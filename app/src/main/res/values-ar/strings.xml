@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">المعلم</string>
+    <string name="login">تسجيل الدخول</string>
+    <string name="register">تسجيل</string>
+</resources>

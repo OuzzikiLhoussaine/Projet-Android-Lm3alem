@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Lm3alem</string>
+    <string name="login">Connexion</string>
+    <string name="register">S\'inscrire</string>
+</resources>
