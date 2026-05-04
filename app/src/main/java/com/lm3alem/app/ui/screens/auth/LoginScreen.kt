@@ -9,11 +9,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.credentials.CredentialManager
+import androidx.credentials.CustomCredential
+import androidx.credentials.GetCredentialRequest
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import com.lm3alem.app.R
 import com.lm3alem.app.data.model.UserRole
 import com.lm3alem.app.ui.navigation.Screen
 import com.lm3alem.app.viewmodel.AuthViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(
@@ -22,18 +29,27 @@ fun LoginScreen(
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+
     val context = LocalContext.current
     val authState by viewModel.authState
+    val scope = rememberCoroutineScope()
+    val credentialManager = remember { CredentialManager.create(context) }
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collect { event ->
             when (event) {
                 is AuthViewModel.AuthEvent.NavigateToHome -> {
-                    val route = if (event.role == UserRole.CLIENT) Screen.ClientHome.route else Screen.ArtisanHome.route
+                    val route =
+                        if (event.role == UserRole.CLIENT)
+                            Screen.ClientHome.route
+                        else
+                            Screen.ArtisanHome.route
+
                     navController.navigate(route) {
                         popUpTo(Screen.Login.route) { inclusive = true }
                     }
                 }
+
                 is AuthViewModel.AuthEvent.NavigateToRoleSelection -> {
                     navController.navigate(Screen.RoleSelection.route)
                 }
@@ -42,19 +58,28 @@ fun LoginScreen(
     }
 
     Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Login", style = MaterialTheme.typography.headlineLarge)
+        Text(
+            text = "Login",
+            style = MaterialTheme.typography.headlineLarge
+        )
+
         Spacer(modifier = Modifier.height(32.dp))
+
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
             label = { Text("Email") },
             modifier = Modifier.fillMaxWidth()
         )
+
         Spacer(modifier = Modifier.height(16.dp))
+
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
@@ -62,20 +87,81 @@ fun LoginScreen(
             visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier.fillMaxWidth()
         )
+
         Spacer(modifier = Modifier.height(24.dp))
+
         Button(
             onClick = { viewModel.login(email, password) },
             modifier = Modifier.fillMaxWidth(),
             enabled = authState !is AuthViewModel.AuthState.Loading
         ) {
             if (authState is AuthViewModel.AuthState.Loading) {
-                CircularProgressIndicator(color = MaterialTheme.colorScheme.onPrimary, modifier = Modifier.size(24.dp))
+                CircularProgressIndicator(
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    modifier = Modifier.size(24.dp)
+                )
             } else {
                 Text(text = "Login")
             }
         }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        OutlinedButton(
+            onClick = {
+                scope.launch {
+                    try {
+                        val googleIdOption = GetGoogleIdOption.Builder()
+                            .setFilterByAuthorizedAccounts(false)
+                            .setServerClientId(
+                                context.getString(R.string.default_web_client_id)
+                            )
+                            .build()
+
+                        val request = GetCredentialRequest.Builder()
+                            .addCredentialOption(googleIdOption)
+                            .build()
+
+                        val result = credentialManager.getCredential(
+                            request = request,
+                            context = context
+                        )
+
+                        val credential = result.credential
+
+                        if (
+                            credential is CustomCredential &&
+                            credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
+                        ) {
+                            viewModel.loginWithGoogle(credential)
+                        } else {
+                            Toast.makeText(
+                                context,
+                                "Invalid Google credential",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+
+                    } catch (e: Exception) {
+                        Toast.makeText(
+                            context,
+                            e.message ?: "Google sign-in failed",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
+            },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = authState !is AuthViewModel.AuthState.Loading
+        ) {
+            Text("Continue with Google")
+        }
+
         Spacer(modifier = Modifier.height(16.dp))
-        TextButton(onClick = { navController.navigate(Screen.Register.route) }) {
+
+        TextButton(
+            onClick = { navController.navigate(Screen.Register.route) }
+        ) {
             Text(text = "Don't have an account? Register")
         }
 

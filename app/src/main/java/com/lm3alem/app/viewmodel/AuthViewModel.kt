@@ -2,8 +2,12 @@ package com.lm3alem.app.viewmodel
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.credentials.CustomCredential
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import com.lm3alem.app.data.model.User
 import com.lm3alem.app.data.model.UserRole
 import com.lm3alem.app.data.repository.AuthRepository
@@ -11,6 +15,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 @HiltViewModel
@@ -45,7 +50,10 @@ class AuthViewModel @Inject constructor(
             _authState.value = AuthState.Loading
             val result = authRepository.login(email, pass)
             result.onSuccess {
-                val userDetails = authRepository.currentUser?.uid?.let { authRepository.getUserDetails(it) }
+                val userDetails = authRepository.currentUser?.uid?.let {
+                    authRepository.getUserDetails(it)
+                }
+
                 if (userDetails != null) {
                     _authState.value = AuthState.Success(userDetails)
                     _eventFlow.emit(AuthEvent.NavigateToHome(userDetails.role))
@@ -54,6 +62,45 @@ class AuthViewModel @Inject constructor(
                 }
             }.onFailure {
                 _authState.value = AuthState.Error(it.message ?: "Login failed")
+            }
+        }
+    }
+
+    fun loginWithGoogle(credential: CustomCredential) {
+        viewModelScope.launch {
+            try {
+                _authState.value = AuthState.Loading
+
+                val googleIdTokenCredential =
+                    GoogleIdTokenCredential.createFrom(credential.data)
+
+                val firebaseCredential = GoogleAuthProvider.getCredential(
+                    googleIdTokenCredential.idToken,
+                    null
+                )
+
+                FirebaseAuth.getInstance()
+                    .signInWithCredential(firebaseCredential)
+                    .await()
+
+                val uid = FirebaseAuth.getInstance().currentUser?.uid
+
+                if (uid == null) {
+                    _authState.value = AuthState.Error("Google user not found")
+                    return@launch
+                }
+
+                val userDetails = authRepository.getUserDetails(uid)
+
+                if (userDetails != null) {
+                    _authState.value = AuthState.Success(userDetails)
+                    _eventFlow.emit(AuthEvent.NavigateToHome(userDetails.role))
+                } else {
+                    _eventFlow.emit(AuthEvent.NavigateToRoleSelection)
+                }
+
+            } catch (e: Exception) {
+                _authState.value = AuthState.Error(e.message ?: "Google login failed")
             }
         }
     }
@@ -68,15 +115,18 @@ class AuthViewModel @Inject constructor(
     ) {
         viewModelScope.launch {
             _authState.value = AuthState.Loading
+
             val user = User(
                 fullName = fullName,
                 email = email,
                 phone = phone,
                 city = city,
-                role = UserRole.CLIENT, // Default role, will be updated in next step
+                role = UserRole.CLIENT,
                 imageUrl = imageUrl
             )
+
             val result = authRepository.register(email, pass, user)
+
             result.onSuccess {
                 _authState.value = AuthState.Success(user)
                 _eventFlow.emit(AuthEvent.NavigateToRoleSelection)
@@ -89,9 +139,12 @@ class AuthViewModel @Inject constructor(
     fun selectRole(role: UserRole) {
         viewModelScope.launch {
             _authState.value = AuthState.Loading
+
             val uid = authRepository.currentUser?.uid
+
             if (uid != null) {
                 val result = authRepository.updateUserRole(uid, role)
+
                 result.onSuccess {
                     _eventFlow.emit(AuthEvent.NavigateToHome(role))
                 }.onFailure {

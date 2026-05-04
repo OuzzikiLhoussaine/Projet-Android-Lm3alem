@@ -2,4 +2,7 @@
     <string name="app_name">المعلم</string>
     <string name="login">تسجيل الدخول</string>
     <string name="register">تسجيل</string>
+    <string name="default_web_client_id">
+248047005826-2q69bgugjs1h38b9hdde68l2d5pdu1r7.apps.googleusercontent.com
+</string>
 </resources>

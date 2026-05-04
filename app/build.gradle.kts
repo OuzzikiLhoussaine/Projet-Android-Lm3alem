@@ -55,6 +55,13 @@ dependencies {
     // Navigation
     implementation(libs.androidx.navigation.compose)
 
+
+    implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("androidx.credentials:credentials:1.3.0")
+    implementation("androidx.credentials:credentials-play-services-auth:1.3.0")
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
+
+
     // Hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
