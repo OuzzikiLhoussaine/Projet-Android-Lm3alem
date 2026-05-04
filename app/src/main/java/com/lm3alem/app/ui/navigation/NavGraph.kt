@@ -10,6 +10,7 @@ import com.lm3alem.app.ui.screens.auth.RegisterScreen
 import com.lm3alem.app.ui.screens.auth.RoleSelectionScreen
 import com.lm3alem.app.ui.screens.client.ClientHomeScreen
 import com.lm3alem.app.ui.screens.artisan.ArtisanHomeScreen
+import com.lm3alem.app.ui.screens.artisan.EditArtisanProfileScreen
 
 @Composable
 fun NavGraph(
@@ -35,6 +36,9 @@ fun NavGraph(
         }
         composable(Screen.ArtisanHome.route) {
             ArtisanHomeScreen(navController)
+        }
+        composable(Screen.EditArtisanProfile.route) {
+            EditArtisanProfileScreen(navController)
         }
     }
 }
