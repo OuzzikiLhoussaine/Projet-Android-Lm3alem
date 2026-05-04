@@ -24,6 +24,22 @@ class AuthViewModel @Inject constructor(
     private val _eventFlow = MutableSharedFlow<AuthEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
+    init {
+        checkSession()
+    }
+
+    private fun checkSession() {
+        val currentUser = authRepository.currentUser
+        if (currentUser != null) {
+            viewModelScope.launch {
+                val details = authRepository.getUserDetails(currentUser.uid)
+                if (details != null) {
+                    _eventFlow.emit(AuthEvent.NavigateToHome(details.role))
+                }
+            }
+        }
+    }
+
     fun login(email: String, pass: String) {
         viewModelScope.launch {
             _authState.value = AuthState.Loading
@@ -42,7 +58,15 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    fun register(email: String, pass: String, fullName: String, phone: String, city: String, role: UserRole) {
+    fun register(
+        email: String,
+        pass: String,
+        fullName: String,
+        phone: String,
+        city: String,
+        role: UserRole,
+        imageUrl: String = ""
+    ) {
         viewModelScope.launch {
             _authState.value = AuthState.Loading
             val user = User(
@@ -50,7 +74,8 @@ class AuthViewModel @Inject constructor(
                 email = email,
                 phone = phone,
                 city = city,
-                role = role
+                role = role,
+                imageUrl = imageUrl
             )
             val result = authRepository.register(email, pass, user)
             result.onSuccess {

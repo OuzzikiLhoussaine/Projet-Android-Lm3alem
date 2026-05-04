@@ -28,6 +28,7 @@ fun RegisterScreen(
     var fullName by remember { mutableStateOf("") }
     var phone by remember { mutableStateOf("") }
     var city by remember { mutableStateOf("") }
+    var imageUrl by remember { mutableStateOf("") }
     
     val authState by viewModel.authState
 
@@ -83,6 +84,13 @@ fun RegisterScreen(
         )
         Spacer(modifier = Modifier.height(16.dp))
         OutlinedTextField(
+            value = imageUrl,
+            onValueChange = { imageUrl = it },
+            label = { Text("Profile Image URL") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        OutlinedTextField(
             value = password,
             onValueChange = { password = it },
             label = { Text("Password") },
@@ -91,7 +99,7 @@ fun RegisterScreen(
         )
         Spacer(modifier = Modifier.height(24.dp))
         Button(
-            onClick = { viewModel.register(email, password, fullName, phone, city, role) },
+            onClick = { viewModel.register(email, password, fullName, phone, city, role, imageUrl) },
             modifier = Modifier.fillMaxWidth(),
             enabled = authState !is AuthViewModel.AuthState.Loading
         ) {
