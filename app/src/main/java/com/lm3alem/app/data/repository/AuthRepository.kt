@@ -3,6 +3,7 @@ package com.lm3alem.app.data.repository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.lm3alem.app.data.model.User
+import com.lm3alem.app.data.model.UserRole
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -37,6 +38,15 @@ class AuthRepository @Inject constructor(
 
     private suspend fun saveUserToFirestore(user: User) {
         firestore.collection("users").document(user.id).set(user).await()
+    }
+
+    suspend fun updateUserRole(uid: String, role: UserRole): Result<Unit> {
+        return try {
+            firestore.collection("users").document(uid).update("role", role).await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 
     suspend fun getUserDetails(uid: String): User? {

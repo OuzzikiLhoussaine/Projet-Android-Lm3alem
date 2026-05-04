@@ -11,18 +11,14 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.lm3alem.app.data.model.UserRole
 import com.lm3alem.app.ui.navigation.Screen
 import com.lm3alem.app.viewmodel.AuthViewModel
 
 @Composable
 fun RegisterScreen(
     navController: NavHostController,
-    roleStr: String?,
     viewModel: AuthViewModel = hiltViewModel()
 ) {
-    val role = try { UserRole.valueOf(roleStr ?: UserRole.CLIENT.name) } catch (e: Exception) { UserRole.CLIENT }
-    
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var fullName by remember { mutableStateOf("") }
@@ -35,12 +31,12 @@ fun RegisterScreen(
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collect { event ->
             when (event) {
-                is AuthViewModel.AuthEvent.NavigateToHome -> {
-                    val route = if (event.role == UserRole.CLIENT) Screen.ClientHome.route else Screen.ArtisanHome.route
-                    navController.navigate(route) {
-                        popUpTo(Screen.Login.route) { inclusive = true }
+                is AuthViewModel.AuthEvent.NavigateToRoleSelection -> {
+                    navController.navigate(Screen.RoleSelection.route) {
+                        popUpTo(Screen.Register.route) { inclusive = true }
                     }
                 }
+                else -> {}
             }
         }
     }
@@ -53,7 +49,7 @@ fun RegisterScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Register as ${role.name.lowercase()}", style = MaterialTheme.typography.headlineLarge)
+        Text(text = "Register", style = MaterialTheme.typography.headlineLarge)
         Spacer(modifier = Modifier.height(32.dp))
         OutlinedTextField(
             value = fullName,
@@ -99,7 +95,7 @@ fun RegisterScreen(
         )
         Spacer(modifier = Modifier.height(24.dp))
         Button(
-            onClick = { viewModel.register(email, password, fullName, phone, city, role, imageUrl) },
+            onClick = { viewModel.register(email, password, fullName, phone, city, imageUrl) },
             modifier = Modifier.fillMaxWidth(),
             enabled = authState !is AuthViewModel.AuthState.Loading
         ) {

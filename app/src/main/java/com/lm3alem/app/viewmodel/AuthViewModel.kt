@@ -64,7 +64,6 @@ class AuthViewModel @Inject constructor(
         fullName: String,
         phone: String,
         city: String,
-        role: UserRole,
         imageUrl: String = ""
     ) {
         viewModelScope.launch {
@@ -74,15 +73,32 @@ class AuthViewModel @Inject constructor(
                 email = email,
                 phone = phone,
                 city = city,
-                role = role,
+                role = UserRole.CLIENT, // Default role, will be updated in next step
                 imageUrl = imageUrl
             )
             val result = authRepository.register(email, pass, user)
             result.onSuccess {
                 _authState.value = AuthState.Success(user)
-                _eventFlow.emit(AuthEvent.NavigateToHome(role))
+                _eventFlow.emit(AuthEvent.NavigateToRoleSelection)
             }.onFailure {
                 _authState.value = AuthState.Error(it.message ?: "Registration failed")
+            }
+        }
+    }
+
+    fun selectRole(role: UserRole) {
+        viewModelScope.launch {
+            _authState.value = AuthState.Loading
+            val uid = authRepository.currentUser?.uid
+            if (uid != null) {
+                val result = authRepository.updateUserRole(uid, role)
+                result.onSuccess {
+                    _eventFlow.emit(AuthEvent.NavigateToHome(role))
+                }.onFailure {
+                    _authState.value = AuthState.Error(it.message ?: "Failed to update role")
+                }
+            } else {
+                _authState.value = AuthState.Error("No authenticated user found")
             }
         }
     }
@@ -96,5 +112,6 @@ class AuthViewModel @Inject constructor(
 
     sealed class AuthEvent {
         data class NavigateToHome(val role: UserRole) : AuthEvent()
+        object NavigateToRoleSelection : AuthEvent()
     }
 }
