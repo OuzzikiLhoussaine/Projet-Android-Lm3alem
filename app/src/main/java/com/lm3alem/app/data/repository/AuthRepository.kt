@@ -58,6 +58,13 @@ class AuthRepository @Inject constructor(
         }
     }
 
+    suspend fun createUser(uid: String, user: User) {
+        firestore.collection("users")
+            .document(uid)
+            .set(user)
+            .await()
+    }
+
     fun logout() {
         firebaseAuth.signOut()
     }

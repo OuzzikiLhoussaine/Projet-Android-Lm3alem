@@ -35,10 +35,13 @@ class AuthViewModel @Inject constructor(
 
     private fun checkSession() {
         val currentUser = authRepository.currentUser
+
         if (currentUser != null) {
             viewModelScope.launch {
                 val details = authRepository.getUserDetails(currentUser.uid)
+
                 if (details != null) {
+                    _authState.value = AuthState.Success(details)
                     _eventFlow.emit(AuthEvent.NavigateToHome(details.role))
                 }
             }
@@ -48,11 +51,18 @@ class AuthViewModel @Inject constructor(
     fun login(email: String, pass: String) {
         viewModelScope.launch {
             _authState.value = AuthState.Loading
+
             val result = authRepository.login(email, pass)
+
             result.onSuccess {
-                val userDetails = authRepository.currentUser?.uid?.let {
-                    authRepository.getUserDetails(it)
+                val uid = authRepository.currentUser?.uid
+
+                if (uid == null) {
+                    _authState.value = AuthState.Error("User not found")
+                    return@launch
                 }
+
+                val userDetails = authRepository.getUserDetails(uid)
 
                 if (userDetails != null) {
                     _authState.value = AuthState.Success(userDetails)
@@ -60,6 +70,7 @@ class AuthViewModel @Inject constructor(
                 } else {
                     _authState.value = AuthState.Error("User details not found")
                 }
+
             }.onFailure {
                 _authState.value = AuthState.Error(it.message ?: "Login failed")
             }
@@ -83,19 +94,33 @@ class AuthViewModel @Inject constructor(
                     .signInWithCredential(firebaseCredential)
                     .await()
 
-                val uid = FirebaseAuth.getInstance().currentUser?.uid
+                val firebaseUser = FirebaseAuth.getInstance().currentUser
 
-                if (uid == null) {
+                if (firebaseUser == null) {
                     _authState.value = AuthState.Error("Google user not found")
                     return@launch
                 }
 
-                val userDetails = authRepository.getUserDetails(uid)
+                val uid = firebaseUser.uid
 
-                if (userDetails != null) {
-                    _authState.value = AuthState.Success(userDetails)
-                    _eventFlow.emit(AuthEvent.NavigateToHome(userDetails.role))
+                val existingUser = authRepository.getUserDetails(uid)
+
+                if (existingUser != null) {
+                    _authState.value = AuthState.Success(existingUser)
+                    _eventFlow.emit(AuthEvent.NavigateToHome(existingUser.role))
                 } else {
+                    val newUser = User(
+                        fullName = firebaseUser.displayName ?: "",
+                        email = firebaseUser.email ?: "",
+                        phone = "",
+                        city = "",
+                        role = UserRole.CLIENT,
+                        imageUrl = firebaseUser.photoUrl?.toString() ?: ""
+                    )
+
+                    authRepository.createUser(uid, newUser)
+
+                    _authState.value = AuthState.Success(newUser)
                     _eventFlow.emit(AuthEvent.NavigateToRoleSelection)
                 }
 
