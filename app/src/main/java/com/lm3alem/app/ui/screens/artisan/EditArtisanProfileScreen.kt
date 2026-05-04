@@ -91,9 +91,15 @@ fun EditArtisanProfileScreen(
         Spacer(modifier = Modifier.height(32.dp))
 
         Button(
-            onClick = { viewModel.saveProfile(job, description, experience, city, price) },
+            onClick = {
+                if (job.isBlank() || city.isBlank() || description.isBlank()) {
+                    // Show a simple error if required fields are missing
+                    return@Button
+                }
+                viewModel.saveProfile(job, description, experience, city, price)
+            },
             modifier = Modifier.fillMaxWidth(),
-            enabled = uiState !is ArtisanViewModel.ArtisanUiState.Loading
+            enabled = uiState !is ArtisanViewModel.ArtisanUiState.Loading && job.isNotBlank() && city.isNotBlank()
         ) {
             if (uiState is ArtisanViewModel.ArtisanUiState.Loading) {
                 CircularProgressIndicator(modifier = Modifier.size(24.dp), color = MaterialTheme.colorScheme.onPrimary)

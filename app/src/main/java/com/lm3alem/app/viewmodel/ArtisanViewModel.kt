@@ -32,24 +32,34 @@ class ArtisanViewModel @Inject constructor(
         city: String,
         price: String
     ) {
-        val userId = authRepository.currentUser?.uid ?: return
-        
         viewModelScope.launch {
             _uiState.value = ArtisanUiState.Loading
-            val profile = ArtisanProfile(
-                userId = userId,
-                job = job,
-                description = description,
-                experience = experience.toIntOrNull() ?: 0,
-                city = city,
-                price = price.toDoubleOrNull() ?: 0.0
-            )
-            val result = artisanRepository.saveArtisanProfile(profile)
-            result.onSuccess {
-                _uiState.value = ArtisanUiState.Success
-                _eventFlow.emit(ArtisanEvent.ProfileSaved)
-            }.onFailure {
-                _uiState.value = ArtisanUiState.Error(it.message ?: "Failed to save profile")
+            
+            val userId = authRepository.currentUser?.uid
+            if (userId == null) {
+                _uiState.value = ArtisanUiState.Error("User not authenticated. Please log in again.")
+                return@launch
+            }
+
+            try {
+                val profile = ArtisanProfile(
+                    userId = userId,
+                    job = job,
+                    description = description,
+                    experience = experience.toIntOrNull() ?: 0,
+                    city = city,
+                    price = price.toDoubleOrNull() ?: 0.0
+                )
+                
+                val result = artisanRepository.saveArtisanProfile(profile)
+                result.onSuccess {
+                    _uiState.value = ArtisanUiState.Success
+                    _eventFlow.emit(ArtisanEvent.ProfileSaved)
+                }.onFailure {
+                    _uiState.value = ArtisanUiState.Error(it.message ?: "Failed to save profile")
+                }
+            } catch (e: Exception) {
+                _uiState.value = ArtisanUiState.Error("An unexpected error occurred: ${e.message}")
             }
         }
     }

@@ -9,8 +9,11 @@ import com.lm3alem.app.ui.screens.auth.LoginScreen
 import com.lm3alem.app.ui.screens.auth.RegisterScreen
 import com.lm3alem.app.ui.screens.auth.RoleSelectionScreen
 import com.lm3alem.app.ui.screens.client.ClientHomeScreen
+import com.lm3alem.app.ui.screens.client.ArtisanDetailsScreen
 import com.lm3alem.app.ui.screens.artisan.ArtisanHomeScreen
 import com.lm3alem.app.ui.screens.artisan.EditArtisanProfileScreen
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 
 @Composable
 fun NavGraph(
@@ -33,6 +36,13 @@ fun NavGraph(
         }
         composable(Screen.ClientHome.route) {
             ClientHomeScreen(navController)
+        }
+        composable(
+            route = Screen.ArtisanDetails.route,
+            arguments = listOf(navArgument("artisanId") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val artisanId = backStackEntry.arguments?.getString("artisanId")
+            ArtisanDetailsScreen(navController, artisanId)
         }
         composable(Screen.ArtisanHome.route) {
             ArtisanHomeScreen(navController)
