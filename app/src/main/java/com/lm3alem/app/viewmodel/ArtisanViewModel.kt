@@ -46,7 +46,7 @@ class ArtisanViewModel @Inject constructor(
         description: String,
         experience: String,
         city: String,
-        price: String
+        price: String,
     ) {
         viewModelScope.launch {
             _uiState.value = ArtisanUiState.Loading

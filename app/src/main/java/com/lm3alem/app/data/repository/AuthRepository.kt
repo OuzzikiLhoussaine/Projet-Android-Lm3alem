@@ -11,7 +11,7 @@ import javax.inject.Singleton
 @Singleton
 class AuthRepository @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
-    private val firestore: FirebaseFirestore
+    private val firestore: FirebaseFirestore,
 ) {
     val currentUser get() = firebaseAuth.currentUser
 
@@ -53,7 +53,7 @@ class AuthRepository @Inject constructor(
         return try {
             val document = firestore.collection("users").document(uid).get().await()
             document.toObject(User::class.java)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             null
         }
     }
