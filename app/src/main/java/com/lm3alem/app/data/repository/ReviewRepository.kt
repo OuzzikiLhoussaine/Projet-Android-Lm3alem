@@ -16,7 +16,12 @@ class ReviewRepository @Inject constructor(
             firestore.runTransaction { transaction ->
                 val artisanRef = firestore.collection("artisans").document(review.artisanId)
                 val artisanSnapshot = transaction.get(artisanRef)
-                val artisan = artisanSnapshot.toObject(ArtisanProfile::class.java) ?: ArtisanProfile(userId = review.artisanId)
+                
+                val artisan = if (artisanSnapshot.exists()) {
+                    artisanSnapshot.toObject(ArtisanProfile::class.java)!!
+                } else {
+                    ArtisanProfile(userId = review.artisanId)
+                }
 
                 val newReviewCount = artisan.reviewCount + 1
                 val newRating = ((artisan.rating * artisan.reviewCount) + review.rating) / newReviewCount
@@ -24,9 +29,13 @@ class ReviewRepository @Inject constructor(
                 val reviewRef = firestore.collection("reviews").document()
                 val finalReview = review.copy(id = reviewRef.id)
 
+                val updatedArtisan = artisan.copy(
+                    rating = newRating,
+                    reviewCount = newReviewCount
+                )
+
                 transaction.set(reviewRef, finalReview)
-                transaction.update(artisanRef, "rating", newRating)
-                transaction.update(artisanRef, "reviewCount", newReviewCount)
+                transaction.set(artisanRef, updatedArtisan)
             }.await()
             Result.success(Unit)
         } catch (e: Exception) {

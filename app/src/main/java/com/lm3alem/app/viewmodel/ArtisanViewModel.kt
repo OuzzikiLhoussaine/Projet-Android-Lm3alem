@@ -58,13 +58,16 @@ class ArtisanViewModel @Inject constructor(
             }
 
             try {
+                val currentProfile = artisanRepository.getArtisanProfile(userId)
                 val profile = ArtisanProfile(
                     userId = userId,
                     job = job,
                     description = description,
                     experience = experience.toIntOrNull() ?: 0,
                     city = city,
-                    price = price.toDoubleOrNull() ?: 0.0
+                    price = price.toDoubleOrNull() ?: 0.0,
+                    rating = currentProfile?.rating ?: 0.0,
+                    reviewCount = currentProfile?.reviewCount ?: 0
                 )
                 
                 val result = artisanRepository.saveArtisanProfile(profile)
