@@ -25,5 +25,12 @@ fun ArtisanHomeScreen(navController: NavHostController) {
         ) {
             Text(text = "Complete Professional Profile")
         }
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(
+            onClick = { navController.navigate(Screen.ArtisanRequests.route) },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(text = "View Service Requests")
+        }
     }
 }

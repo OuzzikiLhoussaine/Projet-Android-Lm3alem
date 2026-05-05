@@ -10,6 +10,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.lm3alem.app.data.model.ArtisanProfile
+import com.lm3alem.app.ui.navigation.Screen
 import com.lm3alem.app.viewmodel.ArtisanViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -52,7 +53,13 @@ fun ArtisanDetailsScreen(
                 CircularProgressIndicator()
             } else {
                 Text(text = "Details for Artisan ID: $artisanId", style = MaterialTheme.typography.headlineSmall)
-                // Display more fields here when available
+                Spacer(modifier = Modifier.height(24.dp))
+                Button(
+                    onClick = { artisanId?.let { navController.navigate(Screen.SendRequest.createRoute(it)) } },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Send Service Request")
+                }
             }
         }
     }
