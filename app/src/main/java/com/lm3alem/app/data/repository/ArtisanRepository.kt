@@ -8,7 +8,7 @@ import javax.inject.Singleton
 
 @Singleton
 class ArtisanRepository @Inject constructor(
-    private val firestore: FirebaseFirestore
+    private val firestore: FirebaseFirestore,
 ) {
     suspend fun saveArtisanProfile(profile: ArtisanProfile): Result<Unit> {
         return try {
@@ -23,7 +23,7 @@ class ArtisanRepository @Inject constructor(
         return try {
             val document = firestore.collection("artisans").document(userId).get().await()
             document.toObject(ArtisanProfile::class.java)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             null
         }
     }

@@ -17,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class RequestViewModel @Inject constructor(
     private val requestRepository: RequestRepository,
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
 ) : ViewModel() {
 
     private val _uiState = mutableStateOf<RequestUiState>(RequestUiState.Idle)

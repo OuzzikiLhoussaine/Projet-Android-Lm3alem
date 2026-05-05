@@ -9,7 +9,7 @@ import javax.inject.Singleton
 
 @Singleton
 class RequestRepository @Inject constructor(
-    private val firestore: FirebaseFirestore
+    private val firestore: FirebaseFirestore,
 ) {
     suspend fun sendRequest(request: ServiceRequest): Result<Unit> {
         return try {

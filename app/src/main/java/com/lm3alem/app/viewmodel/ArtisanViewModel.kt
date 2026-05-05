@@ -16,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ArtisanViewModel @Inject constructor(
     private val artisanRepository: ArtisanRepository,
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
 ) : ViewModel() {
 
     private val _uiState = mutableStateOf<ArtisanUiState>(ArtisanUiState.Idle)
@@ -24,6 +24,22 @@ class ArtisanViewModel @Inject constructor(
 
     private val _eventFlow = MutableSharedFlow<ArtisanEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
+
+    private val _artisanProfile = mutableStateOf<ArtisanProfile?>(null)
+    val artisanProfile: State<ArtisanProfile?> = _artisanProfile
+
+    fun fetchArtisanProfile(userId: String) {
+        viewModelScope.launch {
+            _uiState.value = ArtisanUiState.Loading
+            val profile = artisanRepository.getArtisanProfile(userId)
+            if (profile != null) {
+                _artisanProfile.value = profile
+                _uiState.value = ArtisanUiState.Idle
+            } else {
+                _uiState.value = ArtisanUiState.Error("Profile not found")
+            }
+        }
+    }
 
     fun saveProfile(
         job: String,
