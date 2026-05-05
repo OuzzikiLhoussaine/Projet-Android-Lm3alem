@@ -16,6 +16,7 @@ import androidx.navigation.NavType
 import androidx.navigation.navArgument
 
 import com.lm3alem.app.ui.screens.client.SendRequestScreen
+import com.lm3alem.app.ui.screens.client.AddReviewScreen
 import com.lm3alem.app.ui.screens.artisan.ArtisanRequestsScreen
 
 @Composable
@@ -62,6 +63,13 @@ fun NavGraph(
         }
         composable(Screen.ArtisanRequests.route) {
             ArtisanRequestsScreen(navController)
+        }
+        composable(
+            route = Screen.AddReview.route,
+            arguments = listOf(navArgument("artisanId") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val artisanId = backStackEntry.arguments?.getString("artisanId")
+            AddReviewScreen(navController, artisanId)
         }
     }
 }
