@@ -59,5 +59,9 @@
     <string name="comment_optional">Commentaire (facultatif)</string>
     <string name="submit_review">Envoyer l\'avis</string>
     <string name="loading">Chargement…</string>
+    <string name="profile">Profil</string>
+    <string name="edit_profile">Modifier le profil</string>
+    <string name="logout">Déconnexion</string>
+    <string name="role">Rôle</string>
     <string name="default_web_client_id">248047005826-2q69bgugjs1h38b9hdde68l2d5pdu1r7.apps.googleusercontent.com</string>
 </resources>

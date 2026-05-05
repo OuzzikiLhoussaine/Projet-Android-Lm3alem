@@ -28,7 +28,7 @@ fun RoleSelectionScreen(
         viewModel.eventFlow.collect { event ->
             when (event) {
                 is AuthViewModel.AuthEvent.NavigateToHome -> {
-                    val route = if (event.role == UserRole.CLIENT) Screen.ClientHome.route else Screen.ArtisanHome.route
+                    val route = if (event.role == UserRole.CLIENT) Screen.ClientHome.route else Screen.EditArtisanProfile.route
                     navController.navigate(route) {
                         popUpTo(Screen.RoleSelection.route) { inclusive = true }
                     }

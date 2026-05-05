@@ -59,4 +59,8 @@
     <string name="comment_optional">تعليق (اختياري)</string>
     <string name="submit_review">إرسال التقييم</string>
     <string name="loading">جاري التحميل…</string>
+    <string name="profile">الملف الشخصي</string>
+    <string name="edit_profile">تعديل الملف الشخصي</string>
+    <string name="logout">تسجيل الخروج</string>
+    <string name="role">الدور</string>
 </resources>

@@ -181,6 +181,14 @@ class AuthViewModel @Inject constructor(
         }
     }
 
+    fun logout() {
+        authRepository.logout()
+        _authState.value = AuthState.Idle
+        viewModelScope.launch {
+            _eventFlow.emit(AuthEvent.Logout)
+        }
+    }
+
     sealed class AuthState {
         object Idle : AuthState()
         object Loading : AuthState()
@@ -191,5 +199,6 @@ class AuthViewModel @Inject constructor(
     sealed class AuthEvent {
         data class NavigateToHome(val role: UserRole) : AuthEvent()
         object NavigateToRoleSelection : AuthEvent()
+        object Logout : AuthEvent()
     }
 }

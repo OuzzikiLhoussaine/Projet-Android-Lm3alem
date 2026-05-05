@@ -65,6 +65,15 @@ class AuthRepository @Inject constructor(
             .await()
     }
 
+    suspend fun updateUserDetails(uid: String, updates: Map<String, Any>): Result<Unit> {
+        return try {
+            firestore.collection("users").document(uid).update(updates).await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
     fun logout() {
         firebaseAuth.signOut()
     }

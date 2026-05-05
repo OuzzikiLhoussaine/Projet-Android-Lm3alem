@@ -59,6 +59,7 @@ fun LoginScreen(
                 is AuthViewModel.AuthEvent.NavigateToRoleSelection -> {
                     navController.navigate(Screen.RoleSelection.route)
                 }
+                else -> {}
             }
         }
     }

@@ -18,6 +18,7 @@ import com.lm3alem.app.ui.components.AppTextField
 import com.lm3alem.app.ui.components.AppTopBar
 import com.lm3alem.app.ui.components.ErrorMessage
 import com.lm3alem.app.ui.components.MainButton
+import com.lm3alem.app.ui.navigation.Screen
 import com.lm3alem.app.viewmodel.ArtisanViewModel
 
 @Composable
@@ -37,7 +38,9 @@ fun EditArtisanProfileScreen(
         viewModel.eventFlow.collect { event ->
             when (event) {
                 is ArtisanViewModel.ArtisanEvent.ProfileSaved -> {
-                    navController.popBackStack()
+                    navController.navigate(Screen.ArtisanHome.route) {
+                        popUpTo(Screen.EditArtisanProfile.route) { inclusive = true }
+                    }
                 }
             }
         }
@@ -105,7 +108,7 @@ fun EditArtisanProfileScreen(
                         viewModel.saveProfile(job, description, experience, city, price)
                     }
                 },
-                enabled = job.isNotBlank() && city.isNotBlank(),
+                enabled = job.isNotBlank() && city.isNotBlank() && description.isNotBlank(),
                 isLoading = uiState is ArtisanViewModel.ArtisanUiState.Loading
             )
 
