@@ -7,6 +7,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.credentials.CredentialManager
@@ -65,7 +66,7 @@ fun LoginScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Login",
+            text = stringResource(R.string.login),
             style = MaterialTheme.typography.headlineLarge
         )
 
@@ -74,7 +75,7 @@ fun LoginScreen(
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
-            label = { Text("Email") },
+            label = { Text(stringResource(R.string.email)) },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -83,7 +84,7 @@ fun LoginScreen(
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
-            label = { Text("Password") },
+            label = { Text(stringResource(R.string.password)) },
             visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier.fillMaxWidth()
         )
@@ -101,7 +102,7 @@ fun LoginScreen(
                     modifier = Modifier.size(24.dp)
                 )
             } else {
-                Text(text = "Login")
+                Text(text = stringResource(R.string.login))
             }
         }
 
@@ -137,7 +138,7 @@ fun LoginScreen(
                         } else {
                             Toast.makeText(
                                 context,
-                                "Invalid Google credential",
+                                context.getString(R.string.invalid_google_credential),
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -145,7 +146,7 @@ fun LoginScreen(
                     } catch (e: Exception) {
                         Toast.makeText(
                             context,
-                            e.message ?: "Google sign-in failed",
+                            e.message ?: context.getString(R.string.google_sign_in_failed),
                             Toast.LENGTH_LONG
                         ).show()
                     }
@@ -154,7 +155,7 @@ fun LoginScreen(
             modifier = Modifier.fillMaxWidth(),
             enabled = authState !is AuthViewModel.AuthState.Loading
         ) {
-            Text("Continue with Google")
+            Text(stringResource(R.string.continue_google))
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -162,7 +163,7 @@ fun LoginScreen(
         TextButton(
             onClick = { navController.navigate(Screen.Register.route) }
         ) {
-            Text(text = "Don't have an account? Register")
+            Text(text = stringResource(R.string.no_account_register))
         }
 
         if (authState is AuthViewModel.AuthState.Error) {

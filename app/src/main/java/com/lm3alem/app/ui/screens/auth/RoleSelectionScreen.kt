@@ -5,9 +5,11 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.lm3alem.app.R
 import com.lm3alem.app.data.model.UserRole
 import com.lm3alem.app.ui.navigation.Screen
 import com.lm3alem.app.viewmodel.AuthViewModel
@@ -38,9 +40,9 @@ fun RoleSelectionScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Complete your profile", style = MaterialTheme.typography.headlineLarge)
+        Text(text = stringResource(R.string.complete_profile), style = MaterialTheme.typography.headlineLarge)
         Spacer(modifier = Modifier.height(16.dp))
-        Text(text = "I am a...", style = MaterialTheme.typography.headlineSmall)
+        Text(text = stringResource(R.string.i_am_a), style = MaterialTheme.typography.headlineSmall)
         Spacer(modifier = Modifier.height(32.dp))
         
         Button(
@@ -48,7 +50,7 @@ fun RoleSelectionScreen(
             modifier = Modifier.fillMaxWidth(),
             enabled = authState !is AuthViewModel.AuthState.Loading
         ) {
-            Text(text = "Client")
+            Text(text = stringResource(R.string.client))
         }
         Spacer(modifier = Modifier.height(16.dp))
         Button(
@@ -56,7 +58,7 @@ fun RoleSelectionScreen(
             modifier = Modifier.fillMaxWidth(),
             enabled = authState !is AuthViewModel.AuthState.Loading
         ) {
-            Text(text = "Artisan / Worker")
+            Text(text = stringResource(R.string.artisan_worker))
         }
 
         if (authState is AuthViewModel.AuthState.Loading) {

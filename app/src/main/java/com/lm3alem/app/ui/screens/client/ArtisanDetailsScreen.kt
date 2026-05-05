@@ -7,9 +7,11 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.lm3alem.app.R
 import com.lm3alem.app.ui.navigation.Screen
 import com.lm3alem.app.viewmodel.ArtisanViewModel
 
@@ -42,10 +44,10 @@ fun ArtisanDetailsScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Artisan Details") },
+                title = { Text(stringResource(R.string.artisan_details)) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
                     }
                 }
             )
@@ -59,7 +61,7 @@ fun ArtisanDetailsScreen(
             }
             is ArtisanViewModel.ArtisanUiState.Error -> {
                 Box(modifier = Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
-                    Text(text = state.message, color = MaterialTheme.colorScheme.error)
+                    Text(text = stringResource(R.string.error_message, state.message), color = MaterialTheme.colorScheme.error)
                 }
             }
             else -> {
@@ -75,12 +77,12 @@ fun ArtisanDetailsScreen(
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Icon(Icons.Filled.Star, contentDescription = null, tint = Color(0xFFFFB300))
                                 Text(
-                                    text = " ${String.format(Locale.US, "%.1f", profile.rating)} (${profile.reviewCount} reviews)",
+                                    text = " " + stringResource(R.string.rating_reviews_count, String.format(Locale.US, "%.1f", profile.rating), profile.reviewCount),
                                     style = MaterialTheme.typography.bodyMedium
                                 )
                             }
                             Text(text = profile.city, style = MaterialTheme.typography.bodyMedium)
-                            Text(text = "${profile.experience} years of experience", style = MaterialTheme.typography.bodySmall)
+                            Text(text = stringResource(R.string.years_experience, profile.experience), style = MaterialTheme.typography.bodySmall)
                             Text(text = profile.description, style = MaterialTheme.typography.bodyLarge)
 
                             Spacer(modifier = Modifier.height(16.dp))
@@ -101,7 +103,7 @@ fun ArtisanDetailsScreen(
                                     },
                                     modifier = Modifier.weight(1f)
                                 ) {
-                                    Text("Hire Me")
+                                    Text(stringResource(R.string.hire_me))
                                 }
                                 OutlinedButton(
                                     onClick = {
@@ -115,12 +117,12 @@ fun ArtisanDetailsScreen(
                                     },
                                     modifier = Modifier.weight(1f)
                                 ) {
-                                    Text("Add Review")
+                                    Text(stringResource(R.string.add_review))
                                 }
                             }
 
                             Spacer(modifier = Modifier.height(24.dp))
-                            Text(text = "Reviews", style = MaterialTheme.typography.titleMedium)
+                            Text(text = stringResource(R.string.reviews), style = MaterialTheme.typography.titleMedium)
                             Spacer(modifier = Modifier.height(8.dp))
                         }
 
@@ -130,7 +132,7 @@ fun ArtisanDetailsScreen(
                             }
                             is ReviewViewModel.ReviewUiState.ReviewsLoaded -> {
                                 if (rState.reviews.isEmpty()) {
-                                    item { Text("No reviews yet.") }
+                                    item { Text(stringResource(R.string.no_reviews_yet)) }
                                 } else {
                                     items(rState.reviews) { review ->
                                         ReviewItem(review)

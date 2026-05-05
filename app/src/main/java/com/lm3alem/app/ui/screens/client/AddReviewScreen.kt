@@ -10,9 +10,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.lm3alem.app.R
 import com.lm3alem.app.viewmodel.ReviewViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -39,10 +41,10 @@ fun AddReviewScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Add Review") },
+                title = { Text(stringResource(R.string.add_review)) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
                     }
                 }
             )
@@ -55,7 +57,7 @@ fun AddReviewScreen(
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "How was your experience?", style = MaterialTheme.typography.titleMedium)
+            Text(text = stringResource(R.string.how_was_experience), style = MaterialTheme.typography.titleMedium)
             Spacer(modifier = Modifier.height(16.dp))
             
             Row {
@@ -75,7 +77,7 @@ fun AddReviewScreen(
             OutlinedTextField(
                 value = comment,
                 onValueChange = { comment = it },
-                label = { Text("Comment (optional)") },
+                label = { Text(stringResource(R.string.comment_optional)) },
                 modifier = Modifier.fillMaxWidth(),
                 minLines = 3
             )
@@ -90,13 +92,13 @@ fun AddReviewScreen(
                 if (uiState is ReviewViewModel.ReviewUiState.Loading) {
                     CircularProgressIndicator(modifier = Modifier.size(24.dp), color = MaterialTheme.colorScheme.onPrimary)
                 } else {
-                    Text("Submit Review")
+                    Text(stringResource(R.string.submit_review))
                 }
             }
             
             if (uiState is ReviewViewModel.ReviewUiState.Error) {
                 Text(
-                    text = (uiState as ReviewViewModel.ReviewUiState.Error).message,
+                    text = stringResource(R.string.error_message, (uiState as ReviewViewModel.ReviewUiState.Error).message),
                     color = MaterialTheme.colorScheme.error,
                     modifier = Modifier.padding(top = 8.dp)
                 )

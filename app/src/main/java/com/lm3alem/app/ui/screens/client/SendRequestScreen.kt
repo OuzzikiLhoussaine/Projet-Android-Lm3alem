@@ -7,9 +7,11 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.lm3alem.app.R
 import com.lm3alem.app.viewmodel.RequestViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -35,10 +37,10 @@ fun SendRequestScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Send Request") },
+                title = { Text(stringResource(R.string.send_request)) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
                     }
                 }
             )
@@ -51,12 +53,12 @@ fun SendRequestScreen(
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "Describe the service you need:", style = MaterialTheme.typography.titleMedium)
+            Text(text = stringResource(R.string.describe_service_needed), style = MaterialTheme.typography.titleMedium)
             Spacer(modifier = Modifier.height(16.dp))
             OutlinedTextField(
                 value = description,
                 onValueChange = { description = it },
-                label = { Text("Description") },
+                label = { Text(stringResource(R.string.description)) },
                 modifier = Modifier.fillMaxWidth(),
                 minLines = 5
             )
@@ -69,12 +71,12 @@ fun SendRequestScreen(
                 if (uiState is RequestViewModel.RequestUiState.Loading) {
                     CircularProgressIndicator(modifier = Modifier.size(24.dp), color = MaterialTheme.colorScheme.onPrimary)
                 } else {
-                    Text("Send Request")
+                    Text(stringResource(R.string.send_request))
                 }
             }
             if (uiState is RequestViewModel.RequestUiState.Error) {
                 Text(
-                    text = (uiState as RequestViewModel.RequestUiState.Error).message,
+                    text = stringResource(R.string.error_message, (uiState as RequestViewModel.RequestUiState.Error).message),
                     color = MaterialTheme.colorScheme.error,
                     modifier = Modifier.padding(top = 8.dp)
                 )

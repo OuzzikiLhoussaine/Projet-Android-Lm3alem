@@ -8,10 +8,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.lm3alem.app.R
 import com.lm3alem.app.viewmodel.ArtisanViewModel
 
 @Composable
@@ -44,13 +46,13 @@ fun EditArtisanProfileScreen(
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Edit Professional Profile", style = MaterialTheme.typography.headlineLarge)
+        Text(text = stringResource(R.string.edit_professional_profile), style = MaterialTheme.typography.headlineLarge)
         Spacer(modifier = Modifier.height(24.dp))
 
         OutlinedTextField(
             value = job,
             onValueChange = { job = it },
-            label = { Text("Job / Profession") },
+            label = { Text(stringResource(R.string.job_profession)) },
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(16.dp))
@@ -58,7 +60,7 @@ fun EditArtisanProfileScreen(
         OutlinedTextField(
             value = description,
             onValueChange = { description = it },
-            label = { Text("Description / Bio") },
+            label = { Text(stringResource(R.string.description_bio)) },
             modifier = Modifier.fillMaxWidth(),
             minLines = 3
         )
@@ -67,7 +69,7 @@ fun EditArtisanProfileScreen(
         OutlinedTextField(
             value = experience,
             onValueChange = { experience = it },
-            label = { Text("Years of Experience") },
+            label = { Text(stringResource(R.string.years_of_experience)) },
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
         )
@@ -76,7 +78,7 @@ fun EditArtisanProfileScreen(
         OutlinedTextField(
             value = city,
             onValueChange = { city = it },
-            label = { Text("City") },
+            label = { Text(stringResource(R.string.city)) },
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(16.dp))
@@ -84,7 +86,7 @@ fun EditArtisanProfileScreen(
         OutlinedTextField(
             value = price,
             onValueChange = { price = it },
-            label = { Text("Starting Price (DH)") },
+            label = { Text(stringResource(R.string.starting_price_dh)) },
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
         )
@@ -104,13 +106,13 @@ fun EditArtisanProfileScreen(
             if (uiState is ArtisanViewModel.ArtisanUiState.Loading) {
                 CircularProgressIndicator(modifier = Modifier.size(24.dp), color = MaterialTheme.colorScheme.onPrimary)
             } else {
-                Text("Save Profile")
+                Text(stringResource(R.string.save_profile))
             }
         }
 
         if (uiState is ArtisanViewModel.ArtisanUiState.Error) {
             Text(
-                text = (uiState as ArtisanViewModel.ArtisanUiState.Error).message,
+                text = stringResource(R.string.error_message, (uiState as ArtisanViewModel.ArtisanUiState.Error).message),
                 color = MaterialTheme.colorScheme.error,
                 modifier = Modifier.padding(top = 8.dp)
             )

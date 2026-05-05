@@ -12,10 +12,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import java.util.Locale
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.lm3alem.app.R
 import com.lm3alem.app.data.model.ArtisanProfile
 import com.lm3alem.app.ui.navigation.Screen
 import com.lm3alem.app.viewmodel.ClientViewModel
@@ -30,7 +32,7 @@ fun ClientHomeScreen(
     val uiState by viewModel.uiState
 
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        Text(text = "Find an Artisan", style = MaterialTheme.typography.headlineMedium)
+        Text(text = stringResource(R.string.find_artisan), style = MaterialTheme.typography.headlineMedium)
         Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedTextField(
@@ -39,7 +41,7 @@ fun ClientHomeScreen(
                 searchQuery = it
                 viewModel.filterArtisans(searchQuery, cityFilter)
             },
-            label = { Text("Search by job") },
+            label = { Text(stringResource(R.string.search_by_job)) },
             modifier = Modifier.fillMaxWidth(),
             leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) }
         )
@@ -50,7 +52,7 @@ fun ClientHomeScreen(
                 cityFilter = it
                 viewModel.filterArtisans(searchQuery, cityFilter)
             },
-            label = { Text("Filter by city") },
+            label = { Text(stringResource(R.string.filter_by_city)) },
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(16.dp))
@@ -64,7 +66,7 @@ fun ClientHomeScreen(
             is ClientViewModel.ClientUiState.Success -> {
                 if (state.artisans.isEmpty()) {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text("No artisans found")
+                        Text(stringResource(R.string.no_artisans_found))
                     }
                 } else {
                     LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -77,7 +79,7 @@ fun ClientHomeScreen(
                 }
             }
             is ClientViewModel.ClientUiState.Error -> {
-                Text(text = "Error: ${state.message}", color = MaterialTheme.colorScheme.error)
+                Text(text = stringResource(R.string.error_message, state.message), color = MaterialTheme.colorScheme.error)
             }
         }
     }
@@ -110,12 +112,12 @@ fun ArtisanCard(artisan: ArtisanProfile, onClick: () -> Unit) {
                         modifier = Modifier.size(16.dp)
                     )
                     Text(
-                        text = " ${String.format(Locale.US, "%.1f", artisan.rating)} (${artisan.reviewCount})",
+                        text = " " + stringResource(R.string.rating_reviews_count_short, String.format(Locale.US, "%.1f", artisan.rating), artisan.reviewCount),
                         style = MaterialTheme.typography.labelLarge
                     )
                 }
                 Text(
-                    text = "${artisan.price} DH",
+                    text = stringResource(R.string.price_dh, artisan.price.toString()),
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.primary
                 )
