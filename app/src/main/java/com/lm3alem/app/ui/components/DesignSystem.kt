@@ -31,7 +31,7 @@ fun MainButton(
     enabled: Boolean = true,
     isLoading: Boolean = false,
     containerColor: Color = MaterialTheme.colorScheme.primary,
-    contentColor: Color = MaterialTheme.colorScheme.onPrimary
+    contentColor: Color = MaterialTheme.colorScheme.onPrimary,
 ) {
     Button(
         onClick = onClick,
@@ -42,20 +42,20 @@ fun MainButton(
         shape = RoundedCornerShape(12.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = containerColor,
-            contentColor = contentColor
-        )
+            contentColor = contentColor,
+        ),
     ) {
         if (isLoading) {
             CircularProgressIndicator(
                 modifier = Modifier.size(24.dp),
                 color = contentColor,
-                strokeWidth = 2.dp
+                strokeWidth = 2.dp,
             )
         } else {
             Text(
                 text = text,
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
         }
     }
@@ -74,7 +74,7 @@ fun AppTextField(
     isError: Boolean = false,
     errorMessage: String? = null,
     singleLine: Boolean = true,
-    minLines: Int = 1
+    minLines: Int = 1,
 ) {
     Column(modifier = modifier) {
         OutlinedTextField(
@@ -92,15 +92,15 @@ fun AppTextField(
             minLines = minLines,
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = MaterialTheme.colorScheme.primary,
-                unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant
-            )
+                unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
+            ),
         )
-        if (isError && errorMessage != null) {
+        if (isError && (errorMessage != null)) {
             Text(
                 text = errorMessage,
                 color = MaterialTheme.colorScheme.error,
                 style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier.padding(start = 16.dp, top = 4.dp)
+                modifier = Modifier.padding(start = 16.dp, top = 4.dp),
             )
         }
     }
@@ -114,31 +114,31 @@ fun ArtisanCard(artisan: ArtisanProfile, onClick: () -> Unit) {
             .clickable { onClick() },
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
                     text = artisan.job,
                     style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
                 Text(
                     text = stringResource(R.string.price_dh, artisan.price.toString()),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
             }
             
             Text(
                 text = artisan.city,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             
             Spacer(modifier = Modifier.height(8.dp))
@@ -147,7 +147,7 @@ fun ArtisanCard(artisan: ArtisanProfile, onClick: () -> Unit) {
                 text = artisan.description,
                 style = MaterialTheme.typography.bodySmall,
                 maxLines = 2,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
             )
             
             Spacer(modifier = Modifier.height(12.dp))
@@ -155,35 +155,35 @@ fun ArtisanCard(artisan: ArtisanProfile, onClick: () -> Unit) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
                         imageVector = Icons.Filled.Star,
                         contentDescription = null,
                         tint = Color(0xFFFFB300),
-                        modifier = Modifier.size(18.dp)
+                        modifier = Modifier.size(18.dp),
                     )
                     Text(
                         text = " " + stringResource(
                             R.string.rating_reviews_count_short,
                             String.format(Locale.US, "%.1f", artisan.rating),
-                            artisan.reviewCount
+                            artisan.reviewCount,
                         ),
                         style = MaterialTheme.typography.labelLarge,
-                        fontWeight = FontWeight.Medium
+                        fontWeight = FontWeight.Medium,
                     )
                 }
                 
                 Surface(
                     color = MaterialTheme.colorScheme.secondaryContainer,
-                    shape = RoundedCornerShape(8.dp)
+                    shape = RoundedCornerShape(8.dp),
                 ) {
                     Text(
                         text = stringResource(R.string.years_exp_short, artisan.experience),
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
                         style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSecondaryContainer
+                        color = MaterialTheme.colorScheme.onSecondaryContainer,
                     )
                 }
             }
@@ -210,27 +210,26 @@ fun RequestCard(request: ServiceRequest, onStatusUpdate: (RequestStatus) -> Unit
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Surface(
                     color = statusColor.copy(alpha = 0.1f),
-                    shape = RoundedCornerShape(8.dp)
+                    shape = RoundedCornerShape(8.dp),
                 ) {
                     Text(
                         text = statusText,
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
                         style = MaterialTheme.typography.labelLarge,
                         color = statusColor,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
                     )
                 }
-                // Optional: timestamp can be added here
             }
             
             Spacer(modifier = Modifier.height(12.dp))
@@ -238,7 +237,7 @@ fun RequestCard(request: ServiceRequest, onStatusUpdate: (RequestStatus) -> Unit
             Text(
                 text = request.description,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurface,
             )
             
             if (request.status == RequestStatus.PENDING || request.status == RequestStatus.ACCEPTED) {
@@ -246,27 +245,27 @@ fun RequestCard(request: ServiceRequest, onStatusUpdate: (RequestStatus) -> Unit
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End,
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     if (request.status == RequestStatus.PENDING) {
                         TextButton(
                             onClick = { onStatusUpdate(RequestStatus.REFUSED) },
-                            colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
+                            colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error),
                         ) {
                             Text(stringResource(R.string.refuse))
                         }
                         Spacer(modifier = Modifier.width(8.dp))
                         Button(
                             onClick = { onStatusUpdate(RequestStatus.ACCEPTED) },
-                            shape = RoundedCornerShape(8.dp)
+                            shape = RoundedCornerShape(8.dp),
                         ) {
                             Text(stringResource(R.string.accept))
                         }
-                    } else if (request.status == RequestStatus.ACCEPTED) {
+                    } else {
                         Button(
                             onClick = { onStatusUpdate(RequestStatus.DONE) },
                             shape = RoundedCornerShape(8.dp),
-                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50))
+                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)),
                         ) {
                             Text(stringResource(R.string.mark_as_done))
                         }
@@ -282,30 +281,30 @@ fun RequestCard(request: ServiceRequest, onStatusUpdate: (RequestStatus) -> Unit
 fun AppTopBar(
     title: String,
     onBackClick: (() -> Unit)? = null,
-    actions: @Composable RowScope.() -> Unit = {}
+    actions: @Composable RowScope.() -> Unit = {},
 ) {
     CenterAlignedTopAppBar(
         title = {
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
         },
         navigationIcon = {
-            if (onBackClick != null) {
-                IconButton(onClick = onBackClick) {
+            onBackClick?.let {
+                IconButton(onClick = it) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = stringResource(R.string.back)
+                        contentDescription = stringResource(R.string.back),
                     )
                 }
             }
         },
         actions = actions,
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = MaterialTheme.colorScheme.background
-        )
+            containerColor = MaterialTheme.colorScheme.background,
+        ),
     )
 }
 
@@ -315,18 +314,18 @@ fun LoadingDialog() {
         Surface(
             shape = RoundedCornerShape(16.dp),
             color = MaterialTheme.colorScheme.surface,
-            tonalElevation = 8.dp
+            tonalElevation = 8.dp,
         ) {
             Column(
                 modifier = Modifier.padding(24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.Center,
             ) {
                 CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
                     text = stringResource(R.string.loading),
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodyMedium,
                 )
             }
         }
@@ -336,18 +335,18 @@ fun LoadingDialog() {
 @Composable
 fun ErrorMessage(
     message: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Surface(
         modifier = modifier.fillMaxWidth(),
         color = MaterialTheme.colorScheme.errorContainer,
-        shape = RoundedCornerShape(8.dp)
+        shape = RoundedCornerShape(8.dp),
     ) {
         Text(
             text = message,
             color = MaterialTheme.colorScheme.onErrorContainer,
             style = MaterialTheme.typography.bodySmall,
-            modifier = Modifier.padding(12.dp)
+            modifier = Modifier.padding(12.dp),
         )
     }
 }

@@ -32,7 +32,7 @@ fun ArtisanDetailsScreen(
     navController: NavHostController,
     artisanId: String?,
     viewModel: ArtisanViewModel = hiltViewModel(),
-    reviewViewModel: ReviewViewModel = hiltViewModel()
+    reviewViewModel: ReviewViewModel = hiltViewModel(),
 ) {
     val artisanProfile by viewModel.artisanProfile
     val uiState by viewModel.uiState

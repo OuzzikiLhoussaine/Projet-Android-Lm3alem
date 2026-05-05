@@ -12,8 +12,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.lm3alem.app.R
-import com.lm3alem.app.data.model.RequestStatus
-import com.lm3alem.app.data.model.ServiceRequest
 import com.lm3alem.app.ui.components.AppTopBar
 import com.lm3alem.app.ui.components.ErrorMessage
 import com.lm3alem.app.ui.components.RequestCard
@@ -23,7 +21,7 @@ import com.lm3alem.app.viewmodel.RequestViewModel
 @Composable
 fun ArtisanRequestsScreen(
     navController: NavHostController,
-    viewModel: RequestViewModel = hiltViewModel()
+    viewModel: RequestViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState
 
@@ -35,7 +33,7 @@ fun ArtisanRequestsScreen(
         topBar = {
             AppTopBar(
                 title = stringResource(R.string.service_requests),
-                onBackClick = { navController.popBackStack() }
+                onBackClick = { navController.popBackStack() },
             )
         }
     ) { padding ->
@@ -49,18 +47,18 @@ fun ArtisanRequestsScreen(
                         Text(
                             text = stringResource(R.string.no_requests_yet),
                             modifier = Modifier.align(Alignment.Center),
-                            style = MaterialTheme.typography.bodyLarge
+                            style = MaterialTheme.typography.bodyLarge,
                         )
                     } else {
                         LazyColumn(
                             modifier = Modifier.fillMaxSize().padding(16.dp),
                             verticalArrangement = Arrangement.spacedBy(16.dp),
-                            contentPadding = PaddingValues(bottom = 16.dp)
+                            contentPadding = PaddingValues(bottom = 16.dp),
                         ) {
                             items(state.requests) { request ->
-                                RequestCard(request, onStatusUpdate = { status ->
+                                RequestCard(request) { status ->
                                     viewModel.updateStatus(request.id, status)
-                                })
+                                }
                             }
                         }
                     }
@@ -68,7 +66,7 @@ fun ArtisanRequestsScreen(
                 is RequestViewModel.RequestUiState.Error -> {
                     ErrorMessage(
                         message = stringResource(R.string.error_message, state.message),
-                        modifier = Modifier.align(Alignment.Center).padding(16.dp)
+                        modifier = Modifier.align(Alignment.Center).padding(16.dp),
                     )
                 }
                 else -> {}
