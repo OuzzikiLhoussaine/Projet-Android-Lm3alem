@@ -14,6 +14,9 @@ import androidx.navigation.NavHostController
 import com.lm3alem.app.R
 import com.lm3alem.app.data.model.RequestStatus
 import com.lm3alem.app.data.model.ServiceRequest
+import com.lm3alem.app.ui.components.AppTopBar
+import com.lm3alem.app.ui.components.ErrorMessage
+import com.lm3alem.app.ui.components.RequestCard
 import com.lm3alem.app.viewmodel.RequestViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -29,7 +32,12 @@ fun ArtisanRequestsScreen(
     }
 
     Scaffold(
-        topBar = { TopAppBar(title = { Text(stringResource(R.string.service_requests)) }) }
+        topBar = {
+            AppTopBar(
+                title = stringResource(R.string.service_requests),
+                onBackClick = { navController.popBackStack() }
+            )
+        }
     ) { padding ->
         Box(modifier = Modifier.padding(padding).fillMaxSize()) {
             when (val state = uiState) {
@@ -38,11 +46,16 @@ fun ArtisanRequestsScreen(
                 }
                 is RequestViewModel.RequestUiState.RequestsLoaded -> {
                     if (state.requests.isEmpty()) {
-                        Text(text = stringResource(R.string.no_requests_yet), modifier = Modifier.align(Alignment.Center))
+                        Text(
+                            text = stringResource(R.string.no_requests_yet),
+                            modifier = Modifier.align(Alignment.Center),
+                            style = MaterialTheme.typography.bodyLarge
+                        )
                     } else {
                         LazyColumn(
                             modifier = Modifier.fillMaxSize().padding(16.dp),
-                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                            verticalArrangement = Arrangement.spacedBy(16.dp),
+                            contentPadding = PaddingValues(bottom = 16.dp)
                         ) {
                             items(state.requests) { request ->
                                 RequestCard(request, onStatusUpdate = { status ->
@@ -53,47 +66,12 @@ fun ArtisanRequestsScreen(
                     }
                 }
                 is RequestViewModel.RequestUiState.Error -> {
-                    Text(text = stringResource(R.string.error_message, state.message), color = MaterialTheme.colorScheme.error, modifier = Modifier.align(Alignment.Center))
+                    ErrorMessage(
+                        message = stringResource(R.string.error_message, state.message),
+                        modifier = Modifier.align(Alignment.Center).padding(16.dp)
+                    )
                 }
                 else -> {}
-            }
-        }
-    }
-}
-
-@Composable
-fun RequestCard(request: ServiceRequest, onStatusUpdate: (RequestStatus) -> Unit) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            val statusText = when (request.status) {
-                RequestStatus.PENDING -> stringResource(R.string.status_pending)
-                RequestStatus.ACCEPTED -> stringResource(R.string.status_accepted)
-                RequestStatus.REFUSED -> stringResource(R.string.status_refused)
-                RequestStatus.DONE -> stringResource(R.string.status_done)
-            }
-            Text(text = stringResource(R.string.status_label, statusText), style = MaterialTheme.typography.labelLarge)
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(text = request.description, style = MaterialTheme.typography.bodyMedium)
-            Spacer(modifier = Modifier.height(8.dp))
-            if (request.status == RequestStatus.PENDING) {
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                    TextButton(onClick = { onStatusUpdate(RequestStatus.REFUSED) }) {
-                        Text(stringResource(R.string.refuse), color = MaterialTheme.colorScheme.error)
-                    }
-                    Button(onClick = { onStatusUpdate(RequestStatus.ACCEPTED) }) {
-                        Text(stringResource(R.string.accept))
-                    }
-                }
-            } else if (request.status == RequestStatus.ACCEPTED) {
-                Button(
-                    onClick = { onStatusUpdate(RequestStatus.DONE) },
-                    modifier = Modifier.align(Alignment.End)
-                ) {
-                    Text(stringResource(R.string.mark_as_done))
-                }
             }
         }
     }

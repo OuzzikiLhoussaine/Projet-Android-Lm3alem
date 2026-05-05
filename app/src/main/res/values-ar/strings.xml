@@ -58,4 +58,5 @@
     <string name="how_was_experience">كيف كانت تجربتك؟</string>
     <string name="comment_optional">تعليق (اختياري)</string>
     <string name="submit_review">إرسال التقييم</string>
+    <string name="loading">جاري التحميل…</string>
 </resources>

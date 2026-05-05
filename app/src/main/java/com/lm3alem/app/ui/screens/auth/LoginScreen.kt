@@ -8,8 +8,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
@@ -19,6 +21,9 @@ import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.lm3alem.app.R
 import com.lm3alem.app.data.model.UserRole
+import com.lm3alem.app.ui.components.AppTextField
+import com.lm3alem.app.ui.components.ErrorMessage
+import com.lm3alem.app.ui.components.MainButton
 import com.lm3alem.app.ui.navigation.Screen
 import com.lm3alem.app.viewmodel.AuthViewModel
 import kotlinx.coroutines.launch
@@ -61,52 +66,43 @@ fun LoginScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(24.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
             text = stringResource(R.string.login),
-            style = MaterialTheme.typography.headlineLarge
+            style = MaterialTheme.typography.displaySmall,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.primary
         )
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(48.dp))
 
-        OutlinedTextField(
+        AppTextField(
             value = email,
             onValueChange = { email = it },
-            label = { Text(stringResource(R.string.email)) },
-            modifier = Modifier.fillMaxWidth()
+            label = stringResource(R.string.email)
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        OutlinedTextField(
+        AppTextField(
             value = password,
             onValueChange = { password = it },
-            label = { Text(stringResource(R.string.password)) },
-            visualTransformation = PasswordVisualTransformation(),
-            modifier = Modifier.fillMaxWidth()
+            label = stringResource(R.string.password),
+            visualTransformation = PasswordVisualTransformation()
         )
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(32.dp))
 
-        Button(
+        MainButton(
+            text = stringResource(R.string.login),
             onClick = { viewModel.login(email, password) },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = authState !is AuthViewModel.AuthState.Loading
-        ) {
-            if (authState is AuthViewModel.AuthState.Loading) {
-                CircularProgressIndicator(
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    modifier = Modifier.size(24.dp)
-                )
-            } else {
-                Text(text = stringResource(R.string.login))
-            }
-        }
+            isLoading = authState is AuthViewModel.AuthState.Loading
+        )
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedButton(
             onClick = {
@@ -152,13 +148,14 @@ fun LoginScreen(
                     }
                 }
             },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().height(56.dp),
+            shape = RoundedCornerShape(12.dp),
             enabled = authState !is AuthViewModel.AuthState.Loading
         ) {
             Text(stringResource(R.string.continue_google))
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
         TextButton(
             onClick = { navController.navigate(Screen.Register.route) }
@@ -167,11 +164,8 @@ fun LoginScreen(
         }
 
         if (authState is AuthViewModel.AuthState.Error) {
-            Text(
-                text = (authState as AuthViewModel.AuthState.Error).message,
-                color = MaterialTheme.colorScheme.error,
-                modifier = Modifier.padding(top = 8.dp)
-            )
+            Spacer(modifier = Modifier.height(16.dp))
+            ErrorMessage(message = (authState as AuthViewModel.AuthState.Error).message)
         }
     }
 }

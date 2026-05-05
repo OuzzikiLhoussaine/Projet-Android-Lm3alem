@@ -6,33 +6,39 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.lm3alem.app.R
+import com.lm3alem.app.ui.components.AppTopBar
+import com.lm3alem.app.ui.components.MainButton
 import com.lm3alem.app.ui.navigation.Screen
 
 @Composable
 fun ArtisanHomeScreen(navController: NavHostController) {
-    Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-    ) {
-        Text(text = stringResource(R.string.artisan_dashboard), style = MaterialTheme.typography.headlineMedium)
-        Spacer(modifier = Modifier.height(32.dp))
-        
-        Button(
-            onClick = { navController.navigate(Screen.EditArtisanProfile.route) },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(text = stringResource(R.string.complete_professional_profile))
+    Scaffold(
+        topBar = {
+            AppTopBar(title = stringResource(R.string.artisan_dashboard))
         }
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(
-            onClick = { navController.navigate(Screen.ArtisanRequests.route) },
-            modifier = Modifier.fillMaxWidth()
+    ) { padding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
         ) {
-            Text(text = stringResource(R.string.view_service_requests))
+            MainButton(
+                text = stringResource(R.string.complete_professional_profile),
+                onClick = { navController.navigate(Screen.EditArtisanProfile.route) }
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            MainButton(
+                text = stringResource(R.string.view_service_requests),
+                onClick = { navController.navigate(Screen.ArtisanRequests.route) },
+                containerColor = MaterialTheme.colorScheme.secondary
+            )
         }
     }
 }

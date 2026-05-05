@@ -58,5 +58,6 @@
     <string name="how_was_experience">Comment s\'est passée votre expérience ?</string>
     <string name="comment_optional">Commentaire (facultatif)</string>
     <string name="submit_review">Envoyer l\'avis</string>
+    <string name="loading">Chargement…</string>
     <string name="default_web_client_id">248047005826-2q69bgugjs1h38b9hdde68l2d5pdu1r7.apps.googleusercontent.com</string>
 </resources>

@@ -2,16 +2,20 @@ package com.lm3alem.app.ui.screens.client
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.lm3alem.app.R
+import com.lm3alem.app.ui.components.AppTopBar
+import com.lm3alem.app.ui.components.ErrorMessage
+import com.lm3alem.app.ui.components.MainButton
 import com.lm3alem.app.ui.navigation.Screen
 import com.lm3alem.app.viewmodel.ArtisanViewModel
 
@@ -43,13 +47,9 @@ fun ArtisanDetailsScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text(stringResource(R.string.artisan_details)) },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
-                    }
-                }
+            AppTopBar(
+                title = stringResource(R.string.artisan_details),
+                onBackClick = { navController.popBackStack() }
             )
         }
     ) { padding ->
@@ -61,7 +61,7 @@ fun ArtisanDetailsScreen(
             }
             is ArtisanViewModel.ArtisanUiState.Error -> {
                 Box(modifier = Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
-                    Text(text = stringResource(R.string.error_message, state.message), color = MaterialTheme.colorScheme.error)
+                    ErrorMessage(message = stringResource(R.string.error_message, state.message))
                 }
             }
             else -> {
@@ -70,60 +70,88 @@ fun ArtisanDetailsScreen(
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(padding)
-                            .padding(16.dp)
+                            .padding(horizontal = 24.dp)
                     ) {
                         item {
-                            Text(text = profile.job, style = MaterialTheme.typography.headlineSmall)
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Text(
+                                text = profile.job,
+                                style = MaterialTheme.typography.headlineMedium,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Icon(Icons.Filled.Star, contentDescription = null, tint = Color(0xFFFFB300))
                                 Text(
                                     text = " " + stringResource(R.string.rating_reviews_count, String.format(Locale.US, "%.1f", profile.rating), profile.reviewCount),
-                                    style = MaterialTheme.typography.bodyMedium
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    fontWeight = FontWeight.Medium
                                 )
                             }
-                            Text(text = profile.city, style = MaterialTheme.typography.bodyMedium)
-                            Text(text = stringResource(R.string.years_experience, profile.experience), style = MaterialTheme.typography.bodySmall)
-                            Text(text = profile.description, style = MaterialTheme.typography.bodyLarge)
-
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text(
+                                text = profile.city,
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
                             Spacer(modifier = Modifier.height(16.dp))
+                            
+                            Surface(
+                                color = MaterialTheme.colorScheme.primaryContainer,
+                                shape = RoundedCornerShape(12.dp)
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.years_experience, profile.experience),
+                                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+                                    style = MaterialTheme.typography.labelLarge,
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                            
+                            Spacer(modifier = Modifier.height(24.dp))
+                            
+                            Text(
+                                text = profile.description,
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
+                            )
+
+                            Spacer(modifier = Modifier.height(32.dp))
 
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                horizontalArrangement = Arrangement.spacedBy(16.dp)
                             ) {
-                                Button(
+                                MainButton(
+                                    text = stringResource(R.string.hire_me),
                                     onClick = {
                                         artisanId?.let {
-                                            navController.navigate(
-                                                Screen.SendRequest.createRoute(
-                                                    it
-                                                )
-                                            )
+                                            navController.navigate(Screen.SendRequest.createRoute(it))
                                         }
                                     },
                                     modifier = Modifier.weight(1f)
-                                ) {
-                                    Text(stringResource(R.string.hire_me))
-                                }
+                                )
                                 OutlinedButton(
                                     onClick = {
                                         artisanId?.let {
-                                            navController.navigate(
-                                                Screen.AddReview.createRoute(
-                                                    it
-                                                )
-                                            )
+                                            navController.navigate(Screen.AddReview.createRoute(it))
                                         }
                                     },
-                                    modifier = Modifier.weight(1f)
+                                    modifier = Modifier.weight(1f).height(56.dp),
+                                    shape = RoundedCornerShape(12.dp)
                                 ) {
                                     Text(stringResource(R.string.add_review))
                                 }
                             }
 
-                            Spacer(modifier = Modifier.height(24.dp))
-                            Text(text = stringResource(R.string.reviews), style = MaterialTheme.typography.titleMedium)
-                            Spacer(modifier = Modifier.height(8.dp))
+                            Spacer(modifier = Modifier.height(40.dp))
+                            Text(
+                                text = stringResource(R.string.reviews),
+                                style = MaterialTheme.typography.titleLarge,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
                         }
 
                         when (val rState = reviewState) {
@@ -132,7 +160,13 @@ fun ArtisanDetailsScreen(
                             }
                             is ReviewViewModel.ReviewUiState.ReviewsLoaded -> {
                                 if (rState.reviews.isEmpty()) {
-                                    item { Text(stringResource(R.string.no_reviews_yet)) }
+                                    item { 
+                                        Text(
+                                            text = stringResource(R.string.no_reviews_yet),
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                                        ) 
+                                    }
                                 } else {
                                     items(rState.reviews) { review ->
                                         ReviewItem(review)

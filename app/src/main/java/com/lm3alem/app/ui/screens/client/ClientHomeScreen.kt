@@ -13,12 +13,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import java.util.Locale
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.lm3alem.app.R
 import com.lm3alem.app.data.model.ArtisanProfile
+import com.lm3alem.app.ui.components.AppTextField
+import com.lm3alem.app.ui.components.ArtisanCard
+import com.lm3alem.app.ui.components.ErrorMessage
 import com.lm3alem.app.ui.navigation.Screen
 import com.lm3alem.app.viewmodel.ClientViewModel
 
@@ -32,30 +36,32 @@ fun ClientHomeScreen(
     val uiState by viewModel.uiState
 
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        Text(text = stringResource(R.string.find_artisan), style = MaterialTheme.typography.headlineMedium)
-        Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            text = stringResource(R.string.find_artisan),
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(24.dp))
 
-        OutlinedTextField(
+        AppTextField(
             value = searchQuery,
             onValueChange = {
                 searchQuery = it
                 viewModel.filterArtisans(searchQuery, cityFilter)
             },
-            label = { Text(stringResource(R.string.search_by_job)) },
-            modifier = Modifier.fillMaxWidth(),
-            leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) }
+            label = stringResource(R.string.search_by_job),
+            leadingIcon = Icons.Default.Search
         )
-        Spacer(modifier = Modifier.height(8.dp))
-        OutlinedTextField(
+        Spacer(modifier = Modifier.height(12.dp))
+        AppTextField(
             value = cityFilter,
             onValueChange = {
                 cityFilter = it
                 viewModel.filterArtisans(searchQuery, cityFilter)
             },
-            label = { Text(stringResource(R.string.filter_by_city)) },
-            modifier = Modifier.fillMaxWidth()
+            label = stringResource(R.string.filter_by_city)
         )
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
         when (val state = uiState) {
             is ClientViewModel.ClientUiState.Loading -> {
@@ -66,10 +72,16 @@ fun ClientHomeScreen(
             is ClientViewModel.ClientUiState.Success -> {
                 if (state.artisans.isEmpty()) {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text(stringResource(R.string.no_artisans_found))
+                        Text(
+                            text = stringResource(R.string.no_artisans_found),
+                            style = MaterialTheme.typography.bodyLarge
+                        )
                     }
                 } else {
-                    LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    LazyColumn(
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                        contentPadding = PaddingValues(bottom = 16.dp)
+                    ) {
                         items(state.artisans) { artisan ->
                             ArtisanCard(artisan = artisan) {
                                 navController.navigate(Screen.ArtisanDetails.createRoute(artisan.userId))
@@ -79,48 +91,7 @@ fun ClientHomeScreen(
                 }
             }
             is ClientViewModel.ClientUiState.Error -> {
-                Text(text = stringResource(R.string.error_message, state.message), color = MaterialTheme.colorScheme.error)
-            }
-        }
-    }
-}
-
-@Composable
-fun ArtisanCard(artisan: ArtisanProfile, onClick: () -> Unit) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() },
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(text = artisan.job, style = MaterialTheme.typography.titleLarge)
-            Text(text = artisan.city, style = MaterialTheme.typography.bodyMedium)
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = artisan.description,
-                style = MaterialTheme.typography.bodySmall,
-                maxLines = 2
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        imageVector = Icons.Filled.Star,
-                        contentDescription = null,
-                        tint = Color(0xFFFFB300),
-                        modifier = Modifier.size(16.dp)
-                    )
-                    Text(
-                        text = " " + stringResource(R.string.rating_reviews_count_short, String.format(Locale.US, "%.1f", artisan.rating), artisan.reviewCount),
-                        style = MaterialTheme.typography.labelLarge
-                    )
-                }
-                Text(
-                    text = stringResource(R.string.price_dh, artisan.price.toString()),
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.primary
-                )
+                ErrorMessage(message = stringResource(R.string.error_message, state.message))
             }
         }
     }

@@ -6,11 +6,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.lm3alem.app.R
 import com.lm3alem.app.data.model.UserRole
+import com.lm3alem.app.ui.components.ErrorMessage
+import com.lm3alem.app.ui.components.MainButton
 import com.lm3alem.app.ui.navigation.Screen
 import com.lm3alem.app.viewmodel.AuthViewModel
 
@@ -36,42 +39,39 @@ fun RoleSelectionScreen(
     }
 
     Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
+        modifier = Modifier.fillMaxSize().padding(24.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = stringResource(R.string.complete_profile), style = MaterialTheme.typography.headlineLarge)
+        Text(
+            text = stringResource(R.string.complete_profile),
+            style = MaterialTheme.typography.headlineLarge,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.primary
+        )
         Spacer(modifier = Modifier.height(16.dp))
-        Text(text = stringResource(R.string.i_am_a), style = MaterialTheme.typography.headlineSmall)
-        Spacer(modifier = Modifier.height(32.dp))
+        Text(
+            text = stringResource(R.string.i_am_a),
+            style = MaterialTheme.typography.titleLarge
+        )
+        Spacer(modifier = Modifier.height(48.dp))
         
-        Button(
+        MainButton(
+            text = stringResource(R.string.client),
             onClick = { viewModel.selectRole(UserRole.CLIENT) },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = authState !is AuthViewModel.AuthState.Loading
-        ) {
-            Text(text = stringResource(R.string.client))
-        }
+            isLoading = authState is AuthViewModel.AuthState.Loading
+        )
         Spacer(modifier = Modifier.height(16.dp))
-        Button(
+        MainButton(
+            text = stringResource(R.string.artisan_worker),
             onClick = { viewModel.selectRole(UserRole.ARTISAN) },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = authState !is AuthViewModel.AuthState.Loading
-        ) {
-            Text(text = stringResource(R.string.artisan_worker))
-        }
-
-        if (authState is AuthViewModel.AuthState.Loading) {
-            Spacer(modifier = Modifier.height(16.dp))
-            CircularProgressIndicator()
-        }
+            isLoading = authState is AuthViewModel.AuthState.Loading,
+            containerColor = MaterialTheme.colorScheme.secondary
+        )
 
         if (authState is AuthViewModel.AuthState.Error) {
-            Text(
-                text = (authState as AuthViewModel.AuthState.Error).message,
-                color = MaterialTheme.colorScheme.error,
-                modifier = Modifier.padding(top = 8.dp)
-            )
+            Spacer(modifier = Modifier.height(24.dp))
+            ErrorMessage(message = (authState as AuthViewModel.AuthState.Error).message)
         }
     }
 }
