@@ -5,6 +5,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -50,55 +51,89 @@ fun ArtisanDetailsScreen(
             )
         }
     ) { padding ->
-        Column(modifier = Modifier.padding(padding).padding(16.dp)) {
-            when (val state = uiState) {
-                is ArtisanViewModel.ArtisanUiState.Loading -> {
+        when (val state = uiState) {
+            is ArtisanViewModel.ArtisanUiState.Loading -> {
+                Box(modifier = Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator()
                 }
-                is ArtisanViewModel.ArtisanUiState.Error -> {
+            }
+            is ArtisanViewModel.ArtisanUiState.Error -> {
+                Box(modifier = Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
                     Text(text = state.message, color = MaterialTheme.colorScheme.error)
                 }
-                else -> {
-                    artisanProfile?.let { profile ->
-                        Text(text = profile.job, style = MaterialTheme.typography.headlineSmall)
-                        Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
-                            Icon(Icons.Filled.Star, contentDescription = null, tint = Color(0xFFFFB300))
-                            Text(text = "${String.format(Locale.US, "%.1f", profile.rating)} (${profile.reviewCount} reviews)", style = MaterialTheme.typography.bodyMedium)
-                        }
-                        Text(text = profile.city, style = MaterialTheme.typography.bodyMedium)
-                        Text(text = "${profile.experience} years of experience", style = MaterialTheme.typography.bodySmall)
-                        Text(text = profile.description, style = MaterialTheme.typography.bodyLarge)
-                        
-                        Spacer(modifier = Modifier.height(16.dp))
-                        
-                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Button(
-                                onClick = { artisanId?.let { navController.navigate(Screen.SendRequest.createRoute(it)) } },
-                                modifier = Modifier.weight(1f)
-                            ) {
-                                Text("Hire Me")
+            }
+            else -> {
+                artisanProfile?.let { profile ->
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(padding)
+                            .padding(16.dp)
+                    ) {
+                        item {
+                            Text(text = profile.job, style = MaterialTheme.typography.headlineSmall)
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(Icons.Filled.Star, contentDescription = null, tint = Color(0xFFFFB300))
+                                Text(
+                                    text = " ${String.format(Locale.US, "%.1f", profile.rating)} (${profile.reviewCount} reviews)",
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
                             }
-                            OutlinedButton(
-                                onClick = { artisanId?.let { navController.navigate(Screen.AddReview.createRoute(it)) } },
-                                modifier = Modifier.weight(1f)
+                            Text(text = profile.city, style = MaterialTheme.typography.bodyMedium)
+                            Text(text = "${profile.experience} years of experience", style = MaterialTheme.typography.bodySmall)
+                            Text(text = profile.description, style = MaterialTheme.typography.bodyLarge)
+
+                            Spacer(modifier = Modifier.height(16.dp))
+
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
-                                Text("Add Review")
+                                Button(
+                                    onClick = {
+                                        artisanId?.let {
+                                            navController.navigate(
+                                                Screen.SendRequest.createRoute(
+                                                    it
+                                                )
+                                            )
+                                        }
+                                    },
+                                    modifier = Modifier.weight(1f)
+                                ) {
+                                    Text("Hire Me")
+                                }
+                                OutlinedButton(
+                                    onClick = {
+                                        artisanId?.let {
+                                            navController.navigate(
+                                                Screen.AddReview.createRoute(
+                                                    it
+                                                )
+                                            )
+                                        }
+                                    },
+                                    modifier = Modifier.weight(1f)
+                                ) {
+                                    Text("Add Review")
+                                }
                             }
+
+                            Spacer(modifier = Modifier.height(24.dp))
+                            Text(text = "Reviews", style = MaterialTheme.typography.titleMedium)
+                            Spacer(modifier = Modifier.height(8.dp))
                         }
 
-                        Spacer(modifier = Modifier.height(24.dp))
-                        Text(text = "Reviews", style = MaterialTheme.typography.titleMedium)
-                        
                         when (val rState = reviewState) {
-                            is ReviewViewModel.ReviewUiState.Loading -> CircularProgressIndicator()
+                            is ReviewViewModel.ReviewUiState.Loading -> {
+                                item { CircularProgressIndicator() }
+                            }
                             is ReviewViewModel.ReviewUiState.ReviewsLoaded -> {
                                 if (rState.reviews.isEmpty()) {
-                                    Text("No reviews yet.")
+                                    item { Text("No reviews yet.") }
                                 } else {
-                                    LazyColumn {
-                                        items(rState.reviews) { review ->
-                                            ReviewItem(review)
-                                        }
+                                    items(rState.reviews) { review ->
+                                        ReviewItem(review)
                                     }
                                 }
                             }
@@ -114,7 +149,7 @@ fun ArtisanDetailsScreen(
 @Composable
 fun ReviewItem(review: com.lm3alem.app.data.model.Review) {
     Column(modifier = Modifier.padding(vertical = 8.dp)) {
-        Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
             repeat(5) { index ->
                 Icon(
                     imageVector = Icons.Filled.Star,
@@ -127,6 +162,6 @@ fun ReviewItem(review: com.lm3alem.app.data.model.Review) {
         if (review.comment.isNotEmpty()) {
             Text(text = review.comment, style = MaterialTheme.typography.bodySmall)
         }
-        Divider(modifier = Modifier.padding(top = 8.dp))
+        HorizontalDivider(modifier = Modifier.padding(top = 8.dp))
     }
 }
