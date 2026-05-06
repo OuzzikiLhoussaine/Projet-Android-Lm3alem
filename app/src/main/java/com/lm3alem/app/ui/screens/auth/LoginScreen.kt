@@ -72,7 +72,7 @@ fun LoginScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = stringResource(R.string.login),
+            text = "Login",
             style = MaterialTheme.typography.displaySmall,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.primary
@@ -83,7 +83,7 @@ fun LoginScreen(
         AppTextField(
             value = email,
             onValueChange = { email = it },
-            label = stringResource(R.string.email)
+            label = "Email"
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -91,14 +91,14 @@ fun LoginScreen(
         AppTextField(
             value = password,
             onValueChange = { password = it },
-            label = stringResource(R.string.password),
+            label = "Password",
             visualTransformation = PasswordVisualTransformation()
         )
 
         Spacer(modifier = Modifier.height(32.dp))
 
         MainButton(
-            text = stringResource(R.string.login),
+            text = "Login",
             onClick = { viewModel.login(email, password) },
             isLoading = authState is AuthViewModel.AuthState.Loading
         )
@@ -135,7 +135,7 @@ fun LoginScreen(
                         } else {
                             Toast.makeText(
                                 context,
-                                context.getString(R.string.invalid_google_credential),
+                                "Invalid Google credential",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -143,7 +143,7 @@ fun LoginScreen(
                     } catch (e: Exception) {
                         Toast.makeText(
                             context,
-                            e.message ?: context.getString(R.string.google_sign_in_failed),
+                            e.message ?: "Google sign in failed",
                             Toast.LENGTH_LONG
                         ).show()
                     }
@@ -153,7 +153,7 @@ fun LoginScreen(
             shape = RoundedCornerShape(12.dp),
             enabled = authState !is AuthViewModel.AuthState.Loading
         ) {
-            Text(stringResource(R.string.continue_google))
+            Text("Continue with Google")
         }
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -161,7 +161,7 @@ fun LoginScreen(
         TextButton(
             onClick = { navController.navigate(Screen.Register.route) }
         ) {
-            Text(text = stringResource(R.string.no_account_register))
+            Text(text = "No account? Register")
         }
 
         if (authState is AuthViewModel.AuthState.Error) {

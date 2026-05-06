@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import com.lm3alem.app.ui.screens.auth.LoginScreen
 import com.lm3alem.app.ui.screens.auth.RegisterScreen
 import com.lm3alem.app.ui.screens.auth.RoleSelectionScreen
+import com.lm3alem.app.ui.screens.auth.CompleteProfileScreen
 import com.lm3alem.app.ui.screens.client.ClientHomeScreen
 import com.lm3alem.app.ui.screens.client.ArtisanDetailsScreen
 import com.lm3alem.app.ui.screens.artisan.ArtisanHomeScreen
@@ -39,6 +40,9 @@ fun NavGraph(
         }
         composable(Screen.RoleSelection.route) {
             RoleSelectionScreen(navController)
+        }
+        composable(Screen.CompleteProfile.route) {
+            CompleteProfileScreen(navController)
         }
         composable(Screen.ClientHome.route) {
             ClientHomeScreen(navController)

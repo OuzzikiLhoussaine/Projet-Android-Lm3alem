@@ -70,33 +70,33 @@ fun EditProfileScreen(
             AppTextField(
                 value = fullName,
                 onValueChange = { fullName = it },
-                label = stringResource(R.string.full_name)
+                label = "Full name"
             )
             Spacer(modifier = Modifier.height(16.dp))
 
             AppTextField(
                 value = phone,
                 onValueChange = { phone = it },
-                label = stringResource(R.string.phone_number)
+                label = "Phone"
             )
             Spacer(modifier = Modifier.height(16.dp))
 
             AppTextField(
                 value = city,
                 onValueChange = { city = it },
-                label = stringResource(R.string.city)
+                label = "City"
             )
             Spacer(modifier = Modifier.height(16.dp))
 
             AppTextField(
                 value = imageUrl,
                 onValueChange = { imageUrl = it },
-                label = stringResource(R.string.profile_image_url)
+                label = "Image URL"
             )
             Spacer(modifier = Modifier.height(32.dp))
 
             MainButton(
-                text = stringResource(R.string.save_profile),
+                text = "Save",
                 onClick = {
                     viewModel.updateProfile(fullName, phone, city, imageUrl)
                 },

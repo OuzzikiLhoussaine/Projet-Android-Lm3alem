@@ -21,6 +21,7 @@ import coil.compose.AsyncImage
 import com.lm3alem.app.R
 import com.lm3alem.app.ui.components.AppTopBar
 import com.lm3alem.app.ui.components.ErrorMessage
+import com.lm3alem.app.ui.components.MainButton
 import com.lm3alem.app.ui.navigation.Screen
 import com.lm3alem.app.viewmodel.AuthViewModel
 import com.lm3alem.app.viewmodel.ProfileViewModel
@@ -99,34 +100,30 @@ fun ProfileScreen(
                     
                     Spacer(modifier = Modifier.height(32.dp))
                     
-                    ProfileInfoItem(label = stringResource(R.string.phone_number), value = user.phone)
-                    ProfileInfoItem(label = stringResource(R.string.city), value = user.city)
-                    ProfileInfoItem(label = stringResource(R.string.role), value = user.role.name)
-
-                    Spacer(modifier = Modifier.weight(1f))
-
-                    Button(
-                        onClick = { navController.navigate(Screen.EditProfile.route) },
+                    Column(
                         modifier = Modifier.fillMaxWidth(),
-                        shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp)
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        Icon(Icons.Default.Edit, contentDescription = null)
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(stringResource(R.string.edit_profile))
+                        ProfileInfoItem(label = "Full name", value = user.fullName)
+                        ProfileInfoItem(label = "Email", value = user.email)
+                        ProfileInfoItem(label = "Phone", value = user.phone)
+                        ProfileInfoItem(label = "City", value = user.city)
+                        ProfileInfoItem(label = "Role", value = user.role.name)
                     }
+
+                    Spacer(modifier = Modifier.height(48.dp))
+
+                    MainButton(
+                        text = "Edit profile",
+                        onClick = { navController.navigate(Screen.EditProfile.route) }
+                    )
                     
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    OutlinedButton(
-                        onClick = { authViewModel.logout() },
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp),
-                        colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error)
-                    ) {
-                        Icon(Icons.AutoMirrored.Filled.ExitToApp, contentDescription = null)
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(stringResource(R.string.logout))
-                    }
+                    MainButton(
+                        text = "Logout",
+                        onClick = { authViewModel.logout() }
+                    )
                 }
                 is ProfileViewModel.ProfileUiState.Error -> {
                     ErrorMessage(message = state.message)
@@ -139,9 +136,9 @@ fun ProfileScreen(
 
 @Composable
 fun ProfileInfoItem(label: String, value: String) {
-    Column(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
-        Text(text = label, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
-        Text(text = if (value.isEmpty()) "---" else value, style = MaterialTheme.typography.bodyLarge)
-        HorizontalDivider(modifier = Modifier.padding(top = 8.dp))
-    }
+    Text(
+        text = "$label: ${if (value.isEmpty()) "---" else value}",
+        style = MaterialTheme.typography.bodyLarge,
+        modifier = Modifier.fillMaxWidth()
+    )
 }

@@ -45,7 +45,7 @@ fun AddReviewScreen(
     Scaffold(
         topBar = {
             AppTopBar(
-                title = stringResource(R.string.add_review),
+                title = "Add review",
                 onBackClick = { navController.popBackStack() }
             )
         }
@@ -55,56 +55,46 @@ fun AddReviewScreen(
                 .padding(padding)
                 .padding(24.dp)
                 .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.Start
         ) {
             Text(
-                text = stringResource(R.string.how_was_experience),
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Medium
+                text = "Rating: ${rating.toInt()}/5",
+                style = MaterialTheme.typography.titleMedium,
             )
-            Spacer(modifier = Modifier.height(24.dp))
             
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                (1..5).forEach { index ->
-                    IconButton(
-                        onClick = { rating = index.toFloat() },
-                        modifier = Modifier.size(48.dp)
-                    ) {
-                        Icon(
-                            imageVector = if (index <= rating) Icons.Filled.Star else Icons.Outlined.Star,
-                            contentDescription = null,
-                            tint = if (index <= rating) Color(0xFFFFB300) else Color.Gray,
-                            modifier = Modifier.size(32.dp)
-                        )
-                    }
-                }
-            }
+            Slider(
+                value = rating,
+                onValueChange = { rating = it },
+                valueRange = 1f..5f,
+                steps = 3,
+                colors = SliderDefaults.colors(
+                    thumbColor = MaterialTheme.colorScheme.primary,
+                    activeTrackColor = MaterialTheme.colorScheme.primary,
+                    inactiveTrackColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.24f)
+                )
+            )
             
             Spacer(modifier = Modifier.height(32.dp))
             
             AppTextField(
                 value = comment,
                 onValueChange = { comment = it },
-                label = stringResource(R.string.comment_optional),
-                singleLine = false,
-                minLines = 3
+                label = "Comment"
             )
             
             Spacer(modifier = Modifier.height(40.dp))
             
             MainButton(
-                text = stringResource(R.string.submit_review),
+                text = "Save",
                 onClick = { artisanId?.let { viewModel.addReview(it, rating, comment) } },
                 isLoading = uiState is ReviewViewModel.ReviewUiState.Loading,
-                enabled = rating > 0
+                enabled = rating > 0,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
             )
             
             if (uiState is ReviewViewModel.ReviewUiState.Error) {
                 Spacer(modifier = Modifier.height(24.dp))
-                ErrorMessage(message = stringResource(R.string.error_message, (uiState as ReviewViewModel.ReviewUiState.Error).message))
+                ErrorMessage(message = (uiState as ReviewViewModel.ReviewUiState.Error).message)
             }
         }
     }

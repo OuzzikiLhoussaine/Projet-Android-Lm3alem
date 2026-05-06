@@ -40,7 +40,7 @@ fun SendRequestScreen(
     Scaffold(
         topBar = {
             AppTopBar(
-                title = stringResource(R.string.send_request),
+                title = "Send request",
                 onBackClick = { navController.popBackStack() }
             )
         }
@@ -52,29 +52,22 @@ fun SendRequestScreen(
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = stringResource(R.string.describe_service_needed),
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Medium
-            )
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(8.dp))
             AppTextField(
                 value = description,
                 onValueChange = { description = it },
-                label = stringResource(R.string.description),
-                singleLine = false,
-                minLines = 5
+                label = "Description"
             )
             Spacer(modifier = Modifier.height(32.dp))
             MainButton(
-                text = stringResource(R.string.send_request),
+                text = "Send request",
                 onClick = { artisanId?.let { viewModel.sendRequest(it, description) } },
                 isLoading = uiState is RequestViewModel.RequestUiState.Loading,
                 enabled = description.isNotBlank()
             )
             if (uiState is RequestViewModel.RequestUiState.Error) {
                 Spacer(modifier = Modifier.height(24.dp))
-                ErrorMessage(message = stringResource(R.string.error_message, (uiState as RequestViewModel.RequestUiState.Error).message))
+                ErrorMessage(message = (uiState as RequestViewModel.RequestUiState.Error).message)
             }
         }
     }

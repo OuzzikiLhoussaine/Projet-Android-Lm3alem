@@ -33,7 +33,8 @@ class ReviewViewModel @Inject constructor(
                 clientId = clientId,
                 artisanId = artisanId,
                 rating = rating,
-                comment = comment
+                comment = comment,
+                date = java.util.Date()
             )
             reviewRepository.addReview(review)
                 .onSuccess {

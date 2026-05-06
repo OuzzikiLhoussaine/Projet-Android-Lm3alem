@@ -34,7 +34,8 @@ class RequestViewModel @Inject constructor(
                 clientId = clientId,
                 artisanId = artisanId,
                 description = description,
-                status = RequestStatus.PENDING
+                status = RequestStatus.PENDING,
+                date = java.util.Date()
             )
             requestRepository.sendRequest(request)
                 .onSuccess {

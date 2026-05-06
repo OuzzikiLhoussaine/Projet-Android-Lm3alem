@@ -17,13 +17,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.lm3alem.app.R
 import com.lm3alem.app.ui.components.AppTextField
-import com.lm3alem.app.ui.components.AppTopBar
 import com.lm3alem.app.ui.components.ArtisanCard
 import com.lm3alem.app.ui.components.ErrorMessage
+import com.lm3alem.app.ui.components.MainButton
 import com.lm3alem.app.ui.navigation.Screen
 import com.lm3alem.app.viewmodel.AuthViewModel
 import com.lm3alem.app.viewmodel.ClientViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ClientHomeScreen(
     navController: NavHostController,
@@ -46,14 +47,14 @@ fun ClientHomeScreen(
 
     Scaffold(
         topBar = {
-            AppTopBar(
-                title = stringResource(R.string.find_artisan),
+            TopAppBar(
+                title = { Text("Find an artisan") },
                 actions = {
-                    IconButton(onClick = { navController.navigate(Screen.Profile.route) }) {
-                        Icon(Icons.Default.Person, contentDescription = stringResource(R.string.profile))
+                    TextButton(onClick = { navController.navigate(Screen.Profile.route) }) {
+                        Text("Profile", color = MaterialTheme.colorScheme.primary)
                     }
-                    IconButton(onClick = { authViewModel.logout() }) {
-                        Icon(Icons.AutoMirrored.Filled.ExitToApp, contentDescription = stringResource(R.string.logout))
+                    TextButton(onClick = { authViewModel.logout() }) {
+                        Text("Logout", color = MaterialTheme.colorScheme.primary)
                     }
                 }
             )
@@ -67,8 +68,7 @@ fun ClientHomeScreen(
                     searchQuery = it
                     viewModel.filterArtisans(searchQuery, cityFilter)
                 },
-                label = stringResource(R.string.search_by_job),
-                leadingIcon = Icons.Default.Search
+                label = "Search by job"
             )
             Spacer(modifier = Modifier.height(12.dp))
             AppTextField(
@@ -77,8 +77,19 @@ fun ClientHomeScreen(
                     cityFilter = it
                     viewModel.filterArtisans(searchQuery, cityFilter)
                 },
-                label = stringResource(R.string.filter_by_city)
+                label = "Filter by city"
             )
+            Spacer(modifier = Modifier.height(16.dp))
+            
+            MainButton(
+                text = "Clear",
+                onClick = {
+                    searchQuery = ""
+                    cityFilter = ""
+                    viewModel.filterArtisans("", "")
+                }
+            )
+
             Spacer(modifier = Modifier.height(16.dp))
 
             when (val state = uiState) {

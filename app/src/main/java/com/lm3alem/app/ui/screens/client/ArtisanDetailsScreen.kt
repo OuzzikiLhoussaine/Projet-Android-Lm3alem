@@ -66,115 +66,46 @@ fun ArtisanDetailsScreen(
             }
             else -> {
                 artisanProfile?.let { profile ->
-                    LazyColumn(
+                    Column(
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(padding)
                             .padding(horizontal = 24.dp)
                     ) {
-                        item {
-                            Spacer(modifier = Modifier.height(16.dp))
-                            Text(
-                                text = profile.job,
-                                style = MaterialTheme.typography.headlineMedium,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Icon(Icons.Filled.Star, contentDescription = null, tint = Color(0xFFFFB300))
-                                Text(
-                                    text = " " + stringResource(R.string.rating_reviews_count, String.format(Locale.US, "%.1f", profile.rating), profile.reviewCount),
-                                    style = MaterialTheme.typography.bodyLarge,
-                                    fontWeight = FontWeight.Medium
-                                )
-                            }
-                            Spacer(modifier = Modifier.height(4.dp))
-                            Text(
-                                text = profile.city,
-                                style = MaterialTheme.typography.bodyLarge,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                            Spacer(modifier = Modifier.height(16.dp))
-                            
-                            Surface(
-                                color = MaterialTheme.colorScheme.primaryContainer,
-                                shape = RoundedCornerShape(12.dp)
-                            ) {
-                                Text(
-                                    text = stringResource(R.string.years_experience, profile.experience),
-                                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-                                    style = MaterialTheme.typography.labelLarge,
-                                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            }
-                            
-                            Spacer(modifier = Modifier.height(24.dp))
-                            
-                            Text(
-                                text = profile.description,
-                                style = MaterialTheme.typography.bodyLarge,
-                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
-                            )
+                        Spacer(modifier = Modifier.height(24.dp))
+                        Text(text = "Job: ${profile.job}", style = MaterialTheme.typography.bodyLarge)
+                        Spacer(modifier = Modifier.height(12.dp))
+                        Text(text = "Description: ${profile.description}", style = MaterialTheme.typography.bodyLarge)
+                        Spacer(modifier = Modifier.height(12.dp))
+                        Text(text = "Experience: ${profile.getExperienceInt()} ans", style = MaterialTheme.typography.bodyLarge)
+                        Spacer(modifier = Modifier.height(12.dp))
+                        Text(text = "City: ${profile.city}", style = MaterialTheme.typography.bodyLarge)
+                        Spacer(modifier = Modifier.height(12.dp))
+                        Text(text = "Price: ${profile.getPriceDouble()} DH", style = MaterialTheme.typography.bodyLarge)
+                        Spacer(modifier = Modifier.height(12.dp))
+                        Text(text = "Rating: ${String.format(Locale.US, "%.1f", profile.rating)}/5", style = MaterialTheme.typography.bodyLarge)
 
-                            Spacer(modifier = Modifier.height(32.dp))
+                        Spacer(modifier = Modifier.height(32.dp))
 
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.spacedBy(16.dp)
-                            ) {
-                                MainButton(
-                                    text = stringResource(R.string.hire_me),
-                                    onClick = {
-                                        artisanId?.let {
-                                            navController.navigate(Screen.SendRequest.createRoute(it))
-                                        }
-                                    },
-                                    modifier = Modifier.weight(1f)
-                                )
-                                OutlinedButton(
-                                    onClick = {
-                                        artisanId?.let {
-                                            navController.navigate(Screen.AddReview.createRoute(it))
-                                        }
-                                    },
-                                    modifier = Modifier.weight(1f).height(56.dp),
-                                    shape = RoundedCornerShape(12.dp)
-                                ) {
-                                    Text(stringResource(R.string.add_review))
+                        MainButton(
+                            text = "Send request",
+                            onClick = {
+                                artisanId?.let {
+                                    navController.navigate(Screen.SendRequest.createRoute(it))
                                 }
                             }
+                        )
+                        
+                        Spacer(modifier = Modifier.height(16.dp))
 
-                            Spacer(modifier = Modifier.height(40.dp))
-                            Text(
-                                text = stringResource(R.string.reviews),
-                                style = MaterialTheme.typography.titleLarge,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Spacer(modifier = Modifier.height(16.dp))
-                        }
-
-                        when (val rState = reviewState) {
-                            is ReviewViewModel.ReviewUiState.Loading -> {
-                                item { CircularProgressIndicator() }
-                            }
-                            is ReviewViewModel.ReviewUiState.ReviewsLoaded -> {
-                                if (rState.reviews.isEmpty()) {
-                                    item { 
-                                        Text(
-                                            text = stringResource(R.string.no_reviews_yet),
-                                            style = MaterialTheme.typography.bodyMedium,
-                                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                                        ) 
-                                    }
-                                } else {
-                                    items(rState.reviews) { review ->
-                                        ReviewItem(review)
-                                    }
+                        MainButton(
+                            text = "Add review",
+                            onClick = {
+                                artisanId?.let {
+                                    navController.navigate(Screen.AddReview.createRoute(it))
                                 }
                             }
-                            else -> {}
-                        }
+                        )
                     }
                 }
             }

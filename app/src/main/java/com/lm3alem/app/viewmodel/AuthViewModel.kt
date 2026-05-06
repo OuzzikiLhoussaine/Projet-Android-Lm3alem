@@ -132,22 +132,14 @@ class AuthViewModel @Inject constructor(
 
     fun register(
         email: String,
-        pass: String,
-        fullName: String,
-        phone: String,
-        city: String,
-        imageUrl: String = ""
+        pass: String
     ) {
         viewModelScope.launch {
             _authState.value = AuthState.Loading
 
             val user = User(
-                fullName = fullName,
                 email = email,
-                phone = phone,
-                city = city,
-                role = UserRole.CLIENT,
-                imageUrl = imageUrl
+                role = UserRole.CLIENT
             )
 
             val result = authRepository.register(email, pass, user)
@@ -171,12 +163,41 @@ class AuthViewModel @Inject constructor(
                 val result = authRepository.updateUserRole(uid, role)
 
                 result.onSuccess {
-                    _eventFlow.emit(AuthEvent.NavigateToHome(role))
+                    _eventFlow.emit(AuthEvent.NavigateToCompleteProfile(role))
                 }.onFailure {
                     _authState.value = AuthState.Error(it.message ?: "Failed to update role")
                 }
             } else {
                 _authState.value = AuthState.Error("No authenticated user found")
+            }
+        }
+    }
+
+    fun completeProfile(fullName: String, phone: String, city: String, imageUrl: String) {
+        viewModelScope.launch {
+            _authState.value = AuthState.Loading
+            val uid = authRepository.currentUser?.uid
+            if (uid != null) {
+                val updates = mapOf(
+                    "fullName" to fullName,
+                    "phone" to phone,
+                    "city" to city,
+                    "imageUrl" to imageUrl
+                )
+                val result = authRepository.updateUserDetails(uid, updates)
+                result.onSuccess {
+                    val user = authRepository.getUserDetails(uid)
+                    if (user != null) {
+                        _authState.value = AuthState.Success(user)
+                        _eventFlow.emit(AuthEvent.NavigateToHome(user.role))
+                    } else {
+                        _authState.value = AuthState.Error("Failed to fetch updated user")
+                    }
+                }.onFailure {
+                    _authState.value = AuthState.Error(it.message ?: "Failed to complete profile")
+                }
+            } else {
+                _authState.value = AuthState.Error("User not authenticated")
             }
         }
     }
@@ -199,6 +220,7 @@ class AuthViewModel @Inject constructor(
     sealed class AuthEvent {
         data class NavigateToHome(val role: UserRole) : AuthEvent()
         object NavigateToRoleSelection : AuthEvent()
+        data class NavigateToCompleteProfile(val role: UserRole) : AuthEvent()
         object Logout : AuthEvent()
     }
 }
