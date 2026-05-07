@@ -114,7 +114,13 @@ fun LoginScreen(
             visualTransformation = PasswordVisualTransformation()
         )
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
+            TextButton(onClick = { navController.navigate(Screen.ForgotPassword.route) }) {
+                Text(text = "Forgot Password?", color = MaterialTheme.colorScheme.secondary)
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
 
         MainButton(
             text = "Login",

@@ -54,6 +54,15 @@ class AuthRepository @Inject constructor(
         }
     }
 
+    suspend fun sendPasswordResetEmail(email: String): Result<Unit> {
+        return try {
+            firebaseAuth.sendPasswordResetEmail(email).await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
     private suspend fun saveUserToFirestore(user: User) {
         firestore.collection("users").document(user.id).set(user).await()
     }

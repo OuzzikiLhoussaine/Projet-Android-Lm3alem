@@ -171,6 +171,19 @@ class AuthViewModel @Inject constructor(
         }
     }
 
+    fun sendPasswordReset(email: String) {
+        viewModelScope.launch {
+            _authState.value = AuthState.Loading
+            val result = authRepository.sendPasswordResetEmail(email)
+            result.onSuccess {
+                _authState.value = AuthState.Idle
+                _eventFlow.emit(AuthEvent.PasswordResetSent)
+            }.onFailure {
+                _authState.value = AuthState.Error(it.message ?: "Failed to send reset email")
+            }
+        }
+    }
+
     fun checkEmailVerificationStatus() {
         viewModelScope.launch {
             _authState.value = AuthState.Loading
@@ -254,6 +267,7 @@ class AuthViewModel @Inject constructor(
         object NavigateToRoleSelection : AuthEvent()
         object NavigateToEmailVerification : AuthEvent()
         object NavigateToLogin : AuthEvent()
+        object PasswordResetSent : AuthEvent()
         data class NavigateToCompleteProfile(val role: UserRole) : AuthEvent()
         object Logout : AuthEvent()
     }
