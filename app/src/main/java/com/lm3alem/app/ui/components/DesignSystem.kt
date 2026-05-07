@@ -114,9 +114,10 @@ fun ArtisanCard(artisan: ArtisanProfile, onClick: () -> Unit) {
             .clickable { onClick() },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFFE5E0E9), // Light grey/purple from screenshot
-            contentColor = Color.Black // Ensure text is visible on light background
+            containerColor = MaterialTheme.colorScheme.surface,
+            contentColor = MaterialTheme.colorScheme.onSurface
         ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
@@ -154,10 +155,10 @@ fun ArtisanCard(artisan: ArtisanProfile, onClick: () -> Unit) {
 @Composable
 fun RequestCard(request: ServiceRequest, onStatusUpdate: (RequestStatus) -> Unit) {
     val statusColor = when (request.status) {
-        RequestStatus.PENDING -> MaterialTheme.colorScheme.tertiary
+        RequestStatus.PENDING -> MaterialTheme.colorScheme.secondary
         RequestStatus.ACCEPTED -> Color(0xFF4CAF50)
         RequestStatus.REFUSED -> MaterialTheme.colorScheme.error
-        RequestStatus.DONE -> MaterialTheme.colorScheme.outline
+        RequestStatus.DONE -> MaterialTheme.colorScheme.primary
     }
     
     val statusText = when (request.status) {
