@@ -37,8 +37,7 @@ L'application utilise un système de design personnalisé avec des composants r�
 - `AppTopBar`: Navigation et titres cohérents.
 
 ## Installation
-1. Cloner le projet : `git clone https://github.com/
-Projet-Android-Lm3alem/lm3alem.git`
+1. Cloner le projet : `git clone https://github.com/Projet-Android-Lm3alem/lm3alem.git`
 2. Ouvrir avec **Android Studio (Ladybug ou version ultérieure)**.
 3. Ajouter votre fichier `google-services.json` dans le répertoire `app/`.
 4. Synchroniser le projet avec Gradle.
