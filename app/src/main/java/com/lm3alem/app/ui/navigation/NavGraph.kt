@@ -9,6 +9,7 @@ import com.lm3alem.app.ui.screens.auth.LoginScreen
 import com.lm3alem.app.ui.screens.auth.RegisterScreen
 import com.lm3alem.app.ui.screens.auth.RoleSelectionScreen
 import com.lm3alem.app.ui.screens.auth.CompleteProfileScreen
+import com.lm3alem.app.ui.screens.auth.VerifyEmailScreen
 import com.lm3alem.app.ui.screens.client.ClientHomeScreen
 import com.lm3alem.app.ui.screens.client.ArtisanDetailsScreen
 import com.lm3alem.app.ui.screens.artisan.ArtisanHomeScreen
@@ -43,6 +44,9 @@ fun NavGraph(
         }
         composable(Screen.CompleteProfile.route) {
             CompleteProfileScreen(navController)
+        }
+        composable(Screen.VerifyEmail.route) {
+            VerifyEmailScreen(navController)
         }
         composable(Screen.ClientHome.route) {
             ClientHomeScreen(navController)

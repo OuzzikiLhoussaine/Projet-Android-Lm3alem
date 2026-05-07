@@ -38,6 +38,11 @@ class AuthViewModel @Inject constructor(
 
         if (currentUser != null) {
             viewModelScope.launch {
+                if (!authRepository.isEmailVerified()) {
+                    _authState.value = AuthState.VerificationSent
+                    _eventFlow.emit(AuthEvent.NavigateToEmailVerification)
+                    return@launch
+                }
                 val details = authRepository.getUserDetails(currentUser.uid)
 
                 if (details != null) {
@@ -59,6 +64,12 @@ class AuthViewModel @Inject constructor(
 
                 if (uid == null) {
                     _authState.value = AuthState.Error("User not found")
+                    return@launch
+                }
+
+                if (!authRepository.isEmailVerified()) {
+                    _authState.value = AuthState.VerificationSent
+                    _eventFlow.emit(AuthEvent.NavigateToEmailVerification)
                     return@launch
                 }
 
@@ -145,10 +156,30 @@ class AuthViewModel @Inject constructor(
             val result = authRepository.register(email, pass, user)
 
             result.onSuccess {
-                _authState.value = AuthState.Success(user)
-                _eventFlow.emit(AuthEvent.NavigateToRoleSelection)
+                authRepository.sendEmailVerification()
+                _authState.value = AuthState.VerificationSent
+                _eventFlow.emit(AuthEvent.NavigateToEmailVerification)
             }.onFailure {
                 _authState.value = AuthState.Error(it.message ?: "Registration failed")
+            }
+        }
+    }
+
+    fun resendVerificationEmail() {
+        viewModelScope.launch {
+            authRepository.sendEmailVerification()
+        }
+    }
+
+    fun checkEmailVerificationStatus() {
+        viewModelScope.launch {
+            _authState.value = AuthState.Loading
+            if (authRepository.isEmailVerified()) {
+                authRepository.logout()
+                _authState.value = AuthState.Idle
+                _eventFlow.emit(AuthEvent.NavigateToLogin)
+            } else {
+                _authState.value = AuthState.Error("Email not verified yet. Please check your inbox.")
             }
         }
     }
@@ -213,6 +244,7 @@ class AuthViewModel @Inject constructor(
     sealed class AuthState {
         object Idle : AuthState()
         object Loading : AuthState()
+        object VerificationSent : AuthState()
         data class Success(val user: User) : AuthState()
         data class Error(val message: String) : AuthState()
     }
@@ -220,6 +252,8 @@ class AuthViewModel @Inject constructor(
     sealed class AuthEvent {
         data class NavigateToHome(val role: UserRole) : AuthEvent()
         object NavigateToRoleSelection : AuthEvent()
+        object NavigateToEmailVerification : AuthEvent()
+        object NavigateToLogin : AuthEvent()
         data class NavigateToCompleteProfile(val role: UserRole) : AuthEvent()
         object Logout : AuthEvent()
     }

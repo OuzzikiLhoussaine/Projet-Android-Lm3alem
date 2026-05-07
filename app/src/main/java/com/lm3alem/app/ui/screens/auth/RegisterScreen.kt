@@ -38,6 +38,11 @@ fun RegisterScreen(
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collect { event ->
             when (event) {
+                is AuthViewModel.AuthEvent.NavigateToEmailVerification -> {
+                    navController.navigate(Screen.VerifyEmail.route) {
+                        popUpTo(Screen.Register.route) { inclusive = true }
+                    }
+                }
                 is AuthViewModel.AuthEvent.NavigateToRoleSelection -> {
                     navController.navigate(Screen.RoleSelection.route) {
                         popUpTo(Screen.Register.route) { inclusive = true }

@@ -36,6 +36,24 @@ class AuthRepository @Inject constructor(
         }
     }
 
+    suspend fun sendEmailVerification(): Result<Unit> {
+        return try {
+            firebaseAuth.currentUser?.sendEmailVerification()?.await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun isEmailVerified(): Boolean {
+        return try {
+            firebaseAuth.currentUser?.reload()?.await()
+            firebaseAuth.currentUser?.isEmailVerified ?: false
+        } catch (e: Exception) {
+            false
+        }
+    }
+
     private suspend fun saveUserToFirestore(user: User) {
         firestore.collection("users").document(user.id).set(user).await()
     }

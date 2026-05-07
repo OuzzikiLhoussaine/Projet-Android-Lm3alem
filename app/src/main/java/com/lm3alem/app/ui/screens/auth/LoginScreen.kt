@@ -60,6 +60,10 @@ fun LoginScreen(
                     }
                 }
 
+                is AuthViewModel.AuthEvent.NavigateToEmailVerification -> {
+                    navController.navigate(Screen.VerifyEmail.route)
+                }
+
                 is AuthViewModel.AuthEvent.NavigateToRoleSelection -> {
                     navController.navigate(Screen.RoleSelection.route)
                 }
