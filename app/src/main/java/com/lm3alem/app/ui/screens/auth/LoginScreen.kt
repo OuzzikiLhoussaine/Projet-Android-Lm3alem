@@ -1,7 +1,10 @@
 package com.lm3alem.app.ui.screens.auth
 
 import android.widget.Toast
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -9,13 +12,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.sp
 import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
@@ -31,6 +38,7 @@ import com.lm3alem.app.ui.components.MainButton
 import com.lm3alem.app.ui.navigation.Screen
 import com.lm3alem.app.viewmodel.AuthViewModel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.collect
 
 @Composable
 fun LoginScreen(
@@ -72,32 +80,63 @@ fun LoginScreen(
         }
     }
 
+    val navyBlue = Color(0xFF001D3D)
+    val goldYellow = Color(0xFFFFC107)
+
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(Color(0xFFF8F9FA))
             .padding(24.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.app_logo),
-            contentDescription = "App Logo",
-            modifier = Modifier
-                .size(150.dp)
-                .clip(RoundedCornerShape(16.dp)),
-            contentScale = ContentScale.Fit
-        )
+        // Circular Logo
+        Surface(
+            modifier = Modifier.size(100.dp),
+            shape = CircleShape,
+            border = BorderStroke(3.dp, goldYellow),
+            color = Color.White
+        ) {
+            Box(contentAlignment = Alignment.Center) {
+                Image(
+                    painter = painterResource(id = R.drawable.app_logo),
+                    contentDescription = "App Logo",
+                    modifier = Modifier.size(70.dp),
+                    contentScale = ContentScale.Fit
+                )
+            }
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
+
+        // Lm3alem Text
+        Text(
+            text = buildAnnotatedString {
+                withStyle(style = SpanStyle(color = navyBlue)) {
+                    append("Lm")
+                }
+                withStyle(style = SpanStyle(color = goldYellow)) {
+                    append("3")
+                }
+                withStyle(style = SpanStyle(color = navyBlue)) {
+                    append("alem")
+                }
+            },
+            fontSize = 32.sp,
+            fontWeight = FontWeight.Bold
+        )
+
+        Spacer(modifier = Modifier.height(48.dp))
 
         Text(
             text = "Welcome back",
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.primary
+            color = navyBlue
         )
 
-        Spacer(modifier = Modifier.height(48.dp))
+        Spacer(modifier = Modifier.height(32.dp))
 
         AppTextField(
             value = email,
@@ -125,7 +164,8 @@ fun LoginScreen(
         MainButton(
             text = "Login",
             onClick = { viewModel.login(email, password) },
-            isLoading = authState is AuthViewModel.AuthState.Loading
+            isLoading = authState is AuthViewModel.AuthState.Loading,
+            containerColor = navyBlue
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -183,10 +223,21 @@ fun LoginScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        TextButton(
-            onClick = { navController.navigate(Screen.Register.route) }
+        Row(
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = "No account? Register")
+            Text(
+                text = "No account? ",
+                fontSize = 14.sp,
+                color = navyBlue
+            )
+            Text(
+                text = "Register",
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold,
+                color = navyBlue,
+                modifier = Modifier.clickable { navController.navigate(Screen.Register.route) }
+            )
         }
 
         if (authState is AuthViewModel.AuthState.Error) {

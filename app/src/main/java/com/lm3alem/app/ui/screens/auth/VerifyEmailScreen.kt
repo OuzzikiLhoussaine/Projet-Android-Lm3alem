@@ -20,6 +20,7 @@ import com.lm3alem.app.ui.components.MainButton
 import androidx.compose.runtime.LaunchedEffect
 import com.lm3alem.app.ui.navigation.Screen
 import com.lm3alem.app.viewmodel.AuthViewModel
+import kotlinx.coroutines.flow.collect
 
 @Composable
 fun VerifyEmailScreen(

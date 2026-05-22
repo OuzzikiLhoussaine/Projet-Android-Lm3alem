@@ -143,14 +143,15 @@ class AuthViewModel @Inject constructor(
 
     fun register(
         email: String,
-        pass: String
+        pass: String,
+        role: UserRole = UserRole.CLIENT
     ) {
         viewModelScope.launch {
             _authState.value = AuthState.Loading
 
             val user = User(
                 email = email,
-                role = UserRole.CLIENT
+                role = role
             )
 
             val result = authRepository.register(email, pass, user)

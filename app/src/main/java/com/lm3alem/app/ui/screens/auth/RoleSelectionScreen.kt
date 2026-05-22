@@ -1,24 +1,35 @@
 package com.lm3alem.app.ui.screens.auth
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Build
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.lm3alem.app.R
 import com.lm3alem.app.data.model.UserRole
-import com.lm3alem.app.ui.components.ErrorMessage
-import com.lm3alem.app.ui.components.MainButton
 import com.lm3alem.app.ui.navigation.Screen
 import com.lm3alem.app.viewmodel.AuthViewModel
 
@@ -27,66 +38,161 @@ fun RoleSelectionScreen(
     navController: NavHostController,
     viewModel: AuthViewModel = hiltViewModel()
 ) {
-    val authState by viewModel.authState
+    val navyBlue = Color(0xFF001D3D)
+    val goldYellow = Color(0xFFFFC107)
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collect { event ->
-            when (event) {
-                is AuthViewModel.AuthEvent.NavigateToCompleteProfile -> {
-                    navController.navigate(Screen.CompleteProfile.route) {
-                        popUpTo(Screen.RoleSelection.route) { inclusive = true }
-                    }
+            if (event is AuthViewModel.AuthEvent.NavigateToCompleteProfile) {
+                navController.navigate(Screen.CompleteProfile.route) {
+                    popUpTo(Screen.RoleSelection.route) { inclusive = true }
                 }
-                else -> {}
             }
         }
     }
 
     Column(
-        modifier = Modifier.fillMaxSize().padding(24.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFF8F9FA))
+            .padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.app_logo),
-            contentDescription = "App Logo",
-            modifier = Modifier
-                .size(100.dp)
-                .clip(RoundedCornerShape(16.dp)),
-            contentScale = ContentScale.Fit
-        )
+        // Circular Logo
+        Surface(
+            modifier = Modifier.size(100.dp),
+            shape = CircleShape,
+            border = BorderStroke(3.dp, goldYellow),
+            color = Color.White
+        ) {
+            Box(contentAlignment = Alignment.Center) {
+                Image(
+                    painter = painterResource(id = R.drawable.app_logo),
+                    contentDescription = "App Logo",
+                    modifier = Modifier.size(70.dp),
+                    contentScale = ContentScale.Fit
+                )
+            }
+        }
 
-        Spacer(modifier = Modifier.height(32.dp))
-
-        Text(
-            text = stringResource(R.string.complete_profile),
-            style = MaterialTheme.typography.headlineLarge,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.primary
-        )
         Spacer(modifier = Modifier.height(16.dp))
+
+        // Lm3alem Text
         Text(
-            text = stringResource(R.string.i_am_a),
-            style = MaterialTheme.typography.titleLarge
+            text = buildAnnotatedString {
+                withStyle(style = SpanStyle(color = navyBlue)) {
+                    append("Lm")
+                }
+                withStyle(style = SpanStyle(color = goldYellow)) {
+                    append("3")
+                }
+                withStyle(style = SpanStyle(color = navyBlue)) {
+                    append("alem")
+                }
+            },
+            fontSize = 32.sp,
+            fontWeight = FontWeight.Bold
         )
+
         Spacer(modifier = Modifier.height(48.dp))
-        
-        MainButton(
-            text = stringResource(R.string.client),
-            onClick = { viewModel.selectRole(UserRole.CLIENT) },
-            isLoading = authState is AuthViewModel.AuthState.Loading
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        MainButton(
-            text = stringResource(R.string.artisan_worker),
-            onClick = { viewModel.selectRole(UserRole.ARTISAN) },
-            isLoading = authState is AuthViewModel.AuthState.Loading,
-            containerColor = MaterialTheme.colorScheme.secondary
+
+        Text(
+            text = "Choose your role",
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.Bold,
+            color = navyBlue,
+            textAlign = TextAlign.Center
         )
 
-        if (authState is AuthViewModel.AuthState.Error) {
-            Spacer(modifier = Modifier.height(24.dp))
-            ErrorMessage(message = (authState as AuthViewModel.AuthState.Error).message)
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Text(
+            text = "Are you looking for services or providing them?",
+            style = MaterialTheme.typography.bodyLarge,
+            color = Color.Gray,
+            textAlign = TextAlign.Center
+        )
+
+        Spacer(modifier = Modifier.height(48.dp))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            RoleCard(
+                title = "Client",
+                description = "I need help with home services",
+                icon = Icons.Default.Person,
+                onClick = { viewModel.selectRole(UserRole.CLIENT) },
+                modifier = Modifier.weight(1f),
+                color = navyBlue
+            )
+            RoleCard(
+                title = "Artisan",
+                description = "I want to provide my services",
+                icon = Icons.Default.Build,
+                onClick = { viewModel.selectRole(UserRole.ARTISAN) },
+                modifier = Modifier.weight(1f),
+                color = goldYellow
+            )
+        }
+    }
+}
+
+@Composable
+fun RoleCard(
+    title: String,
+    description: String,
+    icon: ImageVector,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    color: Color
+) {
+    Card(
+        modifier = modifier
+            .height(200.dp)
+            .clickable { onClick() },
+        shape = RoundedCornerShape(24.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Surface(
+                modifier = Modifier.size(60.dp),
+                shape = CircleShape,
+                color = color.copy(alpha = 0.1f)
+            ) {
+                Box(contentAlignment = Alignment.Center) {
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = null,
+                        tint = color,
+                        modifier = Modifier.size(32.dp)
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = title,
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
+                color = Color.Black
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = description,
+                fontSize = 12.sp,
+                color = Color.Gray,
+                textAlign = TextAlign.Center,
+                lineHeight = 16.sp
+            )
         }
     }
 }
