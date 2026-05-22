@@ -27,7 +27,7 @@ import com.lm3alem.app.ui.screens.profile.EditProfileScreen
 @Composable
 fun NavGraph(
     navController: NavHostController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     NavHost(
         navController = navController,

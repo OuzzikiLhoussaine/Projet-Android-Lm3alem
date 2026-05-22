@@ -36,7 +36,7 @@ import com.lm3alem.app.viewmodel.AuthViewModel
 @Composable
 fun RoleSelectionScreen(
     navController: NavHostController,
-    viewModel: AuthViewModel = hiltViewModel()
+    viewModel: AuthViewModel = hiltViewModel(),
 ) {
     val navyBlue = Color(0xFF001D3D)
     val goldYellow = Color(0xFFFFC107)

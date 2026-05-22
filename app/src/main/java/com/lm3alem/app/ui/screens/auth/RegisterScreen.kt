@@ -17,7 +17,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -44,7 +43,7 @@ import kotlinx.coroutines.flow.collect
 @Composable
 fun RegisterScreen(
     navController: NavHostController,
-    viewModel: AuthViewModel = hiltViewModel()
+    viewModel: AuthViewModel = hiltViewModel(),
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -76,7 +75,7 @@ fun RegisterScreen(
             .background(Color(0xFFF8F9FA))
             .padding(24.dp)
             .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -189,15 +188,14 @@ fun RegisterScreen(
         
         Spacer(modifier = Modifier.height(48.dp))
         
+        val isFormValid = email.isNotEmpty() && password.isNotEmpty() && password == confirmPassword
+
         MainButton(
             text = "Register",
             onClick = {
-                if (password != confirmPassword) {
-                    Toast.makeText(context, "Passwords do not match", Toast.LENGTH_SHORT).show()
-                } else {
-                    viewModel.register(email, password, selectedRole)
-                }
+                viewModel.register(email, password, selectedRole)
             },
+            enabled = isFormValid,
             isLoading = authState is AuthViewModel.AuthState.Loading,
             containerColor = navyBlue
         )

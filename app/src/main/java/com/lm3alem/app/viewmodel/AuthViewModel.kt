@@ -57,7 +57,7 @@ class AuthViewModel @Inject constructor(
         viewModelScope.launch {
             _authState.value = AuthState.Loading
 
-            val result = authRepository.login(email, pass)
+            val result = authRepository.login(email.trim(), pass)
 
             result.onSuccess {
                 val uid = authRepository.currentUser?.uid
@@ -149,12 +149,13 @@ class AuthViewModel @Inject constructor(
         viewModelScope.launch {
             _authState.value = AuthState.Loading
 
+            val trimmedEmail = email.trim()
             val user = User(
-                email = email,
+                email = trimmedEmail,
                 role = role
             )
 
-            val result = authRepository.register(email, pass, user)
+            val result = authRepository.register(trimmedEmail, pass, user)
 
             result.onSuccess {
                 authRepository.sendEmailVerification()
@@ -168,14 +169,21 @@ class AuthViewModel @Inject constructor(
 
     fun resendVerificationEmail() {
         viewModelScope.launch {
-            authRepository.sendEmailVerification()
+            _authState.value = AuthState.Loading
+            val result = authRepository.sendEmailVerification()
+            result.onSuccess {
+                _authState.value = AuthState.VerificationSent
+                _eventFlow.emit(AuthEvent.VerificationEmailResent)
+            }.onFailure {
+                _authState.value = AuthState.Error(it.message ?: "Failed to resend verification email")
+            }
         }
     }
 
     fun sendPasswordReset(email: String) {
         viewModelScope.launch {
             _authState.value = AuthState.Loading
-            val result = authRepository.sendPasswordResetEmail(email)
+            val result = authRepository.sendPasswordResetEmail(email.trim())
             result.onSuccess {
                 _authState.value = AuthState.Idle
                 _eventFlow.emit(AuthEvent.PasswordResetSent)
@@ -267,6 +275,7 @@ class AuthViewModel @Inject constructor(
         data class NavigateToHome(val role: UserRole) : AuthEvent()
         object NavigateToRoleSelection : AuthEvent()
         object NavigateToEmailVerification : AuthEvent()
+        object VerificationEmailResent : AuthEvent()
         object NavigateToLogin : AuthEvent()
         object PasswordResetSent : AuthEvent()
         data class NavigateToCompleteProfile(val role: UserRole) : AuthEvent()
