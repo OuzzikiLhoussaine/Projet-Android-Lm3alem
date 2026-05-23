@@ -1,26 +1,45 @@
 package com.lm3alem.app.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.Bolt
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import coil.compose.AsyncImage
 import com.lm3alem.app.R
 import com.lm3alem.app.data.model.ArtisanProfile
 import com.lm3alem.app.data.model.RequestStatus
 import com.lm3alem.app.data.model.ServiceRequest
+import com.lm3alem.app.ui.theme.Lm3alemTheme
+import com.lm3alem.app.ui.theme.LogoBlue
+import com.lm3alem.app.ui.theme.LogoYellow
 import java.util.Locale
 
 @Composable
@@ -112,40 +131,153 @@ fun ArtisanCard(artisan: ArtisanProfile, onClick: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onClick() },
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface,
-            contentColor = MaterialTheme.colorScheme.onSurface
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(
-                text = artisan.job,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-            )
-            Text(
-                text = artisan.description,
-                style = MaterialTheme.typography.bodyMedium,
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalAlignment = Alignment.CenterVertically,
+        Row(
+            modifier = Modifier
+                .padding(12.dp)
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Avatar
+            Surface(
+                modifier = Modifier.size(64.dp),
+                shape = CircleShape,
+                color = MaterialTheme.colorScheme.surfaceVariant
             ) {
-                Text(
-                    text = artisan.city,
-                    style = MaterialTheme.typography.bodyMedium,
+                AsyncImage(
+                    model = "https://i.pravatar.cc/150?u=${artisan.userId}", // Mock URL for design
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.clip(CircleShape)
                 )
+            }
+
+            Spacer(modifier = Modifier.width(12.dp))
+
+            Column(modifier = Modifier.weight(1f)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = "Artisan Name", 
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = LogoBlue
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Surface(
+                        color = LogoYellow,
+                        shape = RoundedCornerShape(8.dp)
+                    ) {
+                        Text(
+                            text = "Verified",
+                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = Color.Black,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
                 Text(
-                    text = stringResource(R.string.price_dh, artisan.getPriceDouble().toString()),
+                    text = artisan.job,
                     style = MaterialTheme.typography.bodyMedium,
+                    color = Color.Gray
                 )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    repeat(5) { index ->
+                        Icon(
+                            imageVector = Icons.Default.Star,
+                            contentDescription = null,
+                            tint = if (index < artisan.rating.toInt()) LogoYellow else Color.LightGray,
+                            modifier = Modifier.size(16.dp)
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = "${String.format(Locale.US, "%.1f", artisan.rating)} (${artisan.reviewCount})",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Color.Gray
+                    )
+                }
+            }
+
+            Column(horizontalAlignment = Alignment.End) {
                 Text(
-                    text = "${String.format(Locale.US, "%.1f", artisan.rating)}/5",
-                    style = MaterialTheme.typography.bodyMedium,
+                    text = "$${artisan.getPriceDouble()}/hr",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = LogoBlue
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Surface(
+                    modifier = Modifier.size(32.dp),
+                    shape = CircleShape,
+                    color = LogoBlue
+                ) {
+                    Box(contentAlignment = Alignment.Center) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                            contentDescription = null,
+                            tint = Color.White,
+                            modifier = Modifier.size(16.dp)
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun CategoryCard(
+    title: String,
+    icon: ImageVector,
+    modifier: Modifier = Modifier,
+    imageUrl: String? = null,
+    onClick: () -> Unit,
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(140.dp)
+            .clickable { onClick() },
+        shape = RoundedCornerShape(32.dp),
+    ) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            // Placeholder for image with overlay
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        brush = Brush.verticalGradient(
+                            colors = listOf(Color.Transparent, Color.Black.copy(alpha = 0.7f))
+                        )
+                    )
+            ) {
+                // Background image (simulated with a dark navy if no URL)
+                Box(modifier = Modifier.fillMaxSize().background(LogoBlue.copy(alpha = 0.8f)))
+            }
+
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    tint = LogoYellow,
+                    modifier = Modifier.size(32.dp)
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
                 )
             }
         }
@@ -240,16 +372,35 @@ fun RequestCard(request: ServiceRequest, onStatusUpdate: (RequestStatus) -> Unit
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppTopBar(
-    title: String,
+    title: String? = null,
     onBackClick: (() -> Unit)? = null,
+    onNotificationClick: (() -> Unit)? = null,
     actions: @Composable RowScope.() -> Unit = {},
 ) {
     TopAppBar(
         title = {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.titleLarge,
-            )
+            if (title != null) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleLarge,
+                )
+            } else {
+                Text(
+                    text = buildAnnotatedString {
+                        withStyle(style = SpanStyle(color = LogoYellow)) {
+                            append("Lm")
+                        }
+                        withStyle(style = SpanStyle(color = Color.White)) {
+                            append("3")
+                        }
+                        withStyle(style = SpanStyle(color = LogoYellow)) {
+                            append("alem")
+                        }
+                    },
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold
+                )
+            }
         },
         navigationIcon = {
             onBackClick?.let {
@@ -257,13 +408,26 @@ fun AppTopBar(
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = stringResource(R.string.back),
+                        tint = if (title != null) MaterialTheme.colorScheme.onBackground else Color.White
                     )
                 }
             }
         },
-        actions = actions,
+        actions = {
+            if (onNotificationClick != null) {
+                IconButton(onClick = onNotificationClick) {
+                    Icon(
+                        imageVector = Icons.Default.Notifications,
+                        contentDescription = "Notifications",
+                        tint = Color.White
+                    )
+                }
+            }
+            actions()
+        },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.background,
+            containerColor = if (title == null) LogoBlue else MaterialTheme.colorScheme.background,
+            titleContentColor = if (title == null) Color.White else MaterialTheme.colorScheme.onBackground
         ),
     )
 }
@@ -307,6 +471,35 @@ fun ErrorMessage(
             color = MaterialTheme.colorScheme.onErrorContainer,
             style = MaterialTheme.typography.bodySmall,
             modifier = Modifier.padding(12.dp),
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ArtisanCardPreview() {
+    Lm3alemTheme {
+        ArtisanCard(
+            artisan = ArtisanProfile(
+                userId = "1",
+                job = "Plumber",
+                rating = 4.8,
+                reviewCount = 127,
+                price = 45.0
+            ),
+            onClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CategoryCardPreview() {
+    Lm3alemTheme {
+        CategoryCard(
+            title = "Electrician",
+            icon = Icons.Default.Bolt,
+            onClick = {}
         )
     }
 }

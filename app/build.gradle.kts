@@ -56,6 +56,7 @@ dependencies {
 
     // Navigation
     implementation(libs.androidx.navigation.compose)
+    implementation("androidx.compose.material:material-icons-extended")
 
 
     implementation("com.google.firebase:firebase-auth-ktx")
