@@ -8,7 +8,10 @@ data class ArtisanProfile(
     val city: String = "",
     val price: Any? = 0.0,
     val rating: Double = 0.0,
-    val reviewCount: Int = 0
+    val reviewCount: Int = 0,
+    val successRate: Int = 100,
+    val availability: String = "Mon - Sat, 8AM - 6PM",
+    val specializations: List<String> = emptyList()
 ) {
     fun getExperienceInt(): Int {
         return when (experience) {

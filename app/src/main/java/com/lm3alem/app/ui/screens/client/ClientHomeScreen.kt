@@ -55,13 +55,13 @@ fun ClientHomeScreen(
     Scaffold(
         topBar = {
             AppTopBar(
-                onNotificationClick = { /* Handle notifications */ }
+                onNotificationClick = { /* Handle notifications */ },
             )
         },
         bottomBar = {
             NavigationBar(
                 containerColor = Color.White,
-                contentColor = LogoBlue
+                contentColor = LogoBlue,
             ) {
                 NavigationBarItem(
                     selected = true,
@@ -146,20 +146,32 @@ fun ClientHomeScreen(
                 CategoryCard(
                     title = "Plumber",
                     icon = Icons.Default.Build,
-                    onClick = { viewModel.filterArtisans("Plumber", "") }
-                )
+                ) { viewModel.filterArtisans("Plumber", "") }
                 Spacer(modifier = Modifier.height(16.dp))
                 CategoryCard(
                     title = "Electrician",
                     icon = Icons.Default.Bolt,
-                    onClick = { viewModel.filterArtisans("Electrician", "") }
-                )
+                ) { viewModel.filterArtisans("Electrician", "") }
                 Spacer(modifier = Modifier.height(16.dp))
                 CategoryCard(
                     title = "Carpenter",
                     icon = Icons.Default.Handyman,
-                    onClick = { viewModel.filterArtisans("Carpenter", "") }
-                )
+                ) { viewModel.filterArtisans("Carpenter", "") }
+                Spacer(modifier = Modifier.height(16.dp))
+                CategoryCard(
+                    title = "Painter",
+                    icon = Icons.Default.FormatPaint,
+                ) { viewModel.filterArtisans("Painter", "") }
+                Spacer(modifier = Modifier.height(16.dp))
+                CategoryCard(
+                    title = "Builder",
+                    icon = Icons.Default.Engineering,
+                ) { viewModel.filterArtisans("Builder", "") }
+                Spacer(modifier = Modifier.height(16.dp))
+                CategoryCard(
+                    title = "Handyman",
+                    icon = Icons.Default.Construction,
+                ) { viewModel.filterArtisans("Handyman", "") }
             }
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -178,9 +190,9 @@ fun ClientHomeScreen(
                         modifier = Modifier.padding(horizontal = 24.dp),
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
-                        state.artisans.take(5).forEach { artisan ->
-                            ArtisanCard(artisan = artisan) {
-                                navController.navigate(Screen.ArtisanDetails.createRoute(artisan.userId))
+                        state.artisans.take(5).forEach { artisanWithUser ->
+                            ArtisanCard(artisanWithUser = artisanWithUser) {
+                                navController.navigate(Screen.ArtisanDetails.createRoute(artisanWithUser.artisan.userId))
                             }
                         }
                         if (state.artisans.isEmpty()) {

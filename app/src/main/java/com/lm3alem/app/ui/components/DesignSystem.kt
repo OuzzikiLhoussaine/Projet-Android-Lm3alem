@@ -10,7 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.Bolt
 import androidx.compose.material3.*
@@ -35,6 +35,8 @@ import androidx.compose.ui.window.Dialog
 import coil.compose.AsyncImage
 import com.lm3alem.app.R
 import com.lm3alem.app.data.model.ArtisanProfile
+import com.lm3alem.app.data.model.ArtisanWithUser
+import com.lm3alem.app.data.model.User
 import com.lm3alem.app.data.model.RequestStatus
 import com.lm3alem.app.data.model.ServiceRequest
 import com.lm3alem.app.ui.theme.Lm3alemTheme
@@ -126,7 +128,10 @@ fun AppTextField(
 }
 
 @Composable
-fun ArtisanCard(artisan: ArtisanProfile, onClick: () -> Unit) {
+fun ArtisanCard(artisanWithUser: ArtisanWithUser, onClick: () -> Unit) {
+    val artisan = artisanWithUser.artisan
+    val user = artisanWithUser.user
+    
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -149,38 +154,32 @@ fun ArtisanCard(artisan: ArtisanProfile, onClick: () -> Unit) {
                 shape = CircleShape,
                 color = MaterialTheme.colorScheme.surfaceVariant
             ) {
-                AsyncImage(
-                    model = "https://i.pravatar.cc/150?u=${artisan.userId}", // Mock URL for design
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.clip(CircleShape)
-                )
+                if (user.imageUrl.isNotEmpty()) {
+                    AsyncImage(
+                        model = user.imageUrl,
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.clip(CircleShape)
+                    )
+                } else {
+                    Icon(
+                        imageVector = Icons.Default.Person,
+                        contentDescription = null,
+                        modifier = Modifier.padding(16.dp),
+                        tint = LogoBlue
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.width(12.dp))
 
             Column(modifier = Modifier.weight(1f)) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        text = "Artisan Name", 
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = LogoBlue
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Surface(
-                        color = LogoYellow,
-                        shape = RoundedCornerShape(8.dp)
-                    ) {
-                        Text(
-                            text = "Verified",
-                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
-                            style = MaterialTheme.typography.labelSmall,
-                            color = Color.Black,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                }
+                Text(
+                    text = user.fullName.ifEmpty { "Artisan Name" }, 
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = LogoBlue
+                )
                 Text(
                     text = artisan.job,
                     style = MaterialTheme.typography.bodyMedium,
@@ -206,7 +205,7 @@ fun ArtisanCard(artisan: ArtisanProfile, onClick: () -> Unit) {
 
             Column(horizontalAlignment = Alignment.End) {
                 Text(
-                    text = "$${artisan.getPriceDouble()}/hr",
+                    text = "${stringResource(R.string.price_dh, artisan.getPriceDouble().toString())}/hr",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = LogoBlue
@@ -480,15 +479,21 @@ fun ErrorMessage(
 fun ArtisanCardPreview() {
     Lm3alemTheme {
         ArtisanCard(
-            artisan = ArtisanProfile(
-                userId = "1",
-                job = "Plumber",
-                rating = 4.8,
-                reviewCount = 127,
-                price = 45.0
+            artisanWithUser = ArtisanWithUser(
+                artisan = ArtisanProfile(
+                    userId = "1",
+                    job = "Plumber",
+                    rating = 4.8,
+                    reviewCount = 127,
+                    price = 45.0,
+                ),
+                user = User(
+                    id = "1",
+                    fullName = "Ahmed Hassan",
+                    imageUrl = ""
+                )
             ),
-            onClick = {}
-        )
+        ) { }
     }
 }
 
@@ -499,7 +504,6 @@ fun CategoryCardPreview() {
         CategoryCard(
             title = "Electrician",
             icon = Icons.Default.Bolt,
-            onClick = {}
-        )
+        ) { }
     }
 }
