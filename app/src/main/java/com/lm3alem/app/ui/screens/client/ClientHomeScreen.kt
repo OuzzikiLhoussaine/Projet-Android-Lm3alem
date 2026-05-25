@@ -76,7 +76,7 @@ fun ClientHomeScreen(
                 )
                 NavigationBarItem(
                     selected = false,
-                    onClick = { },
+                    onClick = { navController.navigate(Screen.Explore.route) },
                     icon = { Icon(Icons.Default.Explore, contentDescription = "Explore") },
                     label = { Text("Explore") }
                 )
@@ -140,7 +140,9 @@ fun ClientHomeScreen(
             }
 
             // Categories Section
-            SectionHeader(title = "Categories") { }
+            SectionHeader(title = "Categories") { 
+                navController.navigate(Screen.Explore.route)
+            }
             
             Column(modifier = Modifier.padding(horizontal = 24.dp)) {
                 CategoryCard(
@@ -177,7 +179,9 @@ fun ClientHomeScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             // Top Rated Artisans Section
-            SectionHeader(title = "Top Rated Artisans") { }
+            SectionHeader(title = "Top Rated Artisans") { 
+                navController.navigate(Screen.Explore.route)
+            }
 
             when (val state = uiState) {
                 is ClientViewModel.ClientUiState.Loading -> {

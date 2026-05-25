@@ -11,7 +11,8 @@ data class ArtisanProfile(
     val reviewCount: Int = 0,
     val successRate: Int = 100,
     val availability: String = "Mon - Sat, 8AM - 6PM",
-    val specializations: List<String> = emptyList()
+    val specializations: List<String> = emptyList(),
+    val isAvailable: Boolean = true
 ) {
     fun getExperienceInt(): Int {
         return when (experience) {
