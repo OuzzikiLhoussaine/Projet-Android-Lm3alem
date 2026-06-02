@@ -89,7 +89,7 @@ fun RegisterScreen(
             Box(contentAlignment = Alignment.Center) {
                 Image(
                     painter = painterResource(id = R.drawable.app_logo),
-                    contentDescription = "App Logo",
+                    contentDescription = stringResource(R.string.app_logo),
                     modifier = Modifier.size(70.dp),
                     contentScale = ContentScale.Fit
                 )
@@ -118,7 +118,7 @@ fun RegisterScreen(
         Spacer(modifier = Modifier.height(40.dp))
 
         Text(
-            text = "Register",
+            text = stringResource(R.string.register),
             fontSize = 32.sp,
             fontWeight = FontWeight.Bold,
             color = navyBlue
@@ -127,7 +127,7 @@ fun RegisterScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            text = "I am a",
+            text = stringResource(R.string.i_am_a),
             fontSize = 14.sp,
             fontWeight = FontWeight.SemiBold,
             color = navyBlue
@@ -143,7 +143,7 @@ fun RegisterScreen(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             RoleToggleButton(
-                text = "Client",
+                text = stringResource(R.string.client),
                 icon = Icons.Default.Person,
                 isSelected = selectedRole == UserRole.CLIENT,
                 onClick = { selectedRole = UserRole.CLIENT },
@@ -151,7 +151,7 @@ fun RegisterScreen(
                 selectedColor = navyBlue
             )
             RoleToggleButton(
-                text = "Artisan",
+                text = stringResource(R.string.artisan),
                 icon = Icons.Default.Build,
                 isSelected = selectedRole == UserRole.ARTISAN,
                 onClick = { selectedRole = UserRole.ARTISAN },
@@ -165,7 +165,7 @@ fun RegisterScreen(
         AppTextField(
             value = email,
             onValueChange = { email = it },
-            label = "Email"
+            label = stringResource(R.string.email)
         )
         
         Spacer(modifier = Modifier.height(16.dp))
@@ -173,7 +173,7 @@ fun RegisterScreen(
         AppTextField(
             value = password,
             onValueChange = { password = it },
-            label = "Password",
+            label = stringResource(R.string.password),
             visualTransformation = PasswordVisualTransformation()
         )
 
@@ -182,7 +182,7 @@ fun RegisterScreen(
         AppTextField(
             value = confirmPassword,
             onValueChange = { confirmPassword = it },
-            label = "Confirm Password",
+            label = stringResource(R.string.confirm_password),
             visualTransformation = PasswordVisualTransformation()
         )
         
@@ -191,7 +191,7 @@ fun RegisterScreen(
         val isFormValid = email.isNotEmpty() && password.isNotEmpty() && password == confirmPassword
 
         MainButton(
-            text = "Register",
+            text = stringResource(R.string.register),
             onClick = {
                 viewModel.register(email, password, selectedRole)
             },
@@ -206,12 +206,12 @@ fun RegisterScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Already have an account? ",
+                text = stringResource(R.string.already_have_account),
                 fontSize = 14.sp,
                 color = navyBlue
             )
             Text(
-                text = "Login",
+                text = stringResource(R.string.login),
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
                 color = navyBlue,

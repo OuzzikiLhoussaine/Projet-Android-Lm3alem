@@ -175,7 +175,7 @@ fun ArtisanCard(artisanWithUser: ArtisanWithUser, onClick: () -> Unit) {
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = user.fullName.ifEmpty { "Artisan Name" }, 
+                    text = user.fullName.ifEmpty { stringResource(R.string.full_name) }, 
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = LogoBlue
@@ -205,7 +205,7 @@ fun ArtisanCard(artisanWithUser: ArtisanWithUser, onClick: () -> Unit) {
 
             Column(horizontalAlignment = Alignment.End) {
                 Text(
-                    text = "${stringResource(R.string.price_dh, artisan.getPriceDouble().toString())}/hr",
+                    text = stringResource(R.string.price_per_hr, artisan.getPriceDouble().toString()),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = LogoBlue
@@ -417,7 +417,7 @@ fun AppTopBar(
                 IconButton(onClick = onNotificationClick) {
                     Icon(
                         imageVector = Icons.Default.Notifications,
-                        contentDescription = "Notifications",
+                        contentDescription = stringResource(R.string.notifications),
                         tint = Color.White
                     )
                 }

@@ -40,12 +40,19 @@ import java.util.Locale
 @Composable
 fun ExploreScreen(
     navController: NavHostController,
-    viewModel: ClientViewModel = hiltViewModel()
+    viewModel: ClientViewModel = hiltViewModel(),
+    initialCategory: String? = null
 ) {
     var searchQuery by remember { mutableStateOf("") }
     val uiState by viewModel.uiState
-    var selectedCategory by remember { mutableStateOf("All") }
+    var selectedCategory by remember { mutableStateOf(initialCategory ?: "All") }
     val categories = listOf("All", "Plumber", "Electrician", "Carpenter", "Painter", "Builder")
+
+    LaunchedEffect(initialCategory) {
+        if (initialCategory != null) {
+            viewModel.filterArtisans("", if (initialCategory == "All") "" else initialCategory)
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -260,27 +267,12 @@ fun ExploreArtisanCard(
             Spacer(modifier = Modifier.width(16.dp))
 
             Column(modifier = Modifier.weight(1f)) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        text = user.fullName.ifEmpty { "Artisan Name" },
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold,
-                        color = LogoBlue
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Surface(
-                        color = LogoYellow,
-                        shape = RoundedCornerShape(8.dp)
-                    ) {
-                        Text(
-                            text = "Verified",
-                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
-                            style = MaterialTheme.typography.labelSmall,
-                            color = Color.Black,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                }
+                Text(
+                    text = user.fullName.ifEmpty { "Artisan Name" },
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = LogoBlue
+                )
                 
                 Text(
                     text = artisan.job,

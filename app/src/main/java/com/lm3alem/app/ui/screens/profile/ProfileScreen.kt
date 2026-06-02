@@ -11,6 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,10 +19,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.os.LocaleListCompat
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
@@ -43,6 +47,22 @@ fun ProfileScreen(
     val uiState by viewModel.uiState
     var notificationsEnabled by remember { mutableStateOf(true) }
     var darkModeEnabled by remember { mutableStateOf(false) }
+    var showLanguageBottomSheet by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+
+    val currentLanguage = remember(showLanguageBottomSheet) {
+        val locales = AppCompatDelegate.getApplicationLocales()
+        if (locales.isEmpty) {
+            "English" // Default to English as we made values/strings.xml English
+        } else {
+            when (locales.get(0)?.language) {
+                "en" -> "English"
+                "fr" -> "Français"
+                "ar" -> "العربية"
+                else -> "English"
+            }
+        }
+    }
 
     LaunchedEffect(Unit) {
         viewModel.fetchUserProfile()
@@ -56,6 +76,17 @@ fun ProfileScreen(
                 }
             }
         }
+    }
+
+    if (showLanguageBottomSheet) {
+        LanguageBottomSheet(
+            onDismiss = { showLanguageBottomSheet = false },
+            onLanguageSelected = { languageCode ->
+                val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags(languageCode)
+                AppCompatDelegate.setApplicationLocales(appLocale)
+                showLanguageBottomSheet = false
+            }
+        )
     }
 
     Scaffold(
@@ -72,20 +103,20 @@ fun ProfileScreen(
                 NavigationBarItem(
                     selected = false,
                     onClick = { navController.navigate(Screen.ClientHome.route) },
-                    icon = { Icon(Icons.Default.Home, contentDescription = "Home") },
-                    label = { Text("Home") }
+                    icon = { Icon(Icons.Default.Home, contentDescription = stringResource(R.string.home)) },
+                    label = { Text(stringResource(R.string.home)) }
                 )
                 NavigationBarItem(
                     selected = false,
                     onClick = { },
-                    icon = { Icon(Icons.Default.Explore, contentDescription = "Explore") },
-                    label = { Text("Explore") }
+                    icon = { Icon(Icons.Default.Explore, contentDescription = stringResource(R.string.explore)) },
+                    label = { Text(stringResource(R.string.explore)) }
                 )
                 NavigationBarItem(
                     selected = false,
                     onClick = { },
-                    icon = { Icon(Icons.AutoMirrored.Filled.Message, contentDescription = "Messages") },
-                    label = { Text("Messages") }
+                    icon = { Icon(Icons.AutoMirrored.Filled.Message, contentDescription = stringResource(R.string.messages)) },
+                    label = { Text(stringResource(R.string.messages)) }
                 )
                 NavigationBarItem(
                     selected = true,
@@ -174,7 +205,7 @@ fun ProfileScreen(
 
                             Column {
                                 Text(
-                                    text = user.fullName.ifEmpty { "User Name" },
+                                    text = user.fullName.ifEmpty { stringResource(R.string.full_name) },
                                     style = MaterialTheme.typography.titleLarge,
                                     fontWeight = FontWeight.Bold,
                                     color = LogoBlue
@@ -204,25 +235,11 @@ fun ProfileScreen(
                         colors = CardDefaults.cardColors(containerColor = Color.White),
                         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
                     ) {
-                        Column {
-                            ProfileMenuItem(
-                                icon = Icons.Default.FavoriteBorder,
-                                title = "Favorites",
-                                onClick = { }
-                            )
-                            HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = Color.LightGray.copy(alpha = 0.3f))
-                            ProfileMenuItem(
-                                icon = Icons.Default.History,
-                                title = "Booking History",
-                                onClick = { }
-                            )
-                            HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = Color.LightGray.copy(alpha = 0.3f))
-                            ProfileMenuItem(
-                                icon = Icons.Default.CreditCard,
-                                title = "Payment Methods",
-                                onClick = { }
-                            )
-                        }
+                        ProfileMenuItem(
+                            icon = Icons.Default.History,
+                            title = stringResource(R.string.booking_history),
+                            onClick = { }
+                        )
                     }
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -237,28 +254,28 @@ fun ProfileScreen(
                         Column {
                             ProfileMenuToggleItem(
                                 icon = Icons.Default.NotificationsNone,
-                                title = "Notifications",
+                                title = stringResource(R.string.notifications),
                                 isChecked = notificationsEnabled,
                                 onCheckedChange = { notificationsEnabled = it }
                             )
                             HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = Color.LightGray.copy(alpha = 0.3f))
                             ProfileMenuToggleItem(
                                 icon = Icons.Default.DarkMode,
-                                title = "Dark Mode",
+                                title = stringResource(R.string.dark_mode),
                                 isChecked = darkModeEnabled,
                                 onCheckedChange = { darkModeEnabled = it }
                             )
                             HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = Color.LightGray.copy(alpha = 0.3f))
                             ProfileMenuItem(
                                 icon = Icons.Default.Language,
-                                title = "Language",
-                                subtitle = "English",
-                                onClick = { }
+                                title = stringResource(R.string.language),
+                                subtitle = currentLanguage,
+                                onClick = { showLanguageBottomSheet = true }
                             )
                             HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = Color.LightGray.copy(alpha = 0.3f))
                             ProfileMenuItem(
                                 icon = Icons.Default.Settings,
-                                title = "Settings",
+                                title = stringResource(R.string.settings),
                                 onClick = { }
                             )
                         }
@@ -275,7 +292,7 @@ fun ProfileScreen(
                     ) {
                         ProfileMenuItem(
                             icon = Icons.Default.HelpOutline,
-                            title = "Help & Support",
+                            title = stringResource(R.string.help_support),
                             onClick = { }
                         )
                     }
@@ -314,7 +331,7 @@ fun ProfileScreen(
                     Spacer(modifier = Modifier.height(24.dp))
 
                     Text(
-                        text = "Version 1.0.0",
+                        text = stringResource(R.string.version, "1.0.0"),
                         modifier = Modifier.align(Alignment.CenterHorizontally),
                         style = MaterialTheme.typography.bodySmall,
                         color = Color.Gray
@@ -330,6 +347,69 @@ fun ProfileScreen(
                 }
                 else -> {}
             }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun LanguageBottomSheet(
+    onDismiss: () -> Unit,
+    onLanguageSelected: (String) -> Unit
+) {
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        containerColor = Color.White,
+        sheetState = rememberModalBottomSheetState()
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 32.dp, start = 24.dp, end = 24.dp)
+        ) {
+            Text(
+                text = stringResource(R.string.select_language),
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(vertical = 16.dp)
+            )
+            
+            LanguageOption(
+                label = stringResource(R.string.english),
+                onClick = { onLanguageSelected("en") }
+            )
+            LanguageOption(
+                label = stringResource(R.string.french),
+                onClick = { onLanguageSelected("fr") }
+            )
+            LanguageOption(
+                label = stringResource(R.string.arabic),
+                onClick = { onLanguageSelected("ar") }
+            )
+        }
+    }
+}
+
+@Composable
+fun LanguageOption(
+    label: String,
+    onClick: () -> Unit
+) {
+    Surface(
+        onClick = onClick,
+        modifier = Modifier.fillMaxWidth(),
+        color = Color.Transparent
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(vertical = 12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = label,
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.Medium
+            )
         }
     }
 }

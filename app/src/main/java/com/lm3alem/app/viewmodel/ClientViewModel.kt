@@ -19,6 +19,8 @@ class ClientViewModel @Inject constructor(
     val uiState: State<ClientUiState> = _uiState
 
     private var allArtisans = listOf<ArtisanWithUser>()
+    private var currentQuery = ""
+    private var currentCategory = ""
 
     init {
         fetchArtisans()
@@ -30,7 +32,7 @@ class ClientViewModel @Inject constructor(
             clientRepository.getAllArtisans()
                 .onSuccess { artisans ->
                     allArtisans = artisans
-                    _uiState.value = ClientUiState.Success(artisans)
+                    applyFilters()
                 }
                 .onFailure {
                     _uiState.value = ClientUiState.Error(it.message ?: "Unknown error")
@@ -38,10 +40,16 @@ class ClientViewModel @Inject constructor(
         }
     }
 
-    fun filterArtisans(query: String, city: String) {
+    fun filterArtisans(query: String, category: String) {
+        currentQuery = query
+        currentCategory = category
+        applyFilters()
+    }
+
+    private fun applyFilters() {
         val filtered = allArtisans.filter {
-            (it.artisan.job.contains(query, ignoreCase = true) || it.artisan.description.contains(query, ignoreCase = true)) &&
-            (city.isEmpty() || it.artisan.city.equals(city, ignoreCase = true))
+            (it.artisan.job.contains(currentQuery, ignoreCase = true) || it.artisan.description.contains(currentQuery, ignoreCase = true)) &&
+            (currentCategory.isEmpty() || it.artisan.job.equals(currentCategory, ignoreCase = true))
         }
         _uiState.value = ClientUiState.Success(filtered)
     }

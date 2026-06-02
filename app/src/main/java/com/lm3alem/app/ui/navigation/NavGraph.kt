@@ -89,8 +89,16 @@ fun NavGraph(
         composable(Screen.Profile.route) {
             ProfileScreen(navController)
         }
-        composable(Screen.Explore.route) {
-            ExploreScreen(navController)
+        composable(
+            route = Screen.Explore.route,
+            arguments = listOf(navArgument("category") { 
+                type = NavType.StringType
+                nullable = true
+                defaultValue = null
+            })
+        ) { backStackEntry ->
+            val category = backStackEntry.arguments?.getString("category")
+            ExploreScreen(navController, initialCategory = category)
         }
         composable(Screen.EditProfile.route) {
             EditProfileScreen(navController)

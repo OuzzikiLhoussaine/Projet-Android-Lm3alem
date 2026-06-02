@@ -12,7 +12,8 @@ data class ArtisanProfile(
     val successRate: Int = 100,
     val availability: String = "Mon - Sat, 8AM - 6PM",
     val specializations: List<String> = emptyList(),
-    val isAvailable: Boolean = true
+    val isAvailable: Boolean = true,
+    val projectCount: Int = 0
 ) {
     fun getExperienceInt(): Int {
         return when (experience) {

@@ -5,6 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lm3alem.app.data.model.ArtisanProfile
+import com.lm3alem.app.data.model.ArtisanWithUser
+import com.lm3alem.app.data.model.User
 import com.lm3alem.app.data.repository.ArtisanRepository
 import com.lm3alem.app.data.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,15 +27,17 @@ class ArtisanViewModel @Inject constructor(
     private val _eventFlow = MutableSharedFlow<ArtisanEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
-    private val _artisanProfile = mutableStateOf<ArtisanProfile?>(null)
-    val artisanProfile: State<ArtisanProfile?> = _artisanProfile
+    private val _artisanWithUser = mutableStateOf<ArtisanWithUser?>(null)
+    val artisanWithUser: State<ArtisanWithUser?> = _artisanWithUser
 
     fun fetchArtisanProfile(userId: String) {
         viewModelScope.launch {
             _uiState.value = ArtisanUiState.Loading
             val profile = artisanRepository.getArtisanProfile(userId)
-            if (profile != null) {
-                _artisanProfile.value = profile
+            val user = authRepository.getUserDetails(userId)
+            
+            if (profile != null && user != null) {
+                _artisanWithUser.value = ArtisanWithUser(profile, user)
                 _uiState.value = ArtisanUiState.Idle
             } else {
                 _uiState.value = ArtisanUiState.Error("Profile not found")

@@ -19,6 +19,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
@@ -100,7 +101,7 @@ fun LoginScreen(
             Box(contentAlignment = Alignment.Center) {
                 Image(
                     painter = painterResource(id = R.drawable.app_logo),
-                    contentDescription = "App Logo",
+                    contentDescription = stringResource(R.string.app_logo),
                     modifier = Modifier.size(70.dp),
                     contentScale = ContentScale.Fit
                 )
@@ -129,7 +130,7 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(48.dp))
 
         Text(
-            text = "Welcome back",
+            text = stringResource(R.string.welcome_back),
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
             color = navyBlue
@@ -140,7 +141,7 @@ fun LoginScreen(
         AppTextField(
             value = email,
             onValueChange = { email = it },
-            label = "Email"
+            label = stringResource(R.string.email)
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -148,20 +149,20 @@ fun LoginScreen(
         AppTextField(
             value = password,
             onValueChange = { password = it },
-            label = "Password",
+            label = stringResource(R.string.password),
             visualTransformation = PasswordVisualTransformation()
         )
 
         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
             TextButton(onClick = { navController.navigate(Screen.ForgotPassword.route) }) {
-                Text(text = "Forgot Password?", color = MaterialTheme.colorScheme.secondary)
+                Text(text = stringResource(R.string.forgot_password), color = MaterialTheme.colorScheme.secondary)
             }
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
         MainButton(
-            text = "Login",
+            text = stringResource(R.string.login),
             onClick = { viewModel.login(email, password) },
             isLoading = authState is AuthViewModel.AuthState.Loading,
             containerColor = navyBlue
@@ -199,7 +200,7 @@ fun LoginScreen(
                         } else {
                             Toast.makeText(
                                 context,
-                                "Invalid Google credential",
+                                context.getString(R.string.invalid_google_credential),
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -207,7 +208,7 @@ fun LoginScreen(
                     } catch (e: Exception) {
                         Toast.makeText(
                             context,
-                            e.message ?: "Google sign in failed",
+                            e.message ?: context.getString(R.string.google_sign_in_failed),
                             Toast.LENGTH_LONG
                         ).show()
                     }
@@ -217,7 +218,7 @@ fun LoginScreen(
             shape = RoundedCornerShape(12.dp),
             enabled = authState !is AuthViewModel.AuthState.Loading
         ) {
-            Text("Continue with Google")
+            Text(stringResource(R.string.continue_google))
         }
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -226,12 +227,12 @@ fun LoginScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "No account? ",
+                text = stringResource(R.string.no_account),
                 fontSize = 14.sp,
                 color = navyBlue
             )
             Text(
-                text = "Register",
+                text = stringResource(R.string.register),
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
                 color = navyBlue,

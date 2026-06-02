@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -69,7 +70,7 @@ fun RoleSelectionScreen(
             Box(contentAlignment = Alignment.Center) {
                 Image(
                     painter = painterResource(id = R.drawable.app_logo),
-                    contentDescription = "App Logo",
+                    contentDescription = stringResource(R.string.app_logo),
                     modifier = Modifier.size(70.dp),
                     contentScale = ContentScale.Fit
                 )
@@ -98,7 +99,7 @@ fun RoleSelectionScreen(
         Spacer(modifier = Modifier.height(48.dp))
 
         Text(
-            text = "Choose your role",
+            text = stringResource(R.string.choose_role),
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
             color = navyBlue,
@@ -108,7 +109,7 @@ fun RoleSelectionScreen(
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = "Are you looking for services or providing them?",
+            text = stringResource(R.string.role_description),
             style = MaterialTheme.typography.bodyLarge,
             color = Color.Gray,
             textAlign = TextAlign.Center
@@ -121,16 +122,16 @@ fun RoleSelectionScreen(
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             RoleCard(
-                title = "Client",
-                description = "I need help with home services",
+                title = stringResource(R.string.client),
+                description = stringResource(R.string.client_role_desc),
                 icon = Icons.Default.Person,
                 onClick = { viewModel.selectRole(UserRole.CLIENT) },
                 modifier = Modifier.weight(1f),
                 color = navyBlue
             )
             RoleCard(
-                title = "Artisan",
-                description = "I want to provide my services",
+                title = stringResource(R.string.artisan),
+                description = stringResource(R.string.artisan_role_desc),
                 icon = Icons.Default.Build,
                 onClick = { viewModel.selectRole(UserRole.ARTISAN) },
                 modifier = Modifier.weight(1f),

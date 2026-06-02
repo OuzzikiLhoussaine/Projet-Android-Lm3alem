@@ -26,6 +26,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.lm3alem.app.R
+import com.lm3alem.app.data.model.ArtisanWithUser
 import com.lm3alem.app.ui.components.AppTopBar
 import com.lm3alem.app.ui.components.ErrorMessage
 import com.lm3alem.app.ui.navigation.Screen
@@ -42,7 +43,7 @@ fun ArtisanDetailsScreen(
     viewModel: ArtisanViewModel = hiltViewModel(),
     reviewViewModel: ReviewViewModel = hiltViewModel(),
 ) {
-    val artisanProfile by viewModel.artisanProfile
+    val artisanWithUser by viewModel.artisanWithUser
     val uiState by viewModel.uiState
     var selectedTab by remember { mutableIntStateOf(0) }
 
@@ -56,14 +57,14 @@ fun ArtisanDetailsScreen(
     Scaffold(
         topBar = {
             AppTopBar(
-                title = "Profile",
+                title = stringResource(R.string.profile),
                 onBackClick = { navController.popBackStack() },
                 actions = {
                     IconButton(onClick = { /* Share */ }) {
-                        Icon(Icons.Default.Share, contentDescription = "Share", tint = Color.White)
+                        Icon(Icons.Default.Share, contentDescription = stringResource(R.string.share), tint = Color.White)
                     }
                     IconButton(onClick = { /* Favorite */ }) {
-                        Icon(Icons.Default.FavoriteBorder, contentDescription = "Favorite", tint = Color.White)
+                        Icon(Icons.Default.FavoriteBorder, contentDescription = stringResource(R.string.favorite), tint = Color.White)
                     }
                 }
             )
@@ -95,12 +96,12 @@ fun ArtisanDetailsScreen(
                     ErrorMessage(message = state.message, modifier = Modifier.padding(24.dp))
                 }
                 else -> {
-                    artisanProfile?.let { profile ->
-                        ArtisanHeaderSection(profile)
+                    artisanWithUser?.let { data ->
+                        ArtisanHeaderSection(data)
                         
                         Spacer(modifier = Modifier.height(24.dp))
                         
-                        SpecializationsSection(profile.specializations)
+                        SpecializationsSection(data.artisan.specializations)
                         
                         Spacer(modifier = Modifier.height(24.dp))
                         
@@ -114,7 +115,7 @@ fun ArtisanDetailsScreen(
                             when (selectedTab) {
                                 0 -> Text("Portfolio content goes here...", color = Color.Gray)
                                 1 -> Text("Reviews content goes here...", color = Color.Gray)
-                                2 -> Text(profile.description.ifEmpty { "No bio available." }, color = Color.Gray)
+                                2 -> Text(data.artisan.description.ifEmpty { stringResource(R.string.no_bio) }, color = Color.Gray)
                             }
                         }
                     }
@@ -125,7 +126,10 @@ fun ArtisanDetailsScreen(
 }
 
 @Composable
-fun ArtisanHeaderSection(profile: com.lm3alem.app.data.model.ArtisanProfile) {
+fun ArtisanHeaderSection(data: ArtisanWithUser) {
+    val profile = data.artisan
+    val user = data.user
+    
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -141,8 +145,16 @@ fun ArtisanHeaderSection(profile: com.lm3alem.app.data.model.ArtisanProfile) {
                     shape = CircleShape,
                     color = Color.LightGray.copy(alpha = 0.2f)
                 ) {
-                    // Using mock image for now, ideally user imageUrl should be here
-                    Icon(Icons.Default.Person, contentDescription = null, modifier = Modifier.padding(20.dp), tint = LogoBlue)
+                    if (user.imageUrl.isNotEmpty()) {
+                        AsyncImage(
+                            model = user.imageUrl,
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.clip(CircleShape)
+                        )
+                    } else {
+                        Icon(Icons.Default.Person, contentDescription = null, modifier = Modifier.padding(20.dp), tint = LogoBlue)
+                    }
                 }
                 
                 Spacer(modifier = Modifier.width(20.dp))
@@ -150,7 +162,7 @@ fun ArtisanHeaderSection(profile: com.lm3alem.app.data.model.ArtisanProfile) {
                 Column {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(
-                            text = "Ahmed Hassan", // Mock name, should be user.fullName
+                            text = user.fullName,
                             style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.Bold,
                             color = LogoBlue
@@ -158,13 +170,13 @@ fun ArtisanHeaderSection(profile: com.lm3alem.app.data.model.ArtisanProfile) {
                         Spacer(modifier = Modifier.width(8.dp))
                         Icon(
                             imageVector = Icons.Default.CheckCircle,
-                            contentDescription = "Verified",
+                            contentDescription = stringResource(R.string.verified),
                             tint = LogoYellow,
                             modifier = Modifier.size(20.dp)
                         )
                     }
                     Text(
-                        text = "Professional ${profile.job}",
+                        text = stringResource(R.string.professional_job, profile.job),
                         style = MaterialTheme.typography.bodyLarge,
                         color = Color.Gray
                     )
@@ -179,7 +191,7 @@ fun ArtisanHeaderSection(profile: com.lm3alem.app.data.model.ArtisanProfile) {
                         }
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = "${String.format(Locale.US, "%.1f", profile.rating)} (${profile.reviewCount} reviews)",
+                            text = "${String.format(Locale.US, "%.1f", profile.rating)} (${profile.reviewCount} ${stringResource(R.string.reviews)})",
                             style = MaterialTheme.typography.bodySmall,
                             color = Color.Gray
                         )
@@ -194,19 +206,19 @@ fun ArtisanHeaderSection(profile: com.lm3alem.app.data.model.ArtisanProfile) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                StatItem(label = "Projects", value = "127")
-                StatItem(label = "Years Exp.", value = "${profile.getExperienceInt()}+")
-                StatItem(label = "Success Rate", value = "${profile.successRate}%")
+                StatItem(label = stringResource(R.string.projects), value = profile.projectCount.toString())
+                StatItem(label = stringResource(R.string.years_exp_label), value = "${profile.getExperienceInt()}+")
+                StatItem(label = stringResource(R.string.success_rate), value = "${profile.successRate}%")
             }
             
             Spacer(modifier = Modifier.height(32.dp))
             
             // Info Rows
-            InfoItem(icon = Icons.Default.LocationOn, text = "Downtown, Cairo") // profile.city
+            InfoItem(icon = Icons.Default.LocationOn, text = profile.city.ifEmpty { stringResource(R.string.location_not_specified) })
             Spacer(modifier = Modifier.height(12.dp))
-            InfoItem(icon = Icons.Default.WorkHistory, text = "Available: ${profile.availability}")
+            InfoItem(icon = Icons.Default.WorkHistory, text = stringResource(R.string.available_label, profile.availability))
             Spacer(modifier = Modifier.height(12.dp))
-            InfoItem(icon = Icons.Default.AttachMoney, text = "${profile.getPriceDouble()} DH/hour", isPrice = true)
+            InfoItem(icon = Icons.Default.AttachMoney, text = stringResource(R.string.dh_hour, profile.getPriceDouble().toString()), isPrice = true)
         }
     }
 }
@@ -245,6 +257,8 @@ fun InfoItem(icon: ImageVector, text: String, isPrice: Boolean = false) {
 
 @Composable
 fun SpecializationsSection(specs: List<String>) {
+    if (specs.isEmpty()) return
+    
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -255,30 +269,21 @@ fun SpecializationsSection(specs: List<String>) {
     ) {
         Column(modifier = Modifier.padding(24.dp)) {
             Text(
-                text = "Specializations",
+                text = stringResource(R.string.specializations),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = LogoBlue
             )
             Spacer(modifier = Modifier.height(16.dp))
             
-            // FlowRow equivalent using wrap
+            // Displaying tags in a simple layout
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                val mockSpecs = listOf("Pipe Installation", "Leak Repair", "Water Heaters", "Drain Cleaning", "Fixtures", "Emergency Service")
-                val displaySpecs = if (specs.isEmpty()) mockSpecs else specs
-                
-                // Simplified row-based layout for tags
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    TagItem(displaySpecs[0])
-                    TagItem(displaySpecs[1])
-                }
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    TagItem(displaySpecs[2])
-                    TagItem(displaySpecs[3])
-                }
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    TagItem(displaySpecs[4])
-                    TagItem(displaySpecs[5])
+                specs.chunked(2).forEach { rowSpecs ->
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        rowSpecs.forEach { spec ->
+                            TagItem(spec)
+                        }
+                    }
                 }
             }
         }
@@ -302,7 +307,11 @@ fun TagItem(text: String) {
 
 @Composable
 fun ArtisanTabs(selectedTab: Int, onTabSelected: (Int) -> Unit) {
-    val tabs = listOf("Portfolio", "Reviews", "About")
+    val tabs = listOf(
+        stringResource(R.string.portfolio),
+        stringResource(R.string.reviews),
+        stringResource(R.string.about)
+    )
     Column {
         Row(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
@@ -350,7 +359,7 @@ fun BottomActionBar(onBookClick: () -> Unit) {
                 shape = CircleShape,
                 contentPadding = PaddingValues(0.dp)
             ) {
-                Icon(Icons.Default.Call, contentDescription = "Call", tint = LogoBlue)
+                Icon(Icons.Default.Call, contentDescription = stringResource(R.string.call), tint = LogoBlue)
             }
             
             OutlinedButton(
@@ -359,7 +368,7 @@ fun BottomActionBar(onBookClick: () -> Unit) {
                 shape = CircleShape,
                 contentPadding = PaddingValues(0.dp)
             ) {
-                Icon(Icons.AutoMirrored.Filled.Message, contentDescription = "Message", tint = LogoBlue)
+                Icon(Icons.AutoMirrored.Filled.Message, contentDescription = stringResource(R.string.message), tint = LogoBlue)
             }
             
             Button(
@@ -370,7 +379,7 @@ fun BottomActionBar(onBookClick: () -> Unit) {
                 shape = RoundedCornerShape(28.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = LogoYellow, contentColor = LogoBlue)
             ) {
-                Text("Book Now", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                Text(stringResource(R.string.book_now), fontWeight = FontWeight.Bold, fontSize = 16.sp)
             }
         }
     }

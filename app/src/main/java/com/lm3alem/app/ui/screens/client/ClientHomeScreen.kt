@@ -19,6 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import androidx.compose.ui.res.stringResource
+import com.lm3alem.app.R
 import com.lm3alem.app.ui.components.*
 import com.lm3alem.app.ui.navigation.Screen
 import com.lm3alem.app.ui.theme.Lm3alemTheme
@@ -66,8 +68,8 @@ fun ClientHomeScreen(
                 NavigationBarItem(
                     selected = true,
                     onClick = { },
-                    icon = { Icon(Icons.Default.Home, contentDescription = "Home") },
-                    label = { Text("Home") },
+                    icon = { Icon(Icons.Default.Home, contentDescription = stringResource(R.string.home)) },
+                    label = { Text(stringResource(R.string.home)) },
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = LogoBlue,
                         selectedTextColor = LogoBlue,
@@ -77,20 +79,20 @@ fun ClientHomeScreen(
                 NavigationBarItem(
                     selected = false,
                     onClick = { navController.navigate(Screen.Explore.route) },
-                    icon = { Icon(Icons.Default.Explore, contentDescription = "Explore") },
-                    label = { Text("Explore") }
+                    icon = { Icon(Icons.Default.Explore, contentDescription = stringResource(R.string.explore)) },
+                    label = { Text(stringResource(R.string.explore)) }
                 )
                 NavigationBarItem(
                     selected = false,
                     onClick = { },
-                    icon = { Icon(Icons.AutoMirrored.Filled.Message, contentDescription = "Messages") },
-                    label = { Text("Messages") }
+                    icon = { Icon(Icons.AutoMirrored.Filled.Message, contentDescription = stringResource(R.string.messages)) },
+                    label = { Text(stringResource(R.string.messages)) }
                 )
                 NavigationBarItem(
                     selected = false,
                     onClick = { navController.navigate(Screen.Profile.route) },
-                    icon = { Icon(Icons.Default.Person, contentDescription = "Profile") },
-                    label = { Text("Profile") }
+                    icon = { Icon(Icons.Default.Person, contentDescription = stringResource(R.string.profile)) },
+                    label = { Text(stringResource(R.string.profile)) }
                 )
             }
         }
@@ -105,13 +107,13 @@ fun ClientHomeScreen(
             // Header Section
             Column(modifier = Modifier.padding(24.dp)) {
                 Text(
-                    text = "Hello, $userName 👋",
+                    text = stringResource(R.string.hello_user, userName),
                     style = MaterialTheme.typography.headlineMedium,
                     fontWeight = FontWeight.Bold,
                     color = LogoBlue
                 )
                 Text(
-                    text = "Find the perfect professional for your home",
+                    text = stringResource(R.string.client_home_subtitle),
                     style = MaterialTheme.typography.bodyLarge,
                     color = Color.Gray
                 )
@@ -126,7 +128,7 @@ fun ClientHomeScreen(
                         viewModel.filterArtisans(searchQuery, "")
                     },
                     modifier = Modifier.fillMaxWidth(),
-                    placeholder = { Text("Search for services...", color = Color.LightGray) },
+                    placeholder = { Text(stringResource(R.string.search_services), color = Color.LightGray) },
                     leadingIcon = { Icon(Icons.Default.Search, contentDescription = null, tint = Color.LightGray) },
                     shape = RoundedCornerShape(28.dp),
                     colors = OutlinedTextFieldDefaults.colors(
@@ -140,46 +142,46 @@ fun ClientHomeScreen(
             }
 
             // Categories Section
-            SectionHeader(title = "Categories") { 
+            SectionHeader(title = stringResource(R.string.categories)) { 
                 navController.navigate(Screen.Explore.route)
             }
             
             Column(modifier = Modifier.padding(horizontal = 24.dp)) {
                 CategoryCard(
-                    title = "Plumber",
+                    title = stringResource(R.string.plumber),
                     icon = Icons.Default.Build,
-                ) { viewModel.filterArtisans("Plumber", "") }
+                ) { navController.navigate(Screen.Explore.createRoute("Plumber")) }
                 Spacer(modifier = Modifier.height(16.dp))
                 CategoryCard(
-                    title = "Electrician",
+                    title = stringResource(R.string.electrician),
                     icon = Icons.Default.Bolt,
-                ) { viewModel.filterArtisans("Electrician", "") }
+                ) { navController.navigate(Screen.Explore.createRoute("Electrician")) }
                 Spacer(modifier = Modifier.height(16.dp))
                 CategoryCard(
-                    title = "Carpenter",
+                    title = stringResource(R.string.carpenter),
                     icon = Icons.Default.Handyman,
-                ) { viewModel.filterArtisans("Carpenter", "") }
+                ) { navController.navigate(Screen.Explore.createRoute("Carpenter")) }
                 Spacer(modifier = Modifier.height(16.dp))
                 CategoryCard(
-                    title = "Painter",
+                    title = stringResource(R.string.painter),
                     icon = Icons.Default.FormatPaint,
-                ) { viewModel.filterArtisans("Painter", "") }
+                ) { navController.navigate(Screen.Explore.createRoute("Painter")) }
                 Spacer(modifier = Modifier.height(16.dp))
                 CategoryCard(
-                    title = "Builder",
+                    title = stringResource(R.string.builder),
                     icon = Icons.Default.Engineering,
-                ) { viewModel.filterArtisans("Builder", "") }
+                ) { navController.navigate(Screen.Explore.createRoute("Builder")) }
                 Spacer(modifier = Modifier.height(16.dp))
                 CategoryCard(
-                    title = "Handyman",
+                    title = stringResource(R.string.handyman),
                     icon = Icons.Default.Construction,
-                ) { viewModel.filterArtisans("Handyman", "") }
+                ) { navController.navigate(Screen.Explore.createRoute("Handyman")) }
             }
 
             Spacer(modifier = Modifier.height(24.dp))
 
             // Top Rated Artisans Section
-            SectionHeader(title = "Top Rated Artisans") { 
+            SectionHeader(title = stringResource(R.string.top_rated_artisans)) { 
                 navController.navigate(Screen.Explore.route)
             }
 
@@ -201,7 +203,7 @@ fun ClientHomeScreen(
                         }
                         if (state.artisans.isEmpty()) {
                             Text(
-                                text = "No artisans found",
+                                text = stringResource(R.string.no_artisans_found),
                                 modifier = Modifier.padding(vertical = 32.dp).align(Alignment.CenterHorizontally),
                                 color = Color.Gray
                             )
@@ -240,7 +242,7 @@ fun SectionHeader(
             color = LogoBlue
         )
         TextButton(onClick = onSeeAllClick) {
-            Text(text = "See all", color = Color.Gray)
+            Text(text = stringResource(R.string.see_all), color = Color.Gray)
         }
     }
 }
