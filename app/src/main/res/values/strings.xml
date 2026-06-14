@@ -61,6 +61,7 @@
     <string name="loading">Loading…</string>
     <string name="profile">Profile</string>
     <string name="edit_profile">Edit Profile</string>
+    <string name="change_profile_picture">Change profile picture</string>
     <string name="logout">Logout</string>
     <string name="role">Role</string>
     <string name="language">Language</string>

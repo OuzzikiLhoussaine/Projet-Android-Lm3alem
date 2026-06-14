@@ -46,11 +46,22 @@ class AuthViewModel @Inject constructor(
                 val details = authRepository.getUserDetails(currentUser.uid)
 
                 if (details != null) {
-                    _authState.value = AuthState.Success(details)
-                    _eventFlow.emit(AuthEvent.NavigateToHome(details.userRole))
+                    if (isProfileComplete(details)) {
+                        _authState.value = AuthState.Success(details)
+                        _eventFlow.emit(AuthEvent.NavigateToHome(details.userRole))
+                    } else {
+                        _authState.value = AuthState.Success(details)
+                        _eventFlow.emit(AuthEvent.NavigateToCompleteProfile(details.userRole))
+                    }
                 }
             }
         }
+    }
+
+    private fun isProfileComplete(user: User): Boolean {
+        return user.fullName.isNotBlank() &&
+                user.phone.isNotBlank() &&
+                user.city.isNotBlank()
     }
 
     fun login(email: String, pass: String) {
@@ -76,8 +87,13 @@ class AuthViewModel @Inject constructor(
                 val userDetails = authRepository.getUserDetails(uid)
 
                 if (userDetails != null) {
-                    _authState.value = AuthState.Success(userDetails)
-                    _eventFlow.emit(AuthEvent.NavigateToHome(userDetails.userRole))
+                    if (isProfileComplete(userDetails)) {
+                        _authState.value = AuthState.Success(userDetails)
+                        _eventFlow.emit(AuthEvent.NavigateToHome(userDetails.userRole))
+                    } else {
+                        _authState.value = AuthState.Success(userDetails)
+                        _eventFlow.emit(AuthEvent.NavigateToCompleteProfile(userDetails.userRole))
+                    }
                 } else {
                     _authState.value = AuthState.Error("User details not found")
                 }
@@ -117,8 +133,13 @@ class AuthViewModel @Inject constructor(
                 val existingUser = authRepository.getUserDetails(uid)
 
                 if (existingUser != null) {
-                    _authState.value = AuthState.Success(existingUser)
-                    _eventFlow.emit(AuthEvent.NavigateToHome(existingUser.userRole))
+                    if (isProfileComplete(existingUser)) {
+                        _authState.value = AuthState.Success(existingUser)
+                        _eventFlow.emit(AuthEvent.NavigateToHome(existingUser.userRole))
+                    } else {
+                        _authState.value = AuthState.Success(existingUser)
+                        _eventFlow.emit(AuthEvent.NavigateToCompleteProfile(existingUser.userRole))
+                    }
                 } else {
                     val newUser = User(
                         fullName = firebaseUser.displayName ?: "",
