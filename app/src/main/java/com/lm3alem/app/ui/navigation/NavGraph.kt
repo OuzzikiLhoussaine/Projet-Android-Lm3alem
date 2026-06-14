@@ -24,6 +24,7 @@ import com.lm3alem.app.ui.screens.artisan.ArtisanRequestsScreen
 import com.lm3alem.app.ui.screens.profile.ProfileScreen
 import com.lm3alem.app.ui.screens.profile.EditProfileScreen
 import com.lm3alem.app.ui.screens.client.ExploreScreen
+import com.lm3alem.app.ui.screens.messages.MessagesScreen
 
 @Composable
 fun NavGraph(
@@ -102,6 +103,9 @@ fun NavGraph(
         }
         composable(Screen.EditProfile.route) {
             EditProfileScreen(navController)
+        }
+        composable(Screen.Messages.route) {
+            MessagesScreen(navController)
         }
     }
 }

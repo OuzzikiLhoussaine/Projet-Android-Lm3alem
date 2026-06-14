@@ -25,6 +25,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
+import androidx.compose.ui.res.stringResource
+import com.lm3alem.app.R
 import com.lm3alem.app.data.model.ArtisanProfile
 import com.lm3alem.app.data.model.ArtisanWithUser
 import com.lm3alem.app.data.model.User
@@ -69,14 +71,14 @@ fun ExploreScreen(
                 NavigationBarItem(
                     selected = false,
                     onClick = { navController.navigate(Screen.ClientHome.route) },
-                    icon = { Icon(Icons.Default.Home, contentDescription = "Home") },
-                    label = { Text("Home") }
+                    icon = { Icon(Icons.Default.Home, contentDescription = stringResource(R.string.home)) },
+                    label = { Text(stringResource(R.string.home)) }
                 )
                 NavigationBarItem(
                     selected = true,
                     onClick = { },
-                    icon = { Icon(Icons.Default.Explore, contentDescription = "Explore") },
-                    label = { Text("Explore") },
+                    icon = { Icon(Icons.Default.Explore, contentDescription = stringResource(R.string.explore)) },
+                    label = { Text(stringResource(R.string.explore)) },
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = LogoBlue,
                         selectedTextColor = LogoBlue,
@@ -85,15 +87,15 @@ fun ExploreScreen(
                 )
                 NavigationBarItem(
                     selected = false,
-                    onClick = { },
-                    icon = { Icon(Icons.AutoMirrored.Filled.Message, contentDescription = "Messages") },
-                    label = { Text("Messages") }
+                    onClick = { navController.navigate(Screen.Messages.route) },
+                    icon = { Icon(Icons.AutoMirrored.Filled.Message, contentDescription = stringResource(R.string.messages)) },
+                    label = { Text(stringResource(R.string.messages)) }
                 )
                 NavigationBarItem(
                     selected = false,
                     onClick = { navController.navigate(Screen.Profile.route) },
-                    icon = { Icon(Icons.Default.Person, contentDescription = "Profile") },
-                    label = { Text("Profile") }
+                    icon = { Icon(Icons.Default.Person, contentDescription = stringResource(R.string.profile)) },
+                    label = { Text(stringResource(R.string.profile)) }
                 )
             }
         }

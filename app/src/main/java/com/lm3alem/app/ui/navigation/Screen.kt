@@ -25,4 +25,5 @@ sealed class Screen(val route: String) {
     object CompleteProfile : Screen("complete_profile")
     object VerifyEmail : Screen("verify_email")
     object ForgotPassword : Screen("forgot_password")
+    object Messages : Screen("messages")
 }

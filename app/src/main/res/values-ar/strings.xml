@@ -91,6 +91,7 @@
     <string name="hello_user">مرحباً، %1$s 👋</string>
     <string name="client_home_subtitle">ابحث عن المهني المثالي لمنزلك</string>
     <string name="search_services">البحث عن خدمات…</string>
+    <string name="search_messages">البحث عن رسائل…</string>
     <string name="categories">الفئات</string>
     <string name="see_all">عرض الكل</string>
     <string name="top_rated_artisans">الحرفيين الأعلى تقييماً</string>

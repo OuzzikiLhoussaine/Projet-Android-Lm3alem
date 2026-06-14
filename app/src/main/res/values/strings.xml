@@ -91,6 +91,7 @@
     <string name="hello_user">Hello, %1$s 👋</string>
     <string name="client_home_subtitle">Find the perfect professional for your home</string>
     <string name="search_services">Search for services…</string>
+    <string name="search_messages">Search messages…</string>
     <string name="categories">Categories</string>
     <string name="see_all">See all</string>
     <string name="top_rated_artisans">Top Rated Artisans</string>
@@ -118,5 +119,5 @@
     <string name="call">Call</string>
     <string name="message">Message</string>
     <string name="book_now">Book Now</string>
-    <string name="default_web_client_id">248047005826-2q69bgugjs1h38b9hdde68l2d5pdu1r7.apps.googleusercontent.com</string>
+    <string name="default_web_client_id">183217366087-aisajifol185dt7h8frmmhr51qto4kui.apps.googleusercontent.com</string>
 </resources>

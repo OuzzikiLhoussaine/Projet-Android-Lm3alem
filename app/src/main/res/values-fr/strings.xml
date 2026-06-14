@@ -91,6 +91,7 @@
     <string name="hello_user">Bonjour, %1$s 👋</string>
     <string name="client_home_subtitle">Trouvez le professionnel idéal pour votre maison</string>
     <string name="search_services">Rechercher des services…</string>
+    <string name="search_messages">Rechercher des messages…</string>
     <string name="categories">Catégories</string>
     <string name="see_all">Voir tout</string>
     <string name="top_rated_artisans">Artisans les mieux notés</string>

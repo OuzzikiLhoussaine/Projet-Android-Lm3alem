@@ -19,7 +19,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -46,9 +45,7 @@ fun ProfileScreen(
 ) {
     val uiState by viewModel.uiState
     var notificationsEnabled by remember { mutableStateOf(true) }
-    var darkModeEnabled by remember { mutableStateOf(false) }
     var showLanguageBottomSheet by remember { mutableStateOf(false) }
-    val context = LocalContext.current
 
     val currentLanguage = remember(showLanguageBottomSheet) {
         val locales = AppCompatDelegate.getApplicationLocales()
@@ -114,7 +111,7 @@ fun ProfileScreen(
                 )
                 NavigationBarItem(
                     selected = false,
-                    onClick = { },
+                    onClick = { navController.navigate(Screen.Messages.route) },
                     icon = { Icon(Icons.AutoMirrored.Filled.Message, contentDescription = stringResource(R.string.messages)) },
                     label = { Text(stringResource(R.string.messages)) }
                 )
@@ -257,13 +254,6 @@ fun ProfileScreen(
                                 title = stringResource(R.string.notifications),
                                 isChecked = notificationsEnabled,
                                 onCheckedChange = { notificationsEnabled = it }
-                            )
-                            HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = Color.LightGray.copy(alpha = 0.3f))
-                            ProfileMenuToggleItem(
-                                icon = Icons.Default.DarkMode,
-                                title = stringResource(R.string.dark_mode),
-                                isChecked = darkModeEnabled,
-                                onCheckedChange = { darkModeEnabled = it }
                             )
                             HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = Color.LightGray.copy(alpha = 0.3f))
                             ProfileMenuItem(

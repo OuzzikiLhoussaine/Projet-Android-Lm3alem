@@ -84,7 +84,7 @@ fun ClientHomeScreen(
                 )
                 NavigationBarItem(
                     selected = false,
-                    onClick = { },
+                    onClick = { navController.navigate(Screen.Messages.route) },
                     icon = { Icon(Icons.AutoMirrored.Filled.Message, contentDescription = stringResource(R.string.messages)) },
                     label = { Text(stringResource(R.string.messages)) }
                 )

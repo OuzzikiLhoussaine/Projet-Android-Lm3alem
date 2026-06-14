@@ -374,6 +374,7 @@ fun AppTopBar(
     title: String? = null,
     onBackClick: (() -> Unit)? = null,
     onNotificationClick: (() -> Unit)? = null,
+    useBrandedColors: Boolean = true,
     actions: @Composable RowScope.() -> Unit = {},
 ) {
     TopAppBar(
@@ -382,6 +383,8 @@ fun AppTopBar(
                 Text(
                     text = title,
                     style = MaterialTheme.typography.titleLarge,
+                    color = if (useBrandedColors) LogoYellow else MaterialTheme.colorScheme.onBackground,
+                    fontWeight = if (useBrandedColors) FontWeight.Bold else FontWeight.Normal
                 )
             } else {
                 Text(
@@ -407,7 +410,7 @@ fun AppTopBar(
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = stringResource(R.string.back),
-                        tint = if (title != null) MaterialTheme.colorScheme.onBackground else Color.White
+                        tint = if (useBrandedColors) Color.White else MaterialTheme.colorScheme.onBackground
                     )
                 }
             }
@@ -425,8 +428,9 @@ fun AppTopBar(
             actions()
         },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = if (title == null) LogoBlue else MaterialTheme.colorScheme.background,
-            titleContentColor = if (title == null) Color.White else MaterialTheme.colorScheme.onBackground
+            containerColor = if (useBrandedColors) LogoBlue else MaterialTheme.colorScheme.background,
+            titleContentColor = if (useBrandedColors) Color.White else MaterialTheme.colorScheme.onBackground,
+            actionIconContentColor = if (useBrandedColors) Color.White else MaterialTheme.colorScheme.onBackground
         ),
     )
 }

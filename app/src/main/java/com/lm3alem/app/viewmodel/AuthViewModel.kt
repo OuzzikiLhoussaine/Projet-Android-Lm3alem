@@ -47,7 +47,7 @@ class AuthViewModel @Inject constructor(
 
                 if (details != null) {
                     _authState.value = AuthState.Success(details)
-                    _eventFlow.emit(AuthEvent.NavigateToHome(details.role))
+                    _eventFlow.emit(AuthEvent.NavigateToHome(details.userRole))
                 }
             }
         }
@@ -77,7 +77,7 @@ class AuthViewModel @Inject constructor(
 
                 if (userDetails != null) {
                     _authState.value = AuthState.Success(userDetails)
-                    _eventFlow.emit(AuthEvent.NavigateToHome(userDetails.role))
+                    _eventFlow.emit(AuthEvent.NavigateToHome(userDetails.userRole))
                 } else {
                     _authState.value = AuthState.Error("User details not found")
                 }
@@ -118,14 +118,14 @@ class AuthViewModel @Inject constructor(
 
                 if (existingUser != null) {
                     _authState.value = AuthState.Success(existingUser)
-                    _eventFlow.emit(AuthEvent.NavigateToHome(existingUser.role))
+                    _eventFlow.emit(AuthEvent.NavigateToHome(existingUser.userRole))
                 } else {
                     val newUser = User(
                         fullName = firebaseUser.displayName ?: "",
                         email = firebaseUser.email ?: "",
                         phone = "",
                         city = "",
-                        role = UserRole.CLIENT,
+                        role = UserRole.CLIENT.name,
                         imageUrl = firebaseUser.photoUrl?.toString() ?: ""
                     )
 
@@ -152,7 +152,7 @@ class AuthViewModel @Inject constructor(
             val trimmedEmail = email.trim()
             val user = User(
                 email = trimmedEmail,
-                role = role
+                role = role.name
             )
 
             val result = authRepository.register(trimmedEmail, pass, user)
@@ -242,7 +242,7 @@ class AuthViewModel @Inject constructor(
                     val user = authRepository.getUserDetails(uid)
                     if (user != null) {
                         _authState.value = AuthState.Success(user)
-                        _eventFlow.emit(AuthEvent.NavigateToHome(user.role))
+                        _eventFlow.emit(AuthEvent.NavigateToHome(user.userRole))
                     } else {
                         _authState.value = AuthState.Error("Failed to fetch updated user")
                     }

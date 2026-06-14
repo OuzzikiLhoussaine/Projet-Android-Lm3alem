@@ -69,7 +69,7 @@ class AuthRepository @Inject constructor(
 
     suspend fun updateUserRole(uid: String, role: UserRole): Result<Unit> {
         return try {
-            firestore.collection("users").document(uid).update("role", role).await()
+            firestore.collection("users").document(uid).update("role", role.name).await()
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)

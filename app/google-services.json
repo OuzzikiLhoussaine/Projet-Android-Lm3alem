@@ -1,42 +1,42 @@
 {
   "project_info": {
-    "project_number": "248047005826",
-    "firebase_url": "https://lm3alem-64c1d-default-rtdb.firebaseio.com",
-    "project_id": "lm3alem-64c1d",
-    "storage_bucket": "lm3alem-64c1d.firebasestorage.app"
+    "project_number": "183217366087",
+    "firebase_url": "https://lm3alemv2-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "lm3alemv2",
+    "storage_bucket": "lm3alemv2.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:248047005826:android:ad825aa1bb1af5f819849b",
+        "mobilesdk_app_id": "1:183217366087:android:38e16db3118467c7ae7d62",
         "android_client_info": {
           "package_name": "com.lm3alem.app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "248047005826-dr7ni82lb0hstosgv25vv0psb3899f97.apps.googleusercontent.com",
+          "client_id": "183217366087-bqdr31mkiv8djm534nqm9k1dnfebc0jd.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.lm3alem.app",
-            "certificate_hash": "061d71c6802f12dd175a6355aa92145f2d541740"
+            "certificate_hash": "e4f622e961a7b0bff340f4865470f5e63edaefe7"
           }
         },
         {
-          "client_id": "248047005826-2q69bgugjs1h38b9hdde68l2d5pdu1r7.apps.googleusercontent.com",
+          "client_id": "183217366087-aisajifol185dt7h8frmmhr51qto4kui.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyClKPtA6jMNYZxT_PKbeEjZcnQIgATezPI"
+          "current_key": "AIzaSyBTs-D3tuUVe6q_4hNggfLoaOyRyjuraC0"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "248047005826-2q69bgugjs1h38b9hdde68l2d5pdu1r7.apps.googleusercontent.com",
+              "client_id": "183217366087-aisajifol185dt7h8frmmhr51qto4kui.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
