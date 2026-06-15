@@ -30,17 +30,23 @@ class ArtisanViewModel @Inject constructor(
     private val _artisanWithUser = mutableStateOf<ArtisanWithUser?>(null)
     val artisanWithUser: State<ArtisanWithUser?> = _artisanWithUser
 
+    init {
+        authRepository.currentUser?.uid?.let { fetchArtisanProfile(it) }
+    }
+
     fun fetchArtisanProfile(userId: String) {
         viewModelScope.launch {
             _uiState.value = ArtisanUiState.Loading
             val profile = artisanRepository.getArtisanProfile(userId)
             val user = authRepository.getUserDetails(userId)
             
-            if (profile != null && user != null) {
-                _artisanWithUser.value = ArtisanWithUser(profile, user)
+            if (user != null) {
+                if (profile != null) {
+                    _artisanWithUser.value = ArtisanWithUser(profile, user)
+                }
                 _uiState.value = ArtisanUiState.Idle
             } else {
-                _uiState.value = ArtisanUiState.Error("Profile not found")
+                _uiState.value = ArtisanUiState.Error("User details not found")
             }
         }
     }
@@ -49,7 +55,6 @@ class ArtisanViewModel @Inject constructor(
         job: String,
         description: String,
         experience: String,
-        city: String,
         price: String,
     ) {
         viewModelScope.launch {
@@ -62,13 +67,14 @@ class ArtisanViewModel @Inject constructor(
             }
 
             try {
+                val userDetails = authRepository.getUserDetails(userId)
                 val currentProfile = artisanRepository.getArtisanProfile(userId)
                 val profile = ArtisanProfile(
                     userId = userId,
                     job = job,
                     description = description,
                     experience = experience.toIntOrNull() ?: 0,
-                    city = city,
+                    city = userDetails?.city ?: "",
                     price = price.toDoubleOrNull() ?: 0.0,
                     rating = currentProfile?.rating ?: 0.0,
                     reviewCount = currentProfile?.reviewCount ?: 0

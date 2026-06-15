@@ -8,7 +8,7 @@ data class User(
     val fullName: String = "",
     val email: String = "",
     val phone: String = "",
-    val role: String = UserRole.CLIENT.name,
+    val role: String = UserRole.UNDEFINED.name,
     val city: String = "",
     val imageUrl: String = ""
 ) {
@@ -16,10 +16,10 @@ data class User(
         get() = try {
             UserRole.valueOf(role)
         } catch (e: Exception) {
-            UserRole.CLIENT
+            UserRole.UNDEFINED
         }
 }
 
 enum class UserRole {
-    CLIENT, ARTISAN
+    CLIENT, ARTISAN, UNDEFINED
 }

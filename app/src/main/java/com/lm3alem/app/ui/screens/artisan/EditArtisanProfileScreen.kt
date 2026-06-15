@@ -10,7 +10,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AttachMoney
 import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.History
-import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Work
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -24,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.lm3alem.app.R
+import com.lm3alem.app.ui.components.AppDropdownField
 import com.lm3alem.app.ui.components.AppTextField
 import com.lm3alem.app.ui.components.AppTopBar
 import com.lm3alem.app.ui.components.ErrorMessage
@@ -40,10 +40,21 @@ fun EditArtisanProfileScreen(
     var job by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
     var experience by remember { mutableStateOf("") }
-    var city by remember { mutableStateOf("") }
     var price by remember { mutableStateOf("") }
 
     val uiState by viewModel.uiState
+    val artisanWithUser by viewModel.artisanWithUser
+
+    val categories = listOf("Plumber", "Electrician", "Carpenter", "Painter", "Builder", "Handyman")
+
+    LaunchedEffect(artisanWithUser) {
+        artisanWithUser?.artisan?.let { artisan ->
+            job = artisan.job
+            description = artisan.description
+            experience = artisan.getExperienceInt().toString()
+            price = artisan.getPriceDouble().toString()
+        }
+    }
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collect { event ->
@@ -97,10 +108,11 @@ fun EditArtisanProfileScreen(
                     modifier = Modifier.padding(24.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    AppTextField(
+                    AppDropdownField(
                         value = job,
                         onValueChange = { job = it },
                         label = stringResource(R.string.job_profession),
+                        options = categories,
                         leadingIcon = Icons.Default.Work
                     )
                     Spacer(modifier = Modifier.height(16.dp))
@@ -125,14 +137,6 @@ fun EditArtisanProfileScreen(
                     Spacer(modifier = Modifier.height(16.dp))
 
                     AppTextField(
-                        value = city,
-                        onValueChange = { city = it },
-                        label = stringResource(R.string.city),
-                        leadingIcon = Icons.Default.LocationOn
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    AppTextField(
                         value = price,
                         onValueChange = { price = it },
                         label = stringResource(R.string.starting_price_dh),
@@ -144,11 +148,11 @@ fun EditArtisanProfileScreen(
                     MainButton(
                         text = stringResource(R.string.save_profile),
                         onClick = {
-                            if (job.isNotBlank() && city.isNotBlank() && description.isNotBlank()) {
-                                viewModel.saveProfile(job, description, experience, city, price)
+                            if (job.isNotBlank() && description.isNotBlank()) {
+                                viewModel.saveProfile(job, description, experience, price)
                             }
                         },
-                        enabled = job.isNotBlank() && city.isNotBlank() && description.isNotBlank(),
+                        enabled = job.isNotBlank() && description.isNotBlank(),
                         isLoading = uiState is ArtisanViewModel.ArtisanUiState.Loading,
                         containerColor = LogoBlue
                     )

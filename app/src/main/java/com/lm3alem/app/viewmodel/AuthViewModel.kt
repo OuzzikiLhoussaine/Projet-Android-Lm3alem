@@ -46,7 +46,10 @@ class AuthViewModel @Inject constructor(
                 val details = authRepository.getUserDetails(currentUser.uid)
 
                 if (details != null) {
-                    if (isProfileComplete(details)) {
+                    if (details.userRole == UserRole.UNDEFINED) {
+                        _authState.value = AuthState.Success(details)
+                        _eventFlow.emit(AuthEvent.NavigateToRoleSelection)
+                    } else if (isProfileComplete(details)) {
                         _authState.value = AuthState.Success(details)
                         _eventFlow.emit(AuthEvent.NavigateToHome(details.userRole))
                     } else {
@@ -61,7 +64,8 @@ class AuthViewModel @Inject constructor(
     private fun isProfileComplete(user: User): Boolean {
         return user.fullName.isNotBlank() &&
                 user.phone.isNotBlank() &&
-                user.city.isNotBlank()
+                user.city.isNotBlank() &&
+                user.userRole != UserRole.UNDEFINED
     }
 
     fun login(email: String, pass: String) {
@@ -87,7 +91,10 @@ class AuthViewModel @Inject constructor(
                 val userDetails = authRepository.getUserDetails(uid)
 
                 if (userDetails != null) {
-                    if (isProfileComplete(userDetails)) {
+                    if (userDetails.userRole == UserRole.UNDEFINED) {
+                        _authState.value = AuthState.Success(userDetails)
+                        _eventFlow.emit(AuthEvent.NavigateToRoleSelection)
+                    } else if (isProfileComplete(userDetails)) {
                         _authState.value = AuthState.Success(userDetails)
                         _eventFlow.emit(AuthEvent.NavigateToHome(userDetails.userRole))
                     } else {
@@ -133,7 +140,10 @@ class AuthViewModel @Inject constructor(
                 val existingUser = authRepository.getUserDetails(uid)
 
                 if (existingUser != null) {
-                    if (isProfileComplete(existingUser)) {
+                    if (existingUser.userRole == UserRole.UNDEFINED) {
+                        _authState.value = AuthState.Success(existingUser)
+                        _eventFlow.emit(AuthEvent.NavigateToRoleSelection)
+                    } else if (isProfileComplete(existingUser)) {
                         _authState.value = AuthState.Success(existingUser)
                         _eventFlow.emit(AuthEvent.NavigateToHome(existingUser.userRole))
                     } else {
@@ -146,7 +156,7 @@ class AuthViewModel @Inject constructor(
                         email = firebaseUser.email ?: "",
                         phone = "",
                         city = "",
-                        role = UserRole.CLIENT.name,
+                        role = UserRole.UNDEFINED.name,
                         imageUrl = firebaseUser.photoUrl?.toString() ?: ""
                     )
 
@@ -237,6 +247,10 @@ class AuthViewModel @Inject constructor(
                 val result = authRepository.updateUserRole(uid, role)
 
                 result.onSuccess {
+                    val updatedUser = authRepository.getUserDetails(uid)
+                    if (updatedUser != null) {
+                        _authState.value = AuthState.Success(updatedUser)
+                    }
                     _eventFlow.emit(AuthEvent.NavigateToCompleteProfile(role))
                 }.onFailure {
                     _authState.value = AuthState.Error(it.message ?: "Failed to update role")

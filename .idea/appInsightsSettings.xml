@@ -10,9 +10,9 @@
               <option name="connection">
                 <ConnectionSetting>
                   <option name="appId" value="com.lm3alem.app" />
-                  <option name="mobileSdkAppId" value="1:248047005826:android:ad825aa1bb1af5f819849b" />
-                  <option name="projectId" value="lm3alem-64c1d" />
-                  <option name="projectNumber" value="248047005826" />
+                  <option name="mobileSdkAppId" value="1:183217366087:android:38e16db3118467c7ae7d62" />
+                  <option name="projectId" value="lm3alemv2" />
+                  <option name="projectNumber" value="183217366087" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
