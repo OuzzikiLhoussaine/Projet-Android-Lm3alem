@@ -60,7 +60,15 @@
     <string name="submit_review">Envoyer l\'avis</string>
     <string name="loading">Chargement…</string>
     <string name="profile">Profil</string>
+    <string name="requests">Demandes</string>
     <string name="edit_profile">Modifier le profil</string>
+    <string name="edit_profile_subtitle">Mettez à jour vos informations personnelles</string>
+    <string name="account_settings">Paramètres du compte</string>
+    <string name="my_reviews">Mes avis</string>
+    <string name="my_reviews_subtitle">Voir ce que les clients disent de vous</string>
+    <string name="my_projects">Mes projets</string>
+    <string name="my_projects_subtitle">Gérez votre portfolio de travaux</string>
+    <string name="app_settings">Paramètres de l\'application</string>
     <string name="logout">Déconnexion</string>
     <string name="role">Rôle</string>
     <string name="language">Langue</string>
@@ -115,6 +123,10 @@
     <string name="specializations">Spécialisations</string>
     <string name="portfolio">Portfolio</string>
     <string name="about">À propos</string>
+    <string name="professional_info">Informations Professionnelles</string>
+    <string name="experience">Expérience</string>
+    <string name="years">ans</string>
+    <string name="starting_price">Prix de départ</string>
     <string name="no_bio">Aucune biographie disponible.</string>
     <string name="call">Appeler</string>
     <string name="message">Message</string>

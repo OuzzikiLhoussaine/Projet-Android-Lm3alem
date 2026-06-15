@@ -1,4 +1,4 @@
-package com.lm3alem.app.ui.screens.messages
+package com.lm3alem.app.ui.screens.artisan
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,19 +21,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.lm3alem.app.R
 import com.lm3alem.app.ui.components.AppTopBar
-import com.lm3alem.app.ui.components.ClientBottomBar
+import com.lm3alem.app.ui.components.ArtisanBottomBar
 import com.lm3alem.app.ui.navigation.Screen
 import com.lm3alem.app.ui.theme.LogoBlue
 import com.lm3alem.app.ui.theme.LogoYellow
+import com.lm3alem.app.viewmodel.AuthViewModel
 
-data class Conversation(
+data class ClientConversation(
     val id: String,
-    val senderName: String,
-    val senderProfession: String,
+    val clientName: String,
+    val location: String,
     val lastMessage: String,
     val timestamp: String,
     val unreadCount: Int,
@@ -42,17 +44,16 @@ data class Conversation(
 )
 
 @Composable
-fun MessagesScreen(
-    navController: NavHostController
+fun ArtisanMessagesScreen(
+    navController: NavHostController,
 ) {
     var searchQuery by remember { mutableStateOf("") }
 
     val mockConversations = listOf(
-        Conversation("1", "Ahmed Hassan", "Plumber", "I'll be there at 2 PM tomorrow", "2m ago", 2, isOnline = true, ""),
-        Conversation("2", "Mohamed Ali", "Electrician", "Thanks for choosing my service!", "1h ago", 0, isOnline = true, ""),
-        Conversation("3", "Youssef Ibrahim", "Carpenter", "The project is completed", "3h ago", 1, isOnline = false, ""),
-        Conversation("4", "Khaled Mahmoud", "Painter", "Can we reschedule to next week?", "1d ago", 0, isOnline = false, ""),
-        Conversation("5", "Omar Saeed", "Builder", "I've sent you the quote", "2d ago", 0, isOnline = true, ""),
+        ClientConversation("1", "Sarah Mansour", "Casablanca", "When can you come for the leak?", "10m ago", 1, isOnline = true, ""),
+        ClientConversation("2", "Karim Alami", "Rabat", "The price is okay for me. Let's do it.", "2h ago", 0, isOnline = false, ""),
+        ClientConversation("3", "Meryem Bennani", "Marrakech", "Thank you for the quick fix!", "Yesterday", 0, isOnline = true, ""),
+        ClientConversation("4", "Anas Zaki", "Fes", "Can we reschedule to Friday?", "2 days ago", 0, isOnline = false, ""),
     )
 
     Scaffold(
@@ -60,14 +61,14 @@ fun MessagesScreen(
             AppTopBar(
                 title = stringResource(R.string.messages),
                 actions = {
-                    IconButton(onClick = { /* More options */ }) {
-                        Icon(Icons.Default.MoreVert, contentDescription = null, tint = Color.White)
+                    IconButton(onClick = { /* Settings or Filter */ }) {
+                        Icon(Icons.Default.FilterList, contentDescription = null, tint = Color.White)
                     }
                 }
             )
         },
         bottomBar = {
-            ClientBottomBar(navController = navController, currentRoute = Screen.Messages.route)
+            ArtisanBottomBar(navController = navController, currentRoute = Screen.ArtisanMessages.route)
         }
     ) { padding ->
         Column(
@@ -76,14 +77,14 @@ fun MessagesScreen(
                 .padding(padding)
                 .background(Color(0xFFF8F9FA))
         ) {
-            // Search Bar
+            // Search Bar for Clients
             OutlinedTextField(
                 value = searchQuery,
                 onValueChange = { searchQuery = it },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp),
-                placeholder = { Text(stringResource(R.string.search_messages), color = Color.LightGray) },
+                placeholder = { Text("Search clients...", color = Color.LightGray) },
                 leadingIcon = { Icon(Icons.Default.Search, contentDescription = null, tint = Color.LightGray) },
                 shape = RoundedCornerShape(28.dp),
                 colors = OutlinedTextFieldDefaults.colors(
@@ -101,8 +102,8 @@ fun MessagesScreen(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 items(mockConversations) { conversation ->
-                    ConversationItem(conversation) {
-                        // Navigate to detail
+                    ClientConversationItem(conversation) {
+                        // Navigate to detail chat
                     }
                 }
             }
@@ -111,27 +112,27 @@ fun MessagesScreen(
 }
 
 @Composable
-fun ConversationItem(conversation: Conversation, onClick: () -> Unit) {
+fun ClientConversationItem(conversation: ClientConversation, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onClick() },
-        shape = RoundedCornerShape(32.dp),
+        shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
     ) {
         Row(
             modifier = Modifier
-                .padding(16.dp)
+                .padding(12.dp)
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Avatar with Online Status
+            // Avatar
             Box {
                 Surface(
-                    modifier = Modifier.size(60.dp),
+                    modifier = Modifier.size(56.dp),
                     shape = CircleShape,
-                    color = Color.LightGray.copy(alpha = 0.2f)
+                    color = MaterialTheme.colorScheme.surfaceVariant
                 ) {
                     if (conversation.imageUrl.isNotEmpty()) {
                         AsyncImage(
@@ -150,18 +151,19 @@ fun ConversationItem(conversation: Conversation, onClick: () -> Unit) {
                     }
                 }
                 
-                // Status dot
-                Surface(
-                    modifier = Modifier
-                        .size(14.dp)
-                        .align(Alignment.BottomEnd),
-                    shape = CircleShape,
-                    color = if (conversation.isOnline) Color(0xFF4CAF50) else Color.LightGray,
-                    border = androidx.compose.foundation.BorderStroke(2.dp, Color.White)
-                ) {}
+                if (conversation.isOnline) {
+                    Surface(
+                        modifier = Modifier
+                            .size(12.dp)
+                            .align(Alignment.BottomEnd),
+                        shape = CircleShape,
+                        color = Color(0xFF4CAF50),
+                        border = androidx.compose.foundation.BorderStroke(2.dp, Color.White)
+                    ) {}
+                }
             }
 
-            Spacer(modifier = Modifier.width(16.dp))
+            Spacer(modifier = Modifier.width(12.dp))
 
             Column(modifier = Modifier.weight(1f)) {
                 Row(
@@ -170,7 +172,7 @@ fun ConversationItem(conversation: Conversation, onClick: () -> Unit) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = conversation.senderName,
+                        text = conversation.clientName,
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
                         color = LogoBlue
@@ -182,44 +184,41 @@ fun ConversationItem(conversation: Conversation, onClick: () -> Unit) {
                     )
                 }
                 
-                Text(
-                    text = conversation.senderProfession,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = Color.Gray
-                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(Icons.Default.LocationOn, contentDescription = null, modifier = Modifier.size(12.dp), tint = Color.Gray)
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = conversation.location,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Color.Gray
+                    )
+                }
                 
                 Spacer(modifier = Modifier.height(4.dp))
                 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                Text(
+                    text = conversation.lastMessage,
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = if (conversation.unreadCount > 0) FontWeight.Bold else FontWeight.Normal,
+                    color = if (conversation.unreadCount > 0) LogoBlue else Color.Gray,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+            
+            if (conversation.unreadCount > 0) {
+                Surface(
+                    modifier = Modifier.size(20.dp).padding(start = 4.dp),
+                    shape = CircleShape,
+                    color = LogoYellow
                 ) {
-                    Text(
-                        text = conversation.lastMessage,
-                        style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = if (conversation.unreadCount > 0) FontWeight.Bold else FontWeight.Normal,
-                        color = if (conversation.unreadCount > 0) LogoBlue else Color.Gray,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.weight(1f)
-                    )
-                    
-                    if (conversation.unreadCount > 0) {
-                        Surface(
-                            modifier = Modifier.size(20.dp),
-                            shape = CircleShape,
-                            color = LogoYellow
-                        ) {
-                            Box(contentAlignment = Alignment.Center) {
-                                Text(
-                                    text = conversation.unreadCount.toString(),
-                                    color = LogoBlue,
-                                    fontSize = 12.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            }
-                        }
+                    Box(contentAlignment = Alignment.Center) {
+                        Text(
+                            text = conversation.unreadCount.toString(),
+                            color = LogoBlue,
+                            fontSize = 10.sp,
+                            fontWeight = FontWeight.Bold
+                        )
                     }
                 }
             }

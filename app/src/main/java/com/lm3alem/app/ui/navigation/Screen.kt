@@ -14,6 +14,7 @@ sealed class Screen(val route: String) {
         fun createRoute(artisanId: String) = "send_request/$artisanId"
     }
     object ArtisanRequests : Screen("artisan_requests")
+    object ArtisanProfile : Screen("artisan_profile")
     object AddReview : Screen("add_review/{artisanId}") {
         fun createRoute(artisanId: String) = "add_review/$artisanId"
     }
@@ -26,4 +27,5 @@ sealed class Screen(val route: String) {
     object VerifyEmail : Screen("verify_email")
     object ForgotPassword : Screen("forgot_password")
     object Messages : Screen("messages")
+    object ArtisanMessages : Screen("artisan_messages")
 }

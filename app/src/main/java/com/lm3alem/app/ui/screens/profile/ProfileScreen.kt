@@ -30,7 +30,10 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.lm3alem.app.R
 import com.lm3alem.app.ui.components.AppTopBar
+import com.lm3alem.app.ui.components.ClientBottomBar
 import com.lm3alem.app.ui.components.ErrorMessage
+import com.lm3alem.app.ui.components.ProfileMenuItem
+import com.lm3alem.app.ui.components.ProfileMenuToggleItem
 import com.lm3alem.app.ui.navigation.Screen
 import com.lm3alem.app.ui.theme.LogoBlue
 import com.lm3alem.app.ui.theme.LogoYellow
@@ -93,40 +96,7 @@ fun ProfileScreen(
             )
         },
         bottomBar = {
-            NavigationBar(
-                containerColor = Color.White,
-                contentColor = LogoBlue
-            ) {
-                NavigationBarItem(
-                    selected = false,
-                    onClick = { navController.navigate(Screen.ClientHome.route) },
-                    icon = { Icon(Icons.Default.Home, contentDescription = stringResource(R.string.home)) },
-                    label = { Text(stringResource(R.string.home)) }
-                )
-                NavigationBarItem(
-                    selected = false,
-                    onClick = { },
-                    icon = { Icon(Icons.Default.Explore, contentDescription = stringResource(R.string.explore)) },
-                    label = { Text(stringResource(R.string.explore)) }
-                )
-                NavigationBarItem(
-                    selected = false,
-                    onClick = { navController.navigate(Screen.Messages.route) },
-                    icon = { Icon(Icons.AutoMirrored.Filled.Message, contentDescription = stringResource(R.string.messages)) },
-                    label = { Text(stringResource(R.string.messages)) }
-                )
-                NavigationBarItem(
-                    selected = true,
-                    onClick = { },
-                    icon = { Icon(Icons.Default.Person, contentDescription = stringResource(R.string.profile)) },
-                    label = { Text(stringResource(R.string.profile)) },
-                    colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = LogoBlue,
-                        selectedTextColor = LogoBlue,
-                        indicatorColor = LogoBlue.copy(alpha = 0.1f),
-                    ),
-                )
-            }
+            ClientBottomBar(navController = navController, currentRoute = Screen.Profile.route)
         }
     ) { padding ->
         Column(
@@ -401,90 +371,5 @@ fun LanguageOption(
                 fontWeight = FontWeight.Medium
             )
         }
-    }
-}
-
-@Composable
-fun ProfileMenuItem(
-    icon: ImageVector,
-    title: String,
-    subtitle: String? = null,
-    onClick: () -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() }
-            .padding(16.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = null,
-            tint = LogoBlue,
-            modifier = Modifier.size(24.dp)
-        )
-        Spacer(modifier = Modifier.width(16.dp))
-        Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold,
-                color = LogoBlue
-            )
-            if (subtitle != null) {
-                Text(
-                    text = subtitle,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = Color.Gray
-                )
-            }
-        }
-        Icon(
-            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-            contentDescription = null,
-            tint = Color.Gray,
-            modifier = Modifier.size(20.dp)
-        )
-    }
-}
-
-@Composable
-fun ProfileMenuToggleItem(
-    icon: ImageVector,
-    title: String,
-    isChecked: Boolean,
-    onCheckedChange: (Boolean) -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = null,
-            tint = LogoBlue,
-            modifier = Modifier.size(24.dp)
-        )
-        Spacer(modifier = Modifier.width(16.dp))
-        Text(
-            text = title,
-            modifier = Modifier.weight(1f),
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.SemiBold,
-            color = LogoBlue
-        )
-        Switch(
-            checked = isChecked,
-            onCheckedChange = onCheckedChange,
-            colors = SwitchDefaults.colors(
-                checkedThumbColor = LogoYellow,
-                checkedTrackColor = LogoYellow.copy(alpha = 0.5f),
-                uncheckedThumbColor = Color.White,
-                uncheckedTrackColor = Color.LightGray.copy(alpha = 0.5f)
-            )
-        )
     }
 }

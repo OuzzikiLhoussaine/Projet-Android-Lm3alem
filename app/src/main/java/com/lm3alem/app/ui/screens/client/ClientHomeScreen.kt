@@ -61,40 +61,7 @@ fun ClientHomeScreen(
             )
         },
         bottomBar = {
-            NavigationBar(
-                containerColor = Color.White,
-                contentColor = LogoBlue,
-            ) {
-                NavigationBarItem(
-                    selected = true,
-                    onClick = { },
-                    icon = { Icon(Icons.Default.Home, contentDescription = stringResource(R.string.home)) },
-                    label = { Text(stringResource(R.string.home)) },
-                    colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = LogoBlue,
-                        selectedTextColor = LogoBlue,
-                        indicatorColor = LogoBlue.copy(alpha = 0.1f)
-                    )
-                )
-                NavigationBarItem(
-                    selected = false,
-                    onClick = { navController.navigate(Screen.Explore.route) },
-                    icon = { Icon(Icons.Default.Explore, contentDescription = stringResource(R.string.explore)) },
-                    label = { Text(stringResource(R.string.explore)) }
-                )
-                NavigationBarItem(
-                    selected = false,
-                    onClick = { navController.navigate(Screen.Messages.route) },
-                    icon = { Icon(Icons.AutoMirrored.Filled.Message, contentDescription = stringResource(R.string.messages)) },
-                    label = { Text(stringResource(R.string.messages)) }
-                )
-                NavigationBarItem(
-                    selected = false,
-                    onClick = { navController.navigate(Screen.Profile.route) },
-                    icon = { Icon(Icons.Default.Person, contentDescription = stringResource(R.string.profile)) },
-                    label = { Text(stringResource(R.string.profile)) }
-                )
-            }
+            ClientBottomBar(navController = navController, currentRoute = Screen.ClientHome.route)
         }
     ) { padding ->
         Column(

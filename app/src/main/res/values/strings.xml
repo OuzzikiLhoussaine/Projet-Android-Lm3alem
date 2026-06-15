@@ -60,7 +60,15 @@
     <string name="submit_review">Submit Review</string>
     <string name="loading">Loading…</string>
     <string name="profile">Profile</string>
+    <string name="requests">Requests</string>
     <string name="edit_profile">Edit Profile</string>
+    <string name="edit_profile_subtitle">Update your personal information</string>
+    <string name="account_settings">Account Settings</string>
+    <string name="my_reviews">My Reviews</string>
+    <string name="my_reviews_subtitle">See what clients say about you</string>
+    <string name="my_projects">My Projects</string>
+    <string name="my_projects_subtitle">Manage your portfolio of work</string>
+    <string name="app_settings">App Settings</string>
     <string name="change_profile_picture">Change profile picture</string>
     <string name="logout">Logout</string>
     <string name="role">Role</string>
@@ -116,6 +124,10 @@
     <string name="specializations">Specializations</string>
     <string name="portfolio">Portfolio</string>
     <string name="about">About</string>
+    <string name="professional_info">Professional Info</string>
+    <string name="experience">Experience</string>
+    <string name="years">years</string>
+    <string name="starting_price">Starting Price</string>
     <string name="no_bio">No bio available.</string>
     <string name="call">Call</string>
     <string name="message">Message</string>

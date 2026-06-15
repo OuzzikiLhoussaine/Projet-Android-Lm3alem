@@ -9,10 +9,15 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Explore
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.Bolt
+import androidx.compose.material.icons.filled.Dashboard
+import androidx.compose.material.icons.filled.ListAlt
+import androidx.compose.material.icons.automirrored.filled.Message
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -39,10 +44,229 @@ import com.lm3alem.app.data.model.ArtisanWithUser
 import com.lm3alem.app.data.model.User
 import com.lm3alem.app.data.model.RequestStatus
 import com.lm3alem.app.data.model.ServiceRequest
+import com.lm3alem.app.ui.navigation.Screen
 import com.lm3alem.app.ui.theme.Lm3alemTheme
 import com.lm3alem.app.ui.theme.LogoBlue
 import com.lm3alem.app.ui.theme.LogoYellow
 import java.util.Locale
+
+@Composable
+fun ArtisanBottomBar(
+    navController: androidx.navigation.NavHostController,
+    currentRoute: String?
+) {
+    NavigationBar(
+        containerColor = Color.White,
+        contentColor = LogoBlue
+    ) {
+        NavigationBarItem(
+            selected = currentRoute == Screen.ArtisanHome.route,
+            onClick = { 
+                if (currentRoute != Screen.ArtisanHome.route) {
+                    navController.navigate(Screen.ArtisanHome.route) {
+                        popUpTo(Screen.ArtisanHome.route) { inclusive = true }
+                    }
+                }
+            },
+            icon = { Icon(Icons.Default.Dashboard, contentDescription = stringResource(R.string.home)) },
+            label = { Text(stringResource(R.string.home)) },
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = LogoBlue,
+                selectedTextColor = LogoBlue,
+                indicatorColor = LogoBlue.copy(alpha = 0.1f),
+            ),
+        )
+        NavigationBarItem(
+            selected = currentRoute == Screen.ArtisanRequests.route,
+            onClick = { 
+                if (currentRoute != Screen.ArtisanRequests.route) {
+                    navController.navigate(Screen.ArtisanRequests.route)
+                }
+            },
+            icon = { Icon(Icons.Default.ListAlt, contentDescription = stringResource(R.string.requests)) },
+            label = { Text(stringResource(R.string.requests)) },
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = LogoBlue,
+                selectedTextColor = LogoBlue,
+                indicatorColor = LogoBlue.copy(alpha = 0.1f),
+            ),
+        )
+        NavigationBarItem(
+            selected = currentRoute == Screen.Messages.route,
+            onClick = { 
+                if (currentRoute != Screen.Messages.route) {
+                    navController.navigate(Screen.Messages.route)
+                }
+            },
+            icon = { Icon(Icons.AutoMirrored.Filled.Message, contentDescription = stringResource(R.string.messages)) },
+            label = { Text(stringResource(R.string.messages)) },
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = LogoBlue,
+                selectedTextColor = LogoBlue,
+                indicatorColor = LogoBlue.copy(alpha = 0.1f),
+            ),
+        )
+    }
+}
+
+@Composable
+fun ClientBottomBar(
+    navController: androidx.navigation.NavHostController,
+    currentRoute: String?
+) {
+    NavigationBar(
+        containerColor = Color.White,
+        contentColor = LogoBlue
+    ) {
+        NavigationBarItem(
+            selected = currentRoute == Screen.ClientHome.route,
+            onClick = { 
+                if (currentRoute != Screen.ClientHome.route) {
+                    navController.navigate(Screen.ClientHome.route) {
+                        popUpTo(Screen.ClientHome.route) { inclusive = true }
+                    }
+                }
+            },
+            icon = { Icon(Icons.Default.Home, contentDescription = stringResource(R.string.home)) },
+            label = { Text(stringResource(R.string.home)) },
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = LogoBlue,
+                selectedTextColor = LogoBlue,
+                indicatorColor = LogoBlue.copy(alpha = 0.1f),
+            ),
+        )
+        NavigationBarItem(
+            selected = currentRoute?.startsWith("explore") == true,
+            onClick = { 
+                if (currentRoute?.startsWith("explore") != true) {
+                    navController.navigate(Screen.Explore.createRoute())
+                }
+            },
+            icon = { Icon(Icons.Default.Explore, contentDescription = stringResource(R.string.explore)) },
+            label = { Text(stringResource(R.string.explore)) },
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = LogoBlue,
+                selectedTextColor = LogoBlue,
+                indicatorColor = LogoBlue.copy(alpha = 0.1f),
+            ),
+        )
+        NavigationBarItem(
+            selected = currentRoute == Screen.Messages.route,
+            onClick = { 
+                if (currentRoute != Screen.Messages.route) {
+                    navController.navigate(Screen.Messages.route)
+                }
+            },
+            icon = { Icon(Icons.AutoMirrored.Filled.Message, contentDescription = stringResource(R.string.messages)) },
+            label = { Text(stringResource(R.string.messages)) },
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = LogoBlue,
+                selectedTextColor = LogoBlue,
+                indicatorColor = LogoBlue.copy(alpha = 0.1f),
+            ),
+        )
+        NavigationBarItem(
+            selected = currentRoute == Screen.Profile.route,
+            onClick = { 
+                if (currentRoute != Screen.Profile.route) {
+                    navController.navigate(Screen.Profile.route)
+                }
+            },
+            icon = { Icon(Icons.Default.Person, contentDescription = stringResource(R.string.profile)) },
+            label = { Text(stringResource(R.string.profile)) },
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = LogoBlue,
+                selectedTextColor = LogoBlue,
+                indicatorColor = LogoBlue.copy(alpha = 0.1f),
+            ),
+        )
+    }
+}
+
+@Composable
+fun ProfileMenuItem(
+    icon: ImageVector,
+    title: String,
+    subtitle: String? = null,
+    onClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() }
+            .padding(16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = LogoBlue,
+            modifier = Modifier.size(24.dp)
+        )
+        Spacer(modifier = Modifier.width(16.dp))
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+                color = LogoBlue
+            )
+            if (subtitle != null) {
+                Text(
+                    text = subtitle,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Color.Gray
+                )
+            }
+        }
+        Icon(
+            imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+            contentDescription = null,
+            tint = Color.Gray,
+            modifier = Modifier.size(20.dp)
+        )
+    }
+}
+
+@Composable
+fun ProfileMenuToggleItem(
+    icon: ImageVector,
+    title: String,
+    isChecked: Boolean,
+    onCheckedChange: (Boolean) -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = LogoBlue,
+            modifier = Modifier.size(24.dp)
+        )
+        Spacer(modifier = Modifier.width(16.dp))
+        Text(
+            text = title,
+            modifier = Modifier.weight(1f),
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.SemiBold,
+            color = LogoBlue
+        )
+        Switch(
+            checked = isChecked,
+            onCheckedChange = onCheckedChange,
+            colors = SwitchDefaults.colors(
+                checkedThumbColor = LogoYellow,
+                checkedTrackColor = LogoYellow.copy(alpha = 0.5f),
+                uncheckedThumbColor = Color.White,
+                uncheckedTrackColor = Color.LightGray.copy(alpha = 0.5f)
+            )
+        )
+    }
+}
 
 @Composable
 fun MainButton(

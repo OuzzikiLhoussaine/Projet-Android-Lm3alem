@@ -13,8 +13,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.lm3alem.app.R
 import com.lm3alem.app.ui.components.AppTopBar
+import com.lm3alem.app.ui.components.ArtisanBottomBar
 import com.lm3alem.app.ui.components.ErrorMessage
 import com.lm3alem.app.ui.components.RequestCard
+import com.lm3alem.app.ui.navigation.Screen
 import com.lm3alem.app.viewmodel.RequestViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -35,6 +37,9 @@ fun ArtisanRequestsScreen(
                 title = stringResource(R.string.service_requests),
                 onBackClick = { navController.popBackStack() },
             )
+        },
+        bottomBar = {
+            ArtisanBottomBar(navController = navController, currentRoute = Screen.ArtisanRequests.route)
         }
     ) { padding ->
         Box(modifier = Modifier.padding(padding).fillMaxSize()) {

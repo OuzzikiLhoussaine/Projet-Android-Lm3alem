@@ -31,6 +31,7 @@ import com.lm3alem.app.data.model.ArtisanProfile
 import com.lm3alem.app.data.model.ArtisanWithUser
 import com.lm3alem.app.data.model.User
 import com.lm3alem.app.ui.components.AppTopBar
+import com.lm3alem.app.ui.components.ClientBottomBar
 import com.lm3alem.app.ui.components.ErrorMessage
 import com.lm3alem.app.ui.navigation.Screen
 import com.lm3alem.app.ui.theme.Lm3alemTheme
@@ -51,9 +52,7 @@ fun ExploreScreen(
     val categories = listOf("All", "Plumber", "Electrician", "Carpenter", "Painter", "Builder")
 
     LaunchedEffect(initialCategory) {
-        if (initialCategory != null) {
-            viewModel.filterArtisans("", if (initialCategory == "All") "" else initialCategory)
-        }
+        viewModel.filterArtisans("", if (initialCategory == null || initialCategory == "All") "" else initialCategory)
     }
 
     Scaffold(
@@ -64,40 +63,7 @@ fun ExploreScreen(
             )
         },
         bottomBar = {
-            NavigationBar(
-                containerColor = Color.White,
-                contentColor = LogoBlue
-            ) {
-                NavigationBarItem(
-                    selected = false,
-                    onClick = { navController.navigate(Screen.ClientHome.route) },
-                    icon = { Icon(Icons.Default.Home, contentDescription = stringResource(R.string.home)) },
-                    label = { Text(stringResource(R.string.home)) }
-                )
-                NavigationBarItem(
-                    selected = true,
-                    onClick = { },
-                    icon = { Icon(Icons.Default.Explore, contentDescription = stringResource(R.string.explore)) },
-                    label = { Text(stringResource(R.string.explore)) },
-                    colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = LogoBlue,
-                        selectedTextColor = LogoBlue,
-                        indicatorColor = LogoBlue.copy(alpha = 0.1f)
-                    )
-                )
-                NavigationBarItem(
-                    selected = false,
-                    onClick = { navController.navigate(Screen.Messages.route) },
-                    icon = { Icon(Icons.AutoMirrored.Filled.Message, contentDescription = stringResource(R.string.messages)) },
-                    label = { Text(stringResource(R.string.messages)) }
-                )
-                NavigationBarItem(
-                    selected = false,
-                    onClick = { navController.navigate(Screen.Profile.route) },
-                    icon = { Icon(Icons.Default.Person, contentDescription = stringResource(R.string.profile)) },
-                    label = { Text(stringResource(R.string.profile)) }
-                )
-            }
+            ClientBottomBar(navController = navController, currentRoute = Screen.Explore.route)
         }
     ) { padding ->
         Column(
@@ -118,7 +84,7 @@ fun ExploreScreen(
                     value = searchQuery,
                     onValueChange = {
                         searchQuery = it
-                        viewModel.filterArtisans(searchQuery, "")
+                        viewModel.filterArtisans(searchQuery, if (selectedCategory == "All") "" else selectedCategory)
                     },
                     modifier = Modifier.weight(1f),
                     placeholder = { Text("Search artisans, services...", color = Color.LightGray) },
@@ -162,7 +128,7 @@ fun ExploreScreen(
                         isSelected = selectedCategory == category,
                         onClick = { 
                             selectedCategory = category
-                            viewModel.filterArtisans("", if (category == "All") "" else category)
+                            viewModel.filterArtisans(searchQuery, if (category == "All") "" else category)
                         }
                     )
                 }

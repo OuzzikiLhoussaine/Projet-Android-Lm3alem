@@ -15,6 +15,8 @@ import com.lm3alem.app.ui.screens.client.ClientHomeScreen
 import com.lm3alem.app.ui.screens.client.ArtisanDetailsScreen
 import com.lm3alem.app.ui.screens.artisan.ArtisanHomeScreen
 import com.lm3alem.app.ui.screens.artisan.EditArtisanProfileScreen
+import com.lm3alem.app.ui.screens.artisan.ArtisanProfileScreen
+import com.lm3alem.app.ui.screens.artisan.ArtisanMessagesScreen
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 
@@ -80,6 +82,9 @@ fun NavGraph(
         composable(Screen.ArtisanRequests.route) {
             ArtisanRequestsScreen(navController)
         }
+        composable(Screen.ArtisanProfile.route) {
+            ArtisanProfileScreen(navController)
+        }
         composable(
             route = Screen.AddReview.route,
             arguments = listOf(navArgument("artisanId") { type = NavType.StringType })
@@ -106,6 +111,9 @@ fun NavGraph(
         }
         composable(Screen.Messages.route) {
             MessagesScreen(navController)
+        }
+        composable(Screen.ArtisanMessages.route) {
+            ArtisanMessagesScreen(navController)
         }
     }
 }

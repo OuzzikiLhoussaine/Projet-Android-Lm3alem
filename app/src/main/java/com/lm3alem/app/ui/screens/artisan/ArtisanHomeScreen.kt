@@ -5,6 +5,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
+import androidx.compose.material.icons.automirrored.filled.Message
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -19,6 +20,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.lm3alem.app.R
 import com.lm3alem.app.ui.components.AppTopBar
+import com.lm3alem.app.ui.components.ArtisanBottomBar
 import com.lm3alem.app.ui.components.ErrorMessage
 import com.lm3alem.app.ui.components.MainButton
 import com.lm3alem.app.ui.components.RequestCard
@@ -50,7 +52,10 @@ fun ArtisanHomeScreen(
             AppTopBar(
                 title = stringResource(R.string.artisan_dashboard),
                 actions = {
-                    IconButton(onClick = { navController.navigate(Screen.Profile.route) }) {
+                    IconButton(onClick = { navController.navigate(Screen.ArtisanMessages.route) }) {
+                        Icon(Icons.AutoMirrored.Filled.Message, contentDescription = stringResource(R.string.messages))
+                    }
+                    IconButton(onClick = { navController.navigate(Screen.ArtisanProfile.route) }) {
                         Icon(Icons.Default.Person, contentDescription = stringResource(R.string.profile))
                     }
                     IconButton(onClick = { authViewModel.logout() }) {
@@ -58,6 +63,9 @@ fun ArtisanHomeScreen(
                     }
                 }
             )
+        },
+        bottomBar = {
+            ArtisanBottomBar(navController = navController, currentRoute = Screen.ArtisanHome.route)
         }
     ) { padding ->
         Column(
