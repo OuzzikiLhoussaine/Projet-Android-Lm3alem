@@ -48,8 +48,13 @@ class ClientViewModel @Inject constructor(
 
     private fun applyFilters() {
         val filtered = allArtisans.filter {
-            (it.artisan.job.contains(currentQuery, ignoreCase = true) || it.artisan.description.contains(currentQuery, ignoreCase = true)) &&
-            (currentCategory.isEmpty() || it.artisan.job.equals(currentCategory, ignoreCase = true))
+            val matchesQuery = it.artisan.job.contains(currentQuery, ignoreCase = true) || 
+                               it.artisan.description.contains(currentQuery, ignoreCase = true) ||
+                               it.user.fullName.contains(currentQuery, ignoreCase = true)
+            
+            val matchesCategory = currentCategory.isEmpty() || it.artisan.job.equals(currentCategory, ignoreCase = true)
+            
+            matchesQuery && matchesCategory
         }
         _uiState.value = ClientUiState.Success(filtered)
     }

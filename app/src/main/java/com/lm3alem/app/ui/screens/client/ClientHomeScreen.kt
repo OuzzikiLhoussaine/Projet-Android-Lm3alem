@@ -97,6 +97,16 @@ fun ClientHomeScreen(
                     modifier = Modifier.fillMaxWidth(),
                     placeholder = { Text(stringResource(R.string.search_services), color = Color.LightGray) },
                     leadingIcon = { Icon(Icons.Default.Search, contentDescription = null, tint = Color.LightGray) },
+                    trailingIcon = {
+                        if (searchQuery.isNotEmpty()) {
+                            IconButton(onClick = { 
+                                searchQuery = ""
+                                viewModel.filterArtisans("", "")
+                            }) {
+                                Icon(Icons.Default.Clear, contentDescription = "Clear", tint = Color.Gray)
+                            }
+                        }
+                    },
                     shape = RoundedCornerShape(28.dp),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = LogoBlue,
