@@ -413,23 +413,23 @@ fun ArtisanCard(artisanWithUser: ArtisanWithUser, onClick: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onClick() },
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(32.dp), // Coins plus arrondis pour plus de confort
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface,
+            containerColor = Color.White, // Fond blanc forcé pour la lisibilité
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp), // Ombre plus douce
     ) {
         Row(
             modifier = Modifier
-                .padding(12.dp)
+                .padding(16.dp)
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
             // Avatar
             Surface(
-                modifier = Modifier.size(64.dp),
+                modifier = Modifier.size(70.dp),
                 shape = CircleShape,
-                color = MaterialTheme.colorScheme.surfaceVariant
+                color = Color(0xFFF0F2F5)
             ) {
                 if (user.imageUrl.isNotEmpty()) {
                     AsyncImage(
@@ -442,40 +442,39 @@ fun ArtisanCard(artisanWithUser: ArtisanWithUser, onClick: () -> Unit) {
                     Icon(
                         imageVector = Icons.Default.Person,
                         contentDescription = null,
-                        modifier = Modifier.padding(16.dp),
+                        modifier = Modifier.padding(18.dp),
                         tint = LogoBlue
                     )
                 }
             }
 
-            Spacer(modifier = Modifier.width(12.dp))
+            Spacer(modifier = Modifier.width(16.dp))
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = user.fullName.ifEmpty { stringResource(R.string.full_name) }, 
-                    style = MaterialTheme.typography.titleMedium,
+                    style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
                     color = LogoBlue
                 )
                 Text(
                     text = artisan.job,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.bodyLarge,
                     color = Color.Gray
                 )
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    repeat(5) { index ->
-                        Icon(
-                            imageVector = Icons.Default.Star,
-                            contentDescription = null,
-                            tint = if (index < artisan.rating.toInt()) LogoYellow else Color.LightGray,
-                            modifier = Modifier.size(16.dp)
-                        )
-                    }
+                Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 4.dp)) {
+                    Icon(
+                        imageVector = Icons.Default.Star,
+                        contentDescription = null,
+                        tint = LogoYellow,
+                        modifier = Modifier.size(18.dp)
+                    )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
                         text = "${String.format(Locale.US, "%.1f", artisan.rating)} (${artisan.reviewCount})",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = Color.Gray
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Color.Gray,
+                        fontWeight = FontWeight.Medium
                     )
                 }
             }
@@ -484,12 +483,12 @@ fun ArtisanCard(artisanWithUser: ArtisanWithUser, onClick: () -> Unit) {
                 Text(
                     text = stringResource(R.string.price_per_hr, artisan.getPriceDouble().toString()),
                     style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
+                    fontWeight = FontWeight.ExtraBold,
                     color = LogoBlue
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(12.dp))
                 Surface(
-                    modifier = Modifier.size(32.dp),
+                    modifier = Modifier.size(36.dp),
                     shape = CircleShape,
                     color = LogoBlue
                 ) {
@@ -498,7 +497,7 @@ fun ArtisanCard(artisanWithUser: ArtisanWithUser, onClick: () -> Unit) {
                             imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                             contentDescription = null,
                             tint = Color.White,
-                            modifier = Modifier.size(16.dp)
+                            modifier = Modifier.size(20.dp)
                         )
                     }
                 }

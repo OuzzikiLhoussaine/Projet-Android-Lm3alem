@@ -283,24 +283,11 @@ fun ExploreArtisanCard(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "$${artisan.getPriceDouble()}/hr",
+                        text = "${artisan.getPriceDouble()} DH/hr",
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
                         color = LogoBlue
                     )
-                    
-                    Surface(
-                        color = if (artisan.isAvailable) Color(0xFFE8F5E9) else Color(0xFFF5F5F5),
-                        shape = RoundedCornerShape(12.dp)
-                    ) {
-                        Text(
-                            text = if (artisan.isAvailable) "Available" else "Busy",
-                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
-                            style = MaterialTheme.typography.labelLarge,
-                            color = if (artisan.isAvailable) Color(0xFF4CAF50) else Color.LightGray,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
                 }
             }
         }

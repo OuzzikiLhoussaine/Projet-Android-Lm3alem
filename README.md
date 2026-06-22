@@ -1,44 +1,84 @@
-# Lm3alem
+# Lm3alem (المعلم) 🛠️
 
-## Description
-Lm3alem est une application Android moderne qui met en relation les clients avec les ouvriers et artisans locaux. L'application facilite la recherche de services professionnels et permet une gestion simplifiée des demandes de travaux.
+**Lm3alem** est une plateforme mobile innovante conçue pour connecter instantanément les artisans et ouvriers qualifiés avec des clients ayant besoin de services de maintenance, de réparation ou de construction.
 
-## Technologies & Librairies
-- **Langage**: Kotlin
-- **UI**: Jetpack Compose (Material 3)
-- **Architecture**: MVVM (Model-View-ViewModel)
-- **Backend**: Firebase (Authentication, Firestore)
-- **Injection de dépendances**: Hilt
-- **Stockage Local**: DataStore
-- **Navigation**: Navigation Compose
-- **Multilingue**: Support pour le Français (par défaut), l'Anglais et l'Arabe (RTL supporté)
+---
 
-## Fonctionnalités
+## 👥 Équipe du Projet
+*   **HASNA ELHASSANI**
+*   **OUZZIKI LHOUSSAINE**
 
-### 👤 Client
-- **Authentification**: Création de compte et connexion (Email/Mot de passe et Google Sign-In).
-- **Recherche**: Trouver un artisan par métier ou description.
-- **Filtrage**: Affiner les résultats par ville.
-- **Profil Artisan**: Consulter les détails, l'expérience, le prix et les avis.
-- **Demandes**: Envoyer des demandes de service détaillées.
-- **Avis**: Noter et commenter les prestations des artisans.
+---
 
-### 🛠️ Artisan
-- **Profil Professionnel**: Créer et modifier sa bio, son métier, ses années d'expérience et ses tarifs.
-- **Gestion des demandes**: Recevoir, accepter ou refuser les demandes de service des clients.
-- **Tableau de bord**: Suivre le statut des travaux (En attente, Accepté, Terminé).
-- **Réputation**: Consulter sa note moyenne et les commentaires laissés par les clients.
+## 📝 Description du Projet
+L'application vise à simplifier la recherche de professionnels de confiance au Maroc. Que vous soyez un client cherchant un plombier en urgence ou un artisan souhaitant digitaliser son activité, **Lm3alem** offre une interface intuitive pour gérer ces interactions de bout en bout.
 
-## Système de Design (Material 3)
-L'application utilise un système de design personnalisé avec des composants réutilisables :
-- `MainButton`: Boutons stylisés avec états de chargement.
-- `AppTextField`: Champs de saisie standardisés avec validation.
-- `ArtisanCard` & `RequestCard`: Affichage élégant des données.
-- `AppTopBar`: Navigation et titres cohérents.
+### Fonctionnalités Principales
+*   **Authentification Sécurisée :** Connexion via Email/Mot de passe ou Google Sign-In.
+*   **Gestion des Rôles :** Inscription distincte pour les **Clients** et les **Artisans**.
+*   **Exploration et Recherche :** Filtres par métier (Plombier, Électricien, Peintre, etc.) et par ville.
+*   **Profils Détaillés :** Consultation de l'expérience, des tarifs, des photos de projets et des avis clients.
+*   **Système de Demandes :** Envoi et gestion de demandes de services en temps réel.
+*   **Évaluations et Avis :** Système de notation pour garantir la qualité des prestations.
+*   **Tableau de Bord Artisan :** Gestion du profil professionnel et suivi des demandes reçues.
 
-## Installation
-1. Cloner le projet : `git clone https://github.com/OuzzikiLhoussaine/Projet-Android-Lm3alem.git`
-2. Ouvrir avec **Android Studio (Ladybug ou version ultérieure)**.
-3. Ajouter votre fichier `google-services.json` dans le répertoire `app/`.
-4. Synchroniser le projet avec Gradle.
-5. Lancer l'application sur un émulateur ou un appareil physique.
+---
+
+## 🏗️ Architecture du Projet
+Le projet suit les principes de la **Clean Architecture** combinée au pattern **MVVM (Model-View-ViewModel)** pour garantir un code testable, maintenable et évolutif.
+
+```text
+[ UI Layer (Compose) ] <---> [ ViewModel (StateFlow) ] <---> [ Repository ] <---> [ Data Sources (Firebase/DataStore) ]
+```
+
+*   **View :** Définie avec Jetpack Compose (UI déclarative).
+*   **ViewModel :** Gère l'état de l'interface et la logique métier.
+*   **Repository :** Abstraction des sources de données (Firestore, Auth).
+*   **Hilt :** Utilisé pour l'injection de dépendances à travers toutes les couches.
+
+---
+
+## 🚀 Dépendances et Technologies
+L'application utilise les dernières technologies recommandées par Google :
+*   **Langage :** Kotlin
+*   **UI :** Jetpack Compose (Material Design 3)
+*   **Navigation :** Compose Navigation
+*   **Base de données & Auth :** Firebase (Firestore, Auth)
+*   **Injection de Dépendances :** Hilt (Dagger)
+*   **Images :** Coil
+*   **Données Locales :** Jetpack DataStore (Preferences)
+
+### Prérequis pour l'installation
+Pour compiler le projet, assurez-vous d'avoir :
+1.  **Android Studio Ladybug** (ou version plus récente).
+2.  **JDK 17** configuré.
+3.  Le fichier `google-services.json` (à placer dans le dossier `app/`) pour la connexion Firebase.
+
+---
+
+## 📸 Captures d'écran
+Voici un aperçu de l'interface utilisateur de **Lm3alem** :
+
+### Authentification
+| Inscription | Connexion | Réinitialisation |
+| :---: | :---: | :---: |
+| ![Register](assets/screenshots/register.png) | ![Login](assets/screenshots/login.png) | ![Reset Password](assets/screenshots/res_passwd.png) |
+
+### Interface Client
+| Accueil Client | Exploration | Profil Client |
+| :---: | :---: | :---: |
+| ![Home](assets/screenshots/client_screen1.png) | ![Explore](assets/screenshots/explore.png) | ![Profile](assets/screenshots/client_profile.png) |
+
+### Communication
+| Messages |
+| :---: |
+| ![Messages](assets/screenshots/messages.png) |
+
+---
+
+## 🛠️ Installation
+```bash
+git clone https://github.com/ouzzikilhoussaine/Lm3alem.git
+cd Lm3alem
+# Ouvrez le projet dans Android Studio et synchronisez avec Gradle.
+```
