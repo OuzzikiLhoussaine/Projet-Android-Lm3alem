@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation("androidx.compose.runtime:runtime-livedata")
 
     // Navigation
     implementation(libs.androidx.navigation.compose)
@@ -82,6 +83,11 @@ dependencies {
 
     // Coil
     implementation(libs.coil.compose)
+
+    // Google Maps
+    implementation(libs.maps.compose)
+    implementation(libs.play.services.maps)
+    implementation(libs.places)
 
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))

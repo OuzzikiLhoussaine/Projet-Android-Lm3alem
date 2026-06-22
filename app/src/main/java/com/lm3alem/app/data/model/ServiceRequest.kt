@@ -7,7 +7,12 @@ data class ServiceRequest(
     val id: String = "",
     val clientId: String = "",
     val artisanId: String = "",
+    val serviceName: String = "",
     val description: String = "",
+    val address: String = "",
+    val budget: String = "",
+    val startTime: String = "",
+    val endTime: String = "",
     val status: RequestStatus = RequestStatus.PENDING,
     val date: Any? = null
 ) {

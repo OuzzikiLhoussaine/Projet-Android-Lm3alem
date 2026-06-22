@@ -39,7 +39,7 @@ import com.lm3alem.app.viewmodel.ProfileViewModel
 fun MessagesScreen(
     navController: NavHostController,
     chatViewModel: ChatViewModel = hiltViewModel(),
-    profileViewModel: ProfileViewModel = hiltViewModel()
+    profileViewModel: ProfileViewModel = hiltViewModel(),
 ) {
     var searchQuery by remember { mutableStateOf("") }
     val chatRooms by chatViewModel.chatRooms.collectAsState()

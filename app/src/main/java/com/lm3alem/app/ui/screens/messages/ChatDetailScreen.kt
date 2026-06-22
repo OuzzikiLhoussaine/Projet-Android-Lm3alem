@@ -7,8 +7,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Send
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -24,7 +24,6 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.lm3alem.app.data.model.Message
 import com.lm3alem.app.ui.theme.LogoBlue
-import com.lm3alem.app.ui.theme.LogoYellow
 import com.lm3alem.app.viewmodel.ChatViewModel
 import com.lm3alem.app.viewmodel.ProfileViewModel
 import kotlinx.coroutines.launch
@@ -95,7 +94,7 @@ fun ChatDetailScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = Color.White)
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = Color.White)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = LogoBlue)
@@ -161,7 +160,7 @@ fun ChatDetailScreen(
                         enabled = messageText.isNotBlank() && actualChatRoomId.isNotEmpty()
                     ) {
                         Icon(
-                            Icons.Default.Send,
+                            Icons.AutoMirrored.Filled.Send,
                             contentDescription = "Send",
                             tint = if (messageText.isNotBlank()) LogoBlue else Color.Gray
                         )

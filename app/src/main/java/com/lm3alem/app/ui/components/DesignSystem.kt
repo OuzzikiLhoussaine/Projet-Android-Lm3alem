@@ -17,6 +17,8 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.Bolt
 import androidx.compose.material.icons.filled.Dashboard
 import androidx.compose.material.icons.filled.ListAlt
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.automirrored.filled.Message
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -320,12 +322,14 @@ fun AppTextField(
     errorMessage: String? = null,
     singleLine: Boolean = true,
     minLines: Int = 1,
+    placeholder: String? = null,
 ) {
     Column(modifier = modifier) {
         OutlinedTextField(
             value = value,
             onValueChange = onValueChange,
             label = { Text(label) },
+            placeholder = placeholder?.let { { Text(it, color = Color.Gray) } },
             modifier = Modifier.fillMaxWidth(),
             leadingIcon = leadingIcon?.let { { Icon(it, contentDescription = null) } },
             trailingIcon = trailingIcon,
@@ -598,15 +602,69 @@ fun RequestCard(request: ServiceRequest, onStatusUpdate: (RequestStatus) -> Unit
                         fontWeight = FontWeight.Bold,
                     )
                 }
+                if (request.budget.isNotEmpty()) {
+                    Text(
+                        text = "${request.budget} DH",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = LogoBlue
+                    )
+                }
             }
             
             Spacer(modifier = Modifier.height(12.dp))
+
+            if (request.serviceName.isNotEmpty()) {
+                Text(
+                    text = request.serviceName,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = LogoBlue
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+            }
             
             Text(
                 text = request.description,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface,
             )
+
+            if (request.address.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(12.dp))
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        Icons.Default.LocationOn,
+                        contentDescription = null,
+                        modifier = Modifier.size(16.dp),
+                        tint = Color.Gray
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = request.address,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Color.Gray
+                    )
+                }
+            }
+
+            if (request.startTime.isNotEmpty() || request.endTime.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        Icons.Default.AccessTime,
+                        contentDescription = null,
+                        modifier = Modifier.size(16.dp),
+                        tint = Color.Gray
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = "${request.startTime} - ${request.endTime}",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Color.Gray
+                    )
+                }
+            }
             
             if (request.status == RequestStatus.PENDING || request.status == RequestStatus.ACCEPTED) {
                 Spacer(modifier = Modifier.height(16.dp))

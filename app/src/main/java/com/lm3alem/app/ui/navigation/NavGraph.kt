@@ -126,5 +126,13 @@ fun NavGraph(
             val otherUserId = backStackEntry.arguments?.getString("otherUserId") ?: ""
             com.lm3alem.app.ui.screens.messages.ChatDetailScreen(navController, chatRoomId, otherUserId)
         }
+        composable(Screen.MapPicker.route) {
+            com.lm3alem.app.ui.screens.client.MapPickerScreen(
+                navController = navController,
+                onLocationSelected = { address ->
+                    navController.previousBackStackEntry?.savedStateHandle?.set("selected_address", address)
+                }
+            )
+        }
     }
 }

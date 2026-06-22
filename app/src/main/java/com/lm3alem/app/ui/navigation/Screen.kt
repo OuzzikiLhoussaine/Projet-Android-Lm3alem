@@ -31,4 +31,5 @@ sealed class Screen(val route: String) {
     object ChatDetail : Screen("chat_detail/{chatRoomId}/{otherUserId}") {
         fun createRoute(chatRoomId: String, otherUserId: String) = "chat_detail/$chatRoomId/$otherUserId"
     }
+    object MapPicker : Screen("map_picker")
 }

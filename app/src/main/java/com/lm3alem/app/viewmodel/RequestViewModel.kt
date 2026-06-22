@@ -26,14 +26,27 @@ class RequestViewModel @Inject constructor(
     private val _eventFlow = MutableSharedFlow<RequestEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
-    fun sendRequest(artisanId: String, description: String) {
+    fun sendRequest(
+        artisanId: String,
+        serviceName: String,
+        description: String,
+        address: String,
+        budget: String,
+        startTime: String,
+        endTime: String
+    ) {
         val clientId = authRepository.currentUser?.uid ?: return
         viewModelScope.launch {
             _uiState.value = RequestUiState.Loading
             val request = ServiceRequest(
                 clientId = clientId,
                 artisanId = artisanId,
+                serviceName = serviceName,
                 description = description,
+                address = address,
+                budget = budget,
+                startTime = startTime,
+                endTime = endTime,
                 status = RequestStatus.PENDING,
                 date = java.util.Date()
             )
