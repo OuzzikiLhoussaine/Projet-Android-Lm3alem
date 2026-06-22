@@ -115,5 +115,16 @@ fun NavGraph(
         composable(Screen.ArtisanMessages.route) {
             ArtisanMessagesScreen(navController)
         }
+        composable(
+            route = Screen.ChatDetail.route,
+            arguments = listOf(
+                navArgument("chatRoomId") { type = NavType.StringType },
+                navArgument("otherUserId") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val chatRoomId = backStackEntry.arguments?.getString("chatRoomId") ?: ""
+            val otherUserId = backStackEntry.arguments?.getString("otherUserId") ?: ""
+            com.lm3alem.app.ui.screens.messages.ChatDetailScreen(navController, chatRoomId, otherUserId)
+        }
     }
 }

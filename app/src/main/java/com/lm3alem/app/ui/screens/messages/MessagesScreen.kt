@@ -21,39 +21,28 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.lm3alem.app.R
+import com.lm3alem.app.data.model.ChatRoom
+import com.lm3alem.app.data.model.User
 import com.lm3alem.app.ui.components.AppTopBar
 import com.lm3alem.app.ui.components.ClientBottomBar
 import com.lm3alem.app.ui.navigation.Screen
 import com.lm3alem.app.ui.theme.LogoBlue
 import com.lm3alem.app.ui.theme.LogoYellow
-
-data class Conversation(
-    val id: String,
-    val senderName: String,
-    val senderProfession: String,
-    val lastMessage: String,
-    val timestamp: String,
-    val unreadCount: Int,
-    val isOnline: Boolean,
-    val imageUrl: String,
-)
+import com.lm3alem.app.viewmodel.ChatViewModel
+import com.lm3alem.app.viewmodel.ProfileViewModel
 
 @Composable
 fun MessagesScreen(
-    navController: NavHostController
+    navController: NavHostController,
+    chatViewModel: ChatViewModel = hiltViewModel(),
+    profileViewModel: ProfileViewModel = hiltViewModel()
 ) {
     var searchQuery by remember { mutableStateOf("") }
-
-    val mockConversations = listOf(
-        Conversation("1", "Ahmed Hassan", "Plumber", "I'll be there at 2 PM tomorrow", "2m ago", 2, isOnline = true, ""),
-        Conversation("2", "Mohamed Ali", "Electrician", "Thanks for choosing my service!", "1h ago", 0, isOnline = true, ""),
-        Conversation("3", "Youssef Ibrahim", "Carpenter", "The project is completed", "3h ago", 1, isOnline = false, ""),
-        Conversation("4", "Khaled Mahmoud", "Painter", "Can we reschedule to next week?", "1d ago", 0, isOnline = false, ""),
-        Conversation("5", "Omar Saeed", "Builder", "I've sent you the quote", "2d ago", 0, isOnline = true, ""),
-    )
+    val chatRooms by chatViewModel.chatRooms.collectAsState()
 
     Scaffold(
         topBar = {
@@ -95,14 +84,33 @@ fun MessagesScreen(
                 singleLine = true
             )
 
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                items(mockConversations) { conversation ->
-                    ConversationItem(conversation) {
-                        // Navigate to detail
+            if (chatRooms.isEmpty()) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text("No messages yet", color = Color.Gray)
+                }
+            } else {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    items(chatRooms) { chatRoom ->
+                        val otherUserId = chatViewModel.getOtherParticipantId(chatRoom) ?: ""
+                        var otherUser by remember { mutableStateOf<User?>(null) }
+                        
+                        LaunchedEffect(otherUserId) {
+                            if (otherUserId.isNotEmpty()) {
+                                otherUser = profileViewModel.getUserById(otherUserId)
+                            }
+                        }
+
+                        ConversationItem(
+                            chatRoom = chatRoom,
+                            otherUser = otherUser,
+                            onClick = {
+                                navController.navigate(Screen.ChatDetail.createRoute(chatRoom.id, otherUserId))
+                            }
+                        )
                     }
                 }
             }
@@ -111,7 +119,7 @@ fun MessagesScreen(
 }
 
 @Composable
-fun ConversationItem(conversation: Conversation, onClick: () -> Unit) {
+fun ConversationItem(chatRoom: ChatRoom, otherUser: User?, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -133,9 +141,9 @@ fun ConversationItem(conversation: Conversation, onClick: () -> Unit) {
                     shape = CircleShape,
                     color = Color.LightGray.copy(alpha = 0.2f)
                 ) {
-                    if (conversation.imageUrl.isNotEmpty()) {
+                    if (otherUser?.imageUrl?.isNotEmpty() == true) {
                         AsyncImage(
-                            model = conversation.imageUrl,
+                            model = otherUser.imageUrl,
                             contentDescription = null,
                             contentScale = ContentScale.Crop,
                             modifier = Modifier.clip(CircleShape)
@@ -149,16 +157,6 @@ fun ConversationItem(conversation: Conversation, onClick: () -> Unit) {
                         )
                     }
                 }
-                
-                // Status dot
-                Surface(
-                    modifier = Modifier
-                        .size(14.dp)
-                        .align(Alignment.BottomEnd),
-                    shape = CircleShape,
-                    color = if (conversation.isOnline) Color(0xFF4CAF50) else Color.LightGray,
-                    border = androidx.compose.foundation.BorderStroke(2.dp, Color.White)
-                ) {}
             }
 
             Spacer(modifier = Modifier.width(16.dp))
@@ -170,20 +168,20 @@ fun ConversationItem(conversation: Conversation, onClick: () -> Unit) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = conversation.senderName,
+                        text = otherUser?.fullName ?: "Loading...",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
                         color = LogoBlue
                     )
                     Text(
-                        text = conversation.timestamp,
+                        text = "Today", 
                         style = MaterialTheme.typography.bodySmall,
                         color = Color.Gray
                     )
                 }
                 
                 Text(
-                    text = conversation.senderProfession,
+                    text = otherUser?.role ?: "",
                     style = MaterialTheme.typography.bodySmall,
                     color = Color.Gray
                 )
@@ -196,31 +194,13 @@ fun ConversationItem(conversation: Conversation, onClick: () -> Unit) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = conversation.lastMessage,
+                        text = chatRoom.lastMessage,
                         style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = if (conversation.unreadCount > 0) FontWeight.Bold else FontWeight.Normal,
-                        color = if (conversation.unreadCount > 0) LogoBlue else Color.Gray,
+                        color = Color.Gray,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.weight(1f)
                     )
-                    
-                    if (conversation.unreadCount > 0) {
-                        Surface(
-                            modifier = Modifier.size(20.dp),
-                            shape = CircleShape,
-                            color = LogoYellow
-                        ) {
-                            Box(contentAlignment = Alignment.Center) {
-                                Text(
-                                    text = conversation.unreadCount.toString(),
-                                    color = LogoBlue,
-                                    fontSize = 12.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            }
-                        }
-                    }
                 }
             }
         }

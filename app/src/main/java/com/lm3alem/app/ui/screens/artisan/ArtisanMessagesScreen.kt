@@ -30,31 +30,19 @@ import com.lm3alem.app.ui.components.ArtisanBottomBar
 import com.lm3alem.app.ui.navigation.Screen
 import com.lm3alem.app.ui.theme.LogoBlue
 import com.lm3alem.app.ui.theme.LogoYellow
-import com.lm3alem.app.viewmodel.AuthViewModel
-
-data class ClientConversation(
-    val id: String,
-    val clientName: String,
-    val location: String,
-    val lastMessage: String,
-    val timestamp: String,
-    val unreadCount: Int,
-    val isOnline: Boolean,
-    val imageUrl: String,
-)
+import com.lm3alem.app.viewmodel.ChatViewModel
+import com.lm3alem.app.viewmodel.ProfileViewModel
+import com.lm3alem.app.data.model.ChatRoom
+import com.lm3alem.app.data.model.User
 
 @Composable
 fun ArtisanMessagesScreen(
     navController: NavHostController,
+    chatViewModel: ChatViewModel = hiltViewModel(),
+    profileViewModel: ProfileViewModel = hiltViewModel()
 ) {
     var searchQuery by remember { mutableStateOf("") }
-
-    val mockConversations = listOf(
-        ClientConversation("1", "Sarah Mansour", "Casablanca", "When can you come for the leak?", "10m ago", 1, isOnline = true, ""),
-        ClientConversation("2", "Karim Alami", "Rabat", "The price is okay for me. Let's do it.", "2h ago", 0, isOnline = false, ""),
-        ClientConversation("3", "Meryem Bennani", "Marrakech", "Thank you for the quick fix!", "Yesterday", 0, isOnline = true, ""),
-        ClientConversation("4", "Anas Zaki", "Fes", "Can we reschedule to Friday?", "2 days ago", 0, isOnline = false, ""),
-    )
+    val chatRooms by chatViewModel.chatRooms.collectAsState()
 
     Scaffold(
         topBar = {
@@ -96,14 +84,33 @@ fun ArtisanMessagesScreen(
                 singleLine = true
             )
 
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                items(mockConversations) { conversation ->
-                    ClientConversationItem(conversation) {
-                        // Navigate to detail chat
+            if (chatRooms.isEmpty()) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text("No messages yet", color = Color.Gray)
+                }
+            } else {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    items(chatRooms) { chatRoom ->
+                        val otherUserId = chatViewModel.getOtherParticipantId(chatRoom) ?: ""
+                        var otherUser by remember { mutableStateOf<User?>(null) }
+                        
+                        LaunchedEffect(otherUserId) {
+                            if (otherUserId.isNotEmpty()) {
+                                otherUser = profileViewModel.getUserById(otherUserId)
+                            }
+                        }
+
+                        ClientConversationItem(
+                            chatRoom = chatRoom,
+                            otherUser = otherUser,
+                            onClick = {
+                                navController.navigate(Screen.ChatDetail.createRoute(chatRoom.id, otherUserId))
+                            }
+                        )
                     }
                 }
             }
@@ -112,7 +119,7 @@ fun ArtisanMessagesScreen(
 }
 
 @Composable
-fun ClientConversationItem(conversation: ClientConversation, onClick: () -> Unit) {
+fun ClientConversationItem(chatRoom: ChatRoom, otherUser: User?, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -134,9 +141,9 @@ fun ClientConversationItem(conversation: ClientConversation, onClick: () -> Unit
                     shape = CircleShape,
                     color = MaterialTheme.colorScheme.surfaceVariant
                 ) {
-                    if (conversation.imageUrl.isNotEmpty()) {
+                    if (otherUser?.imageUrl?.isNotEmpty() == true) {
                         AsyncImage(
-                            model = conversation.imageUrl,
+                            model = otherUser.imageUrl,
                             contentDescription = null,
                             contentScale = ContentScale.Crop,
                             modifier = Modifier.clip(CircleShape)
@@ -150,17 +157,6 @@ fun ClientConversationItem(conversation: ClientConversation, onClick: () -> Unit
                         )
                     }
                 }
-                
-                if (conversation.isOnline) {
-                    Surface(
-                        modifier = Modifier
-                            .size(12.dp)
-                            .align(Alignment.BottomEnd),
-                        shape = CircleShape,
-                        color = Color(0xFF4CAF50),
-                        border = androidx.compose.foundation.BorderStroke(2.dp, Color.White)
-                    ) {}
-                }
             }
 
             Spacer(modifier = Modifier.width(12.dp))
@@ -172,13 +168,13 @@ fun ClientConversationItem(conversation: ClientConversation, onClick: () -> Unit
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = conversation.clientName,
+                        text = otherUser?.fullName ?: "Loading...",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
                         color = LogoBlue
                     )
                     Text(
-                        text = conversation.timestamp,
+                        text = "Just now", 
                         style = MaterialTheme.typography.bodySmall,
                         color = Color.Gray
                     )
@@ -188,7 +184,7 @@ fun ClientConversationItem(conversation: ClientConversation, onClick: () -> Unit
                     Icon(Icons.Default.LocationOn, contentDescription = null, modifier = Modifier.size(12.dp), tint = Color.Gray)
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = conversation.location,
+                        text = otherUser?.city ?: "",
                         style = MaterialTheme.typography.bodySmall,
                         color = Color.Gray
                     )
@@ -197,30 +193,12 @@ fun ClientConversationItem(conversation: ClientConversation, onClick: () -> Unit
                 Spacer(modifier = Modifier.height(4.dp))
                 
                 Text(
-                    text = conversation.lastMessage,
+                    text = chatRoom.lastMessage,
                     style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = if (conversation.unreadCount > 0) FontWeight.Bold else FontWeight.Normal,
-                    color = if (conversation.unreadCount > 0) LogoBlue else Color.Gray,
+                    color = Color.Gray,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
-            }
-            
-            if (conversation.unreadCount > 0) {
-                Surface(
-                    modifier = Modifier.size(20.dp).padding(start = 4.dp),
-                    shape = CircleShape,
-                    color = LogoYellow
-                ) {
-                    Box(contentAlignment = Alignment.Center) {
-                        Text(
-                            text = conversation.unreadCount.toString(),
-                            color = LogoBlue,
-                            fontSize = 10.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                }
             }
         }
     }

@@ -62,6 +62,10 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
+    suspend fun getUserById(uid: String): User? {
+        return authRepository.getUserDetails(uid)
+    }
+
     sealed class ProfileUiState {
         object Idle : ProfileUiState()
         object Loading : ProfileUiState()

@@ -75,6 +75,11 @@ fun ArtisanDetailsScreen(
                     artisanId?.let {
                         navController.navigate(Screen.SendRequest.createRoute(it))
                     }
+                },
+                onMessageClick = {
+                    artisanId?.let {
+                        navController.navigate(Screen.ChatDetail.createRoute("new", it))
+                    }
                 }
             )
         }
@@ -340,7 +345,7 @@ fun ArtisanTabs(selectedTab: Int, onTabSelected: (Int) -> Unit) {
 }
 
 @Composable
-fun BottomActionBar(onBookClick: () -> Unit) {
+fun BottomActionBar(onBookClick: () -> Unit, onMessageClick: () -> Unit) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
         color = Color.White,
@@ -363,7 +368,7 @@ fun BottomActionBar(onBookClick: () -> Unit) {
             }
             
             OutlinedButton(
-                onClick = { /* Message */ },
+                onClick = onMessageClick,
                 modifier = Modifier.size(56.dp),
                 shape = CircleShape,
                 contentPadding = PaddingValues(0.dp)
