@@ -564,7 +564,11 @@ fun CategoryCard(
 }
 
 @Composable
-fun RequestCard(request: ServiceRequest, onStatusUpdate: (RequestStatus) -> Unit) {
+fun RequestCard(
+    request: ServiceRequest,
+    client: User? = null,
+    onStatusUpdate: (RequestStatus) -> Unit
+) {
     val statusColor = when (request.status) {
         RequestStatus.PENDING -> MaterialTheme.colorScheme.secondary
         RequestStatus.ACCEPTED -> Color(0xFF4CAF50)
@@ -581,10 +585,12 @@ fun RequestCard(request: ServiceRequest, onStatusUpdate: (RequestStatus) -> Unit
 
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(24.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(modifier = Modifier.padding(20.dp)) {
+            // Header with Status and Budget
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -612,8 +618,48 @@ fun RequestCard(request: ServiceRequest, onStatusUpdate: (RequestStatus) -> Unit
                 }
             }
             
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
+            // Client Info Section
+            if (client != null) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Surface(
+                        modifier = Modifier.size(44.dp),
+                        shape = CircleShape,
+                        color = Color.LightGray.copy(alpha = 0.2f)
+                    ) {
+                        if (client.imageUrl.isNotEmpty()) {
+                            AsyncImage(
+                                model = client.imageUrl,
+                                contentDescription = null,
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier.clip(CircleShape)
+                            )
+                        } else {
+                            Icon(Icons.Default.Person, contentDescription = null, modifier = Modifier.padding(8.dp), tint = LogoBlue)
+                        }
+                    }
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Column {
+                        Text(
+                            text = client.fullName,
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.Bold,
+                            color = LogoBlue
+                        )
+                        Text(
+                            text = client.phone.ifEmpty { "No phone provided" },
+                            style = MaterialTheme.typography.labelSmall,
+                            color = Color.Gray
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+                HorizontalDivider(color = Color.LightGray.copy(alpha = 0.2f))
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+
+            // Service Details
             if (request.serviceName.isNotEmpty()) {
                 Text(
                     text = request.serviceName,
@@ -624,12 +670,15 @@ fun RequestCard(request: ServiceRequest, onStatusUpdate: (RequestStatus) -> Unit
                 Spacer(modifier = Modifier.height(4.dp))
             }
             
-            Text(
-                text = request.description,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface,
-            )
+            if (request.description.isNotEmpty()) {
+                Text(
+                    text = request.description,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+            }
 
+            // Address and Time Info
             if (request.address.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(12.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -666,8 +715,9 @@ fun RequestCard(request: ServiceRequest, onStatusUpdate: (RequestStatus) -> Unit
                 }
             }
             
+            // Action Buttons
             if (request.status == RequestStatus.PENDING || request.status == RequestStatus.ACCEPTED) {
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(20.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End,
@@ -683,14 +733,15 @@ fun RequestCard(request: ServiceRequest, onStatusUpdate: (RequestStatus) -> Unit
                         Spacer(modifier = Modifier.width(8.dp))
                         Button(
                             onClick = { onStatusUpdate(RequestStatus.ACCEPTED) },
-                            shape = RoundedCornerShape(8.dp),
+                            shape = RoundedCornerShape(12.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = LogoBlue)
                         ) {
                             Text(stringResource(R.string.accept))
                         }
                     } else {
                         Button(
                             onClick = { onStatusUpdate(RequestStatus.DONE) },
-                            shape = RoundedCornerShape(8.dp),
+                            shape = RoundedCornerShape(12.dp),
                             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)),
                         ) {
                             Text(stringResource(R.string.mark_as_done))

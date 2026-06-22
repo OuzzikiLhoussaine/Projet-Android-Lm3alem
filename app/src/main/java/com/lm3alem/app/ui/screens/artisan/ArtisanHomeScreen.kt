@@ -8,9 +8,7 @@ import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.automirrored.filled.Message
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -27,14 +25,22 @@ import com.lm3alem.app.ui.components.RequestCard
 import com.lm3alem.app.ui.navigation.Screen
 import com.lm3alem.app.viewmodel.AuthViewModel
 import com.lm3alem.app.viewmodel.RequestViewModel
+import com.lm3alem.app.viewmodel.ProfileViewModel
+import com.lm3alem.app.viewmodel.ChatViewModel
+import com.lm3alem.app.data.model.User
+import com.lm3alem.app.data.model.RequestStatus
+import kotlinx.coroutines.launch
 
 @Composable
 fun ArtisanHomeScreen(
     navController: NavHostController,
     authViewModel: AuthViewModel = hiltViewModel(),
     requestViewModel: RequestViewModel = hiltViewModel(),
+    profileViewModel: ProfileViewModel = hiltViewModel(),
+    chatViewModel: ChatViewModel = hiltViewModel(),
 ) {
     val requestState by requestViewModel.uiState
+    val scope = rememberCoroutineScope()
 
     LaunchedEffect(key1 = true) {
         requestViewModel.fetchRequests()
@@ -110,8 +116,24 @@ fun ArtisanHomeScreen(
                                 contentPadding = PaddingValues(bottom = 24.dp),
                             ) {
                                 items(state.requests) { request ->
-                                    RequestCard(request) { status ->
+                                    var clientInfo by remember { mutableStateOf<User?>(null) }
+                                    
+                                    LaunchedEffect(request.clientId) {
+                                        clientInfo = profileViewModel.getUserById(request.clientId)
+                                    }
+
+                                    RequestCard(
+                                        request = request,
+                                        client = clientInfo
+                                    ) { status ->
                                         requestViewModel.updateStatus(request.id, status)
+                                        
+                                        if (status == RequestStatus.ACCEPTED) {
+                                            scope.launch {
+                                                val roomId = chatViewModel.getOrCreateChatRoom(request.clientId)
+                                                navController.navigate(Screen.ChatDetail.createRoute(roomId, request.clientId))
+                                            }
+                                        }
                                     }
                                 }
                             }

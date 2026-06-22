@@ -18,14 +18,22 @@ import com.lm3alem.app.ui.components.ErrorMessage
 import com.lm3alem.app.ui.components.RequestCard
 import com.lm3alem.app.ui.navigation.Screen
 import com.lm3alem.app.viewmodel.RequestViewModel
+import com.lm3alem.app.viewmodel.ProfileViewModel
+import com.lm3alem.app.viewmodel.ChatViewModel
+import com.lm3alem.app.data.model.User
+import com.lm3alem.app.data.model.RequestStatus
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ArtisanRequestsScreen(
     navController: NavHostController,
     viewModel: RequestViewModel = hiltViewModel(),
+    profileViewModel: ProfileViewModel = hiltViewModel(),
+    chatViewModel: ChatViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState
+    val scope = rememberCoroutineScope()
 
     LaunchedEffect(key1 = true) {
         viewModel.fetchRequests()
@@ -61,8 +69,25 @@ fun ArtisanRequestsScreen(
                             contentPadding = PaddingValues(bottom = 16.dp),
                         ) {
                             items(state.requests) { request ->
-                                RequestCard(request) { status ->
+                                var clientInfo by remember { mutableStateOf<User?>(null) }
+                                
+                                LaunchedEffect(request.clientId) {
+                                    clientInfo = profileViewModel.getUserById(request.clientId)
+                                }
+
+                                RequestCard(
+                                    request = request,
+                                    client = clientInfo
+                                ) { status ->
                                     viewModel.updateStatus(request.id, status)
+                                    
+                                    // If accepted, navigate to chat
+                                    if (status == RequestStatus.ACCEPTED) {
+                                        scope.launch {
+                                            val roomId = chatViewModel.getOrCreateChatRoom(request.clientId)
+                                            navController.navigate(Screen.ChatDetail.createRoute(roomId, request.clientId))
+                                        }
+                                    }
                                 }
                             }
                         }
