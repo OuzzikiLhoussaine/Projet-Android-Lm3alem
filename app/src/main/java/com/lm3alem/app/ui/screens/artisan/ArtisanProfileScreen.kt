@@ -148,7 +148,7 @@ fun ArtisanProfileScreen(
                             icon = Icons.Default.Person,
                             title = stringResource(R.string.edit_profile),
                             subtitle = stringResource(R.string.edit_profile_subtitle),
-                            onClick = { navController.navigate(Screen.EditArtisanProfile.route) }
+                            onClick = { navController.navigate(Screen.EditProfile.route) }
                         )
                         
                         ProfileMenuItem(

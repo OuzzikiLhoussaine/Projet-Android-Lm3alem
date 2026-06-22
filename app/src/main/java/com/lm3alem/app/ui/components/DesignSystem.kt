@@ -92,10 +92,10 @@ fun ArtisanBottomBar(
             ),
         )
         NavigationBarItem(
-            selected = currentRoute == Screen.Messages.route,
+            selected = currentRoute == Screen.ArtisanMessages.route,
             onClick = { 
-                if (currentRoute != Screen.Messages.route) {
-                    navController.navigate(Screen.Messages.route)
+                if (currentRoute != Screen.ArtisanMessages.route) {
+                    navController.navigate(Screen.ArtisanMessages.route)
                 }
             },
             icon = { Icon(Icons.AutoMirrored.Filled.Message, contentDescription = stringResource(R.string.messages)) },
