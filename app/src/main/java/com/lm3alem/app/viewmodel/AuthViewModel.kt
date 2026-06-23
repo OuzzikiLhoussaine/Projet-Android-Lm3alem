@@ -199,12 +199,13 @@ class AuthViewModel @Inject constructor(
             _authState.value = AuthState.Loading
 
             val trimmedEmail = email.trim()
+            val trimmedPass = pass.trim()
             val user = User(
                 email = trimmedEmail,
                 role = role.name
             )
 
-            val result = authRepository.register(trimmedEmail, pass, user)
+            val result = authRepository.register(trimmedEmail, trimmedPass, user)
 
             result.onSuccess {
                 authRepository.sendEmailVerification()

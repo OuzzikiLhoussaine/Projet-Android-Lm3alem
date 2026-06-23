@@ -13,7 +13,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -42,18 +44,44 @@ fun RegisterScreen(
     navController: NavHostController,
     viewModel: AuthViewModel = hiltViewModel(),
 ) {
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var confirmPassword by remember { mutableStateOf("") }
-    var selectedRole by remember { mutableStateOf(UserRole.CLIENT) }
+    var email by rememberSaveable { mutableStateOf("") }
+    var password by rememberSaveable { mutableStateOf("") }
+    var confirmPassword by rememberSaveable { mutableStateOf("") }
+    var selectedRole by rememberSaveable { mutableStateOf(UserRole.CLIENT) }
     
     val authState by viewModel.authState
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collect { event ->
             when (event) {
+                is AuthViewModel.AuthEvent.NavigateToHome -> {
+                    val route = when (event.role) {
+                        UserRole.CLIENT -> Screen.ClientHome.route
+                        UserRole.ARTISAN -> Screen.ArtisanHome.route
+                        UserRole.ADMIN -> Screen.AdminDashboard.route
+                        else -> Screen.RoleSelection.route
+                    }
+                    navController.navigate(route) {
+                        popUpTo(Screen.Register.route) { inclusive = true }
+                    }
+                }
                 is AuthViewModel.AuthEvent.NavigateToEmailVerification -> {
                     navController.navigate(Screen.VerifyEmail.route) {
+                        popUpTo(Screen.Register.route) { inclusive = true }
+                    }
+                }
+                is AuthViewModel.AuthEvent.NavigateToRoleSelection -> {
+                    navController.navigate(Screen.RoleSelection.route) {
+                        popUpTo(Screen.Register.route) { inclusive = true }
+                    }
+                }
+                is AuthViewModel.AuthEvent.NavigateToCompleteProfile -> {
+                    navController.navigate(Screen.CompleteProfile.route) {
+                        popUpTo(Screen.Register.route) { inclusive = true }
+                    }
+                }
+                is AuthViewModel.AuthEvent.NavigateToLogin -> {
+                    navController.navigate(Screen.Login.route) {
                         popUpTo(Screen.Register.route) { inclusive = true }
                     }
                 }
@@ -79,7 +107,7 @@ fun RegisterScreen(
         Surface(
             modifier = Modifier.size(100.dp),
             shape = CircleShape,
-            border = BorderStroke(3.dp, primaryGreen),
+            border = BorderStroke(3.dp, MaterialTheme.colorScheme.secondary),
             color = MaterialTheme.colorScheme.surface
         ) {
             Box(contentAlignment = Alignment.Center) {
@@ -100,7 +128,7 @@ fun RegisterScreen(
                 withStyle(style = SpanStyle(color = primaryGreen)) {
                     append("Lm")
                 }
-                withStyle(style = SpanStyle(color = onBackground)) {
+                withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.secondary)) {
                     append("3")
                 }
                 withStyle(style = SpanStyle(color = primaryGreen)) {
@@ -152,7 +180,7 @@ fun RegisterScreen(
                 isSelected = selectedRole == UserRole.ARTISAN,
                 onClick = { selectedRole = UserRole.ARTISAN },
                 modifier = Modifier.weight(1f),
-                selectedColor = primaryGreen
+                selectedColor = MaterialTheme.colorScheme.secondary
             )
         }
 
@@ -161,7 +189,11 @@ fun RegisterScreen(
         AppTextField(
             value = email,
             onValueChange = { email = it },
-            label = stringResource(R.string.email)
+            label = stringResource(R.string.email),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = androidx.compose.ui.text.input.KeyboardType.Email,
+                imeAction = androidx.compose.ui.text.input.ImeAction.Next
+            )
         )
         
         Spacer(modifier = Modifier.height(16.dp))
@@ -170,7 +202,11 @@ fun RegisterScreen(
             value = password,
             onValueChange = { password = it },
             label = stringResource(R.string.password),
-            visualTransformation = PasswordVisualTransformation()
+            visualTransformation = PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = androidx.compose.ui.text.input.KeyboardType.Password,
+                imeAction = androidx.compose.ui.text.input.ImeAction.Next
+            )
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -179,12 +215,19 @@ fun RegisterScreen(
             value = confirmPassword,
             onValueChange = { confirmPassword = it },
             label = stringResource(R.string.confirm_password),
-            visualTransformation = PasswordVisualTransformation()
+            visualTransformation = PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = androidx.compose.ui.text.input.KeyboardType.Password,
+                imeAction = androidx.compose.ui.text.input.ImeAction.Done
+            )
         )
         
         Spacer(modifier = Modifier.height(48.dp))
         
-        val isFormValid = email.isNotEmpty() && password.isNotEmpty() && password == confirmPassword
+        val isFormValid = email.isNotBlank() && 
+                password.length >= 6 && 
+                password == confirmPassword && 
+                android.util.Patterns.EMAIL_ADDRESS.matcher(email.trim()).matches()
 
         MainButton(
             text = stringResource(R.string.register),
