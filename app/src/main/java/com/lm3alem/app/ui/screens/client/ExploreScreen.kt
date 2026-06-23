@@ -307,23 +307,82 @@ fun ExploreArtisanCard(
 @Composable
 fun ExploreArtisanCardPreview() {
     Lm3alemTheme {
-        ExploreArtisanCard(
-            artisanWithUser = ArtisanWithUser(
-                artisan = ArtisanProfile(
-                    userId = "1",
-                    job = "Plumber",
-                    rating = 4.8,
-                    reviewCount = 127,
-                    price = 45.0,
-                    isAvailable = true
+        Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            ExploreArtisanCard(
+                artisanWithUser = ArtisanWithUser(
+                    artisan = ArtisanProfile(
+                        userId = "1",
+                        job = "Plumber",
+                        rating = 4.8,
+                        reviewCount = 127,
+                        price = 45.0,
+                        isAvailable = true
+                    ),
+                    user = User(
+                        id = "1",
+                        fullName = "Ahmed Mansouri",
+                        imageUrl = "https://images.unsplash.com/photo-1585704032915-c3400ca1f9e3?auto=format&fit=crop&q=80&w=400"
+                    )
                 ),
-                user = User(
-                    id = "1",
-                    fullName = "Ahmed Hassan",
-                    imageUrl = ""
-                )
-            ),
-            onClick = {}
-        )
+                onClick = {}
+            )
+            
+            ExploreArtisanCard(
+                artisanWithUser = ArtisanWithUser(
+                    artisan = ArtisanProfile(
+                        userId = "2",
+                        job = "Electrician",
+                        rating = 4.9,
+                        reviewCount = 85,
+                        price = 60.0,
+                        isAvailable = true
+                    ),
+                    user = User(
+                        id = "2",
+                        fullName = "Ouzziki Lhoussaine",
+                        imageUrl = "https://plus.unsplash.com/premium_photo-1661644847590-3783e3d20652?q=80&w=400&auto=format&fit=crop"
+                    )
+                ),
+                onClick = {}
+            )
+
+            ExploreArtisanCard(
+                artisanWithUser = ArtisanWithUser(
+                    artisan = ArtisanProfile(
+                        userId = "3",
+                        job = "Electrician",
+                        rating = 4.7,
+                        reviewCount = 42,
+                        price = 55.0,
+                        isAvailable = true
+                    ),
+                    user = User(
+                        id = "3",
+                        fullName = "Sarah Alami",
+                        imageUrl = "https://images.unsplash.com/photo-1581092921461-7d15cc8905de?auto=format&fit=crop&q=80&w=400"
+                    )
+                ),
+                onClick = {}
+            )
+
+            ExploreArtisanCard(
+                artisanWithUser = ArtisanWithUser(
+                    artisan = ArtisanProfile(
+                        userId = "4",
+                        job = "Painter",
+                        rating = 4.6,
+                        reviewCount = 28,
+                        price = 40.0,
+                        isAvailable = true
+                    ),
+                    user = User(
+                        id = "4",
+                        fullName = "Hasna Elhassani",
+                        imageUrl = "https://plus.unsplash.com/premium_photo-1682974933148-ebe98314f922?q=80&w=400&auto=format&fit=crop"
+                    )
+                ),
+                onClick = {}
+            )
+        }
     }
 }

@@ -865,16 +865,16 @@ fun ArtisanCardPreview() {
         ArtisanCard(
             artisanWithUser = ArtisanWithUser(
                 artisan = ArtisanProfile(
-                    userId = "1",
-                    job = "Plumber",
-                    rating = 4.8,
-                    reviewCount = 127,
-                    price = 45.0,
+                    userId = "2",
+                    job = "Electrician",
+                    rating = 4.9,
+                    reviewCount = 85,
+                    price = 60.0,
                 ),
                 user = User(
-                    id = "1",
-                    fullName = "Ahmed Hassan",
-                    imageUrl = ""
+                    id = "2",
+                    fullName = "Ouzziki Lhoussaine",
+                    imageUrl = "https://plus.unsplash.com/premium_photo-1661644847590-3783e3d20652?q=80&w=400&auto=format&fit=crop"
                 )
             ),
         ) { }
