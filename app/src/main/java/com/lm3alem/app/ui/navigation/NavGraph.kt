@@ -31,6 +31,7 @@ import com.lm3alem.app.ui.screens.profile.SupportScreen
 import com.lm3alem.app.ui.screens.client.ExploreScreen
 import com.lm3alem.app.ui.screens.client.BookingHistoryScreen
 import com.lm3alem.app.ui.screens.messages.MessagesScreen
+import com.lm3alem.app.ui.screens.admin.AdminDashboardScreen
 
 @Composable
 fun NavGraph(
@@ -130,6 +131,9 @@ fun NavGraph(
         }
         composable(Screen.ArtisanMessages.route) {
             ArtisanMessagesScreen(navController)
+        }
+        composable(Screen.AdminDashboard.route) {
+            AdminDashboardScreen(navController)
         }
         composable(
             route = Screen.ChatDetail.route,

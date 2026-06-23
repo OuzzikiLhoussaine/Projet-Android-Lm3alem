@@ -56,11 +56,12 @@ fun LoginScreen(
         viewModel.eventFlow.collect { event ->
             when (event) {
                 is AuthViewModel.AuthEvent.NavigateToHome -> {
-                    val route =
-                        if (event.role == UserRole.CLIENT)
-                            Screen.ClientHome.route
-                        else
-                            Screen.ArtisanHome.route
+                    val route = when (event.role) {
+                        UserRole.CLIENT -> Screen.ClientHome.route
+                        UserRole.ARTISAN -> Screen.ArtisanHome.route
+                        UserRole.ADMIN -> Screen.AdminDashboard.route
+                        else -> Screen.RoleSelection.route
+                    }
 
                     navController.navigate(route) {
                         popUpTo(Screen.Login.route) { inclusive = true }

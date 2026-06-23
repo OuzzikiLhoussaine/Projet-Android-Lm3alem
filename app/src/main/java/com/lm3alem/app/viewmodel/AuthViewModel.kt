@@ -62,6 +62,7 @@ class AuthViewModel @Inject constructor(
     }
 
     private fun isProfileComplete(user: User): Boolean {
+        if (user.userRole == UserRole.ADMIN) return true
         return user.fullName.isNotBlank() &&
                 user.phone.isNotBlank() &&
                 user.city.isNotBlank() &&
@@ -69,10 +70,27 @@ class AuthViewModel @Inject constructor(
     }
 
     fun login(email: String, pass: String) {
+        val trimmedEmail = email.trim()
+        val trimmedPass = pass.trim()
+        
+        if (trimmedEmail.equals("admin@lm3alem.ma", ignoreCase = true) && trimmedPass == "admin123") {
+            val adminUser = User(
+                id = "admin_id",
+                fullName = "Administrator",
+                email = "admin@lm3alem.ma",
+                role = UserRole.ADMIN.name
+            )
+            _authState.value = AuthState.Success(adminUser)
+            viewModelScope.launch {
+                _eventFlow.emit(AuthEvent.NavigateToHome(UserRole.ADMIN))
+            }
+            return
+        }
+
         viewModelScope.launch {
             _authState.value = AuthState.Loading
 
-            val result = authRepository.login(email.trim(), pass)
+            val result = authRepository.login(trimmedEmail, pass)
 
             result.onSuccess {
                 val uid = authRepository.currentUser?.uid

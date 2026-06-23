@@ -101,6 +101,28 @@ class AuthRepository @Inject constructor(
         }
     }
 
+    suspend fun getAllUsers(): Result<List<User>> {
+        return try {
+            val snapshot = firestore.collection("users").get().await()
+            val users = snapshot.toObjects(User::class.java)
+            Result.success(users)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun deleteUser(uid: String): Result<Unit> {
+        return try {
+            firestore.collection("users").document(uid).delete().await()
+            // Note: This only deletes the Firestore document. 
+            // To delete from Firebase Auth, the admin would need special privileges or we'd need a Cloud Function.
+            // For now, deleting from Firestore is a good start.
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
     fun logout() {
         firebaseAuth.signOut()
     }

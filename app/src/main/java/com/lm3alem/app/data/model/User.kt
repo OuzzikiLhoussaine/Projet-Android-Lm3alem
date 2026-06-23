@@ -21,5 +21,5 @@ data class User(
 }
 
 enum class UserRole {
-    CLIENT, ARTISAN, UNDEFINED
+    CLIENT, ARTISAN, ADMIN, UNDEFINED
 }

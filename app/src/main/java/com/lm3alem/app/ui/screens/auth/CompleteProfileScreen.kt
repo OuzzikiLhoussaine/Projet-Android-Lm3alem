@@ -63,10 +63,11 @@ fun CompleteProfileScreen(
         viewModel.eventFlow.collect { event ->
             when (event) {
                 is AuthViewModel.AuthEvent.NavigateToHome -> {
-                    val route = if (event.role == UserRole.CLIENT) {
-                        Screen.ClientHome.route
-                    } else {
-                        Screen.EditArtisanProfile.route
+                    val route = when (event.role) {
+                        UserRole.CLIENT -> Screen.ClientHome.route
+                        UserRole.ARTISAN -> Screen.EditArtisanProfile.route
+                        UserRole.ADMIN -> Screen.AdminDashboard.route
+                        else -> Screen.RoleSelection.route
                     }
                     navController.navigate(route) {
                         popUpTo(Screen.CompleteProfile.route) { inclusive = true }
