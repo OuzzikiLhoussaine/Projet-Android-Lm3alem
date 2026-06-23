@@ -759,6 +759,7 @@ fun AppTopBar(
     title: String? = null,
     onBackClick: (() -> Unit)? = null,
     onNotificationClick: (() -> Unit)? = null,
+    notificationCount: Int = 0,
     useBrandedColors: Boolean = true,
     actions: @Composable RowScope.() -> Unit = {},
 ) {
@@ -803,11 +804,24 @@ fun AppTopBar(
         actions = {
             if (onNotificationClick != null) {
                 IconButton(onClick = onNotificationClick) {
-                    Icon(
-                        imageVector = Icons.Default.Notifications,
-                        contentDescription = stringResource(R.string.notifications),
-                        tint = Color.White
-                    )
+                    BadgedBox(
+                        badge = {
+                            if (notificationCount > 0) {
+                                Badge(
+                                    containerColor = Color.Red,
+                                    contentColor = Color.White
+                                ) {
+                                    Text(text = notificationCount.toString())
+                                }
+                            }
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Notifications,
+                            contentDescription = stringResource(R.string.notifications),
+                            tint = if (useBrandedColors) Color.White else MaterialTheme.colorScheme.onBackground
+                        )
+                    }
                 }
             }
             actions()

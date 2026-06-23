@@ -42,6 +42,10 @@ fun ArtisanHomeScreen(
     val requestState by requestViewModel.uiState
     val scope = rememberCoroutineScope()
 
+    val unreadCount = if (requestState is RequestViewModel.RequestUiState.RequestsLoaded) {
+        (requestState as RequestViewModel.RequestUiState.RequestsLoaded).requests.count { !it.readByArtisan && it.status == RequestStatus.PENDING }
+    } else 0
+
     LaunchedEffect(key1 = true) {
         requestViewModel.fetchRequests()
         authViewModel.eventFlow.collect { event ->
@@ -57,6 +61,8 @@ fun ArtisanHomeScreen(
         topBar = {
             AppTopBar(
                 title = stringResource(R.string.artisan_dashboard),
+                onNotificationClick = { navController.navigate(Screen.ArtisanRequests.route) },
+                notificationCount = unreadCount,
                 actions = {
                     IconButton(onClick = { navController.navigate(Screen.ArtisanMessages.route) }) {
                         Icon(Icons.AutoMirrored.Filled.Message, contentDescription = stringResource(R.string.messages))

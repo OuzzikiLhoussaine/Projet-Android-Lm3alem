@@ -30,6 +30,7 @@ import com.lm3alem.app.ui.screens.profile.TermsOfServiceScreen
 import com.lm3alem.app.ui.screens.profile.SupportScreen
 import com.lm3alem.app.ui.screens.client.ExploreScreen
 import com.lm3alem.app.ui.screens.client.BookingHistoryScreen
+import com.lm3alem.app.ui.screens.client.NotificationsScreen
 import com.lm3alem.app.ui.screens.messages.MessagesScreen
 import com.lm3alem.app.ui.screens.admin.AdminDashboardScreen
 
@@ -153,6 +154,9 @@ fun NavGraph(
                     navController.previousBackStackEntry?.savedStateHandle?.set("selected_address", address)
                 }
             )
+        }
+        composable(Screen.Notifications.route) {
+            NotificationsScreen(navController)
         }
     }
 }

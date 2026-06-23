@@ -58,4 +58,26 @@ class RequestRepository @Inject constructor(
             Result.failure(e)
         }
     }
+
+    suspend fun markRequestAsReadByClient(requestId: String): Result<Unit> {
+        return try {
+            firestore.collection("requests").document(requestId)
+                .update("readByClient", true)
+                .await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun markRequestAsReadByArtisan(requestId: String): Result<Unit> {
+        return try {
+            firestore.collection("requests").document(requestId)
+                .update("readByArtisan", true)
+                .await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }

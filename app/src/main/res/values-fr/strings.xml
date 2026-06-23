@@ -133,4 +133,9 @@
     <string name="call">Appeler</string>
     <string name="message">Message</string>
     <string name="book_now">Réserver maintenant</string>
+    <string name="notification_new_request_title">Nouvelle demande</string>
+    <string name="notification_new_request_body">Vous avez reçu une nouvelle demande pour %1$s</string>
+    <string name="notification_request_update_title">Mise à jour de la demande</string>
+    <string name="notification_request_accepted">Votre demande pour %1$s a été acceptée !</string>
+    <string name="notification_request_refused">Votre demande pour %1$s a été refusée.</string>
 </resources>

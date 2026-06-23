@@ -37,6 +37,12 @@ fun ClientHomeScreen(
     var searchQuery by remember { mutableStateOf("") }
     val uiState by viewModel.uiState
     val authState by authViewModel.authState
+    val requestViewModel: com.lm3alem.app.viewmodel.RequestViewModel = hiltViewModel()
+    val requestState by requestViewModel.uiState
+
+    val unreadCount = if (requestState is com.lm3alem.app.viewmodel.RequestViewModel.RequestUiState.ClientRequestsLoaded) {
+        (requestState as com.lm3alem.app.viewmodel.RequestViewModel.RequestUiState.ClientRequestsLoaded).requests.count { !it.request.readByClient && it.request.status != com.lm3alem.app.data.model.RequestStatus.PENDING }
+    } else 0
 
     val userName = if (authState is AuthViewModel.AuthState.Success) {
         (authState as AuthViewModel.AuthState.Success).user.fullName.split(" ").firstOrNull() ?: "User"
@@ -45,6 +51,7 @@ fun ClientHomeScreen(
     }
 
     LaunchedEffect(key1 = true) {
+        requestViewModel.fetchClientRequests()
         authViewModel.eventFlow.collect { event ->
             if (event is AuthViewModel.AuthEvent.Logout) {
                 navController.navigate(Screen.Login.route) {
@@ -57,7 +64,8 @@ fun ClientHomeScreen(
     Scaffold(
         topBar = {
             AppTopBar(
-                onNotificationClick = { /* Handle notifications */ },
+                onNotificationClick = { navController.navigate(Screen.Notifications.route) },
+                notificationCount = unreadCount
             )
         },
         bottomBar = {

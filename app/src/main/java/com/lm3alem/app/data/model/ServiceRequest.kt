@@ -14,7 +14,9 @@ data class ServiceRequest(
     val startTime: String = "",
     val endTime: String = "",
     val status: RequestStatus = RequestStatus.PENDING,
-    val date: Any? = null
+    val date: Any? = null,
+    val readByClient: Boolean = true,
+    val readByArtisan: Boolean = true
 ) {
     fun getFormattedDate(): Date {
         return when (date) {

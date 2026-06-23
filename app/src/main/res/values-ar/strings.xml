@@ -134,4 +134,9 @@
     <string name="call">اتصال</string>
     <string name="message">رسالة</string>
     <string name="book_now">احجز الآن</string>
+    <string name="notification_new_request_title">طلب جديد</string>
+    <string name="notification_new_request_body">لقد تلقيت طلباً جديداً لـ %1$s</string>
+    <string name="notification_request_update_title">تحديث الطلب</string>
+    <string name="notification_request_accepted">لقد تم قبول طلبك لـ %1$s!</string>
+    <string name="notification_request_refused">لقد تم رفض طلبك لـ %1$s.</string>
 </resources>

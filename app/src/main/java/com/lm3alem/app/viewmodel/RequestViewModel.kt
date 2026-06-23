@@ -107,6 +107,18 @@ class RequestViewModel @Inject constructor(
         }
     }
 
+    fun markAsReadByClient(requestId: String) {
+        viewModelScope.launch {
+            requestRepository.markRequestAsReadByClient(requestId)
+        }
+    }
+
+    fun markAsReadByArtisan(requestId: String) {
+        viewModelScope.launch {
+            requestRepository.markRequestAsReadByArtisan(requestId)
+        }
+    }
+
     sealed class RequestUiState {
         object Idle : RequestUiState()
         object Loading : RequestUiState()

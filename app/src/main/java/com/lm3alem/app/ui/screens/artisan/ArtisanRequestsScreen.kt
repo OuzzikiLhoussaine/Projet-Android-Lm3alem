@@ -56,6 +56,15 @@ fun ArtisanRequestsScreen(
                     CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                 }
                 is RequestViewModel.RequestUiState.RequestsLoaded -> {
+                    // Mark as read for artisan
+                    LaunchedEffect(state.requests) {
+                        state.requests.forEach { 
+                            if (!it.readByArtisan) {
+                                viewModel.markAsReadByArtisan(it.id)
+                            }
+                        }
+                    }
+
                     if (state.requests.isEmpty()) {
                         Text(
                             text = stringResource(R.string.no_requests_yet),

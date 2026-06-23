@@ -50,8 +50,16 @@ fun ExploreScreen(
     val uiState by viewModel.uiState
     var selectedCategory by remember { mutableStateOf(initialCategory ?: "All") }
     val categories = listOf("All", "Plumber", "Electrician", "Carpenter", "Painter", "Builder")
+    
+    val requestViewModel: com.lm3alem.app.viewmodel.RequestViewModel = hiltViewModel()
+    val requestState by requestViewModel.uiState
+
+    val unreadCount = if (requestState is com.lm3alem.app.viewmodel.RequestViewModel.RequestUiState.ClientRequestsLoaded) {
+        (requestState as com.lm3alem.app.viewmodel.RequestViewModel.RequestUiState.ClientRequestsLoaded).requests.count { !it.request.readByClient && it.request.status != com.lm3alem.app.data.model.RequestStatus.PENDING }
+    } else 0
 
     LaunchedEffect(initialCategory) {
+        requestViewModel.fetchClientRequests()
         viewModel.filterArtisans("", if (initialCategory == null || initialCategory == "All") "" else initialCategory)
     }
 
@@ -59,7 +67,8 @@ fun ExploreScreen(
         topBar = {
             AppTopBar(
                 title = "Explore",
-                onNotificationClick = { /* Handle notifications */ }
+                onNotificationClick = { navController.navigate(Screen.Notifications.route) },
+                notificationCount = unreadCount
             )
         },
         bottomBar = {
