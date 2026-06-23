@@ -33,6 +33,7 @@
     <string name="add_review">Add Review</string>
     <string name="reviews">Reviews</string>
     <string name="no_reviews_yet">No reviews yet.</string>
+    <string name="no_portfolio_yet">No portfolio items yet.</string>
     <string name="edit_professional_profile">Edit Professional Profile</string>
     <string name="job_profession">Job / Profession</string>
     <string name="description_bio">Description / Bio</string>
@@ -60,6 +61,7 @@
     <string name="submit_review">Submit Review</string>
     <string name="loading">Loading…</string>
     <string name="profile">Profile</string>
+    <string name="requests">Requests</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="edit_profile_subtitle">Update your personal information</string>
     <string name="account_settings">Account Settings</string>
@@ -68,6 +70,7 @@
     <string name="my_projects">My Projects</string>
     <string name="my_projects_subtitle">Manage your portfolio of work</string>
     <string name="app_settings">App Settings</string>
+    <string name="change_profile_picture">Change profile picture</string>
     <string name="logout">Logout</string>
     <string name="role">Role</string>
     <string name="language">Language</string>
@@ -100,6 +103,7 @@
     <string name="hello_user">Hello, %1$s 👋</string>
     <string name="client_home_subtitle">Find the perfect professional for your home</string>
     <string name="search_services">Search for services…</string>
+    <string name="search_messages">Search messages…</string>
     <string name="categories">Categories</string>
     <string name="see_all">See all</string>
     <string name="top_rated_artisans">Top Rated Artisans</string>
@@ -123,6 +127,10 @@
     <string name="specializations">Specializations</string>
     <string name="portfolio">Portfolio</string>
     <string name="about">About</string>
+    <string name="professional_info">Professional Info</string>
+    <string name="experience">Experience</string>
+    <string name="years">years</string>
+    <string name="starting_price">Starting Price</string>
     <string name="no_bio">No bio available.</string>
     <string name="call">Call</string>
     <string name="message">Message</string>
@@ -132,4 +140,6 @@
     <string name="notification_request_update_title">Request Update</string>
     <string name="notification_request_accepted">Your request for %1$s has been accepted!</string>
     <string name="notification_request_refused">Your request for %1$s has been refused.</string>
+    <string name="notification_request_sent">You made a new request for %1$s to %2$s</string>
+    <string name="request_sent">Request Sent</string>
 </resources>

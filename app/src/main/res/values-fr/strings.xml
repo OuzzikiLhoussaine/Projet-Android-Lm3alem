@@ -33,6 +33,7 @@
     <string name="add_review">Ajouter un avis</string>
     <string name="reviews">Avis</string>
     <string name="no_reviews_yet">Aucun avis pour le moment.</string>
+    <string name="no_portfolio_yet">Aucun élément de portfolio pour le moment.</string>
     <string name="edit_professional_profile">Modifier le profil professionnel</string>
     <string name="job_profession">Métier / Profession</string>
     <string name="description_bio">Description / Bio</string>
@@ -69,6 +70,7 @@
     <string name="my_projects">Mes projets</string>
     <string name="my_projects_subtitle">Gérez votre portfolio de travaux</string>
     <string name="app_settings">Paramètres de l\'application</string>
+    <string name="change_profile_picture">Changer la photo de profil</string>
     <string name="logout">Déconnexion</string>
     <string name="role">Rôle</string>
     <string name="language">Langue</string>
@@ -138,4 +140,6 @@
     <string name="notification_request_update_title">Mise à jour de la demande</string>
     <string name="notification_request_accepted">Votre demande pour %1$s a été acceptée !</string>
     <string name="notification_request_refused">Votre demande pour %1$s a été refusée.</string>
+    <string name="notification_request_sent">Vous avez envoyé une nouvelle demande pour %1$s à %2$s</string>
+    <string name="request_sent">Demande envoyée</string>
 </resources>

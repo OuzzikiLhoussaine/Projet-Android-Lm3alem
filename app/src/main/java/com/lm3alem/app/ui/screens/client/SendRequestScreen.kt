@@ -243,8 +243,9 @@ fun SendRequestScreen(
                             description = description,
                             address = address,
                             budget = budget,
-                            startTime = "$dateStr $startStr",
-                            endTime = endStr
+                            startTime = startStr,
+                            endTime = endStr,
+                            date = dateStr
                         )
                     }
                 },

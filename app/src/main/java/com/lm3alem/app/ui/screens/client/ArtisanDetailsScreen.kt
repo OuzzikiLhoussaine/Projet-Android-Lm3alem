@@ -27,6 +27,7 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.lm3alem.app.R
 import com.lm3alem.app.data.model.ArtisanWithUser
+import com.lm3alem.app.data.model.Review
 import com.lm3alem.app.ui.components.AppTopBar
 import com.lm3alem.app.ui.components.ErrorMessage
 import com.lm3alem.app.ui.navigation.Screen
@@ -45,6 +46,7 @@ fun ArtisanDetailsScreen(
 ) {
     val artisanWithUser by viewModel.artisanWithUser
     val uiState by viewModel.uiState
+    val reviewState by reviewViewModel.uiState
     var selectedTab by remember { mutableIntStateOf(0) }
 
     LaunchedEffect(artisanId) {
@@ -118,8 +120,31 @@ fun ArtisanDetailsScreen(
                         // Tab Content
                         Box(modifier = Modifier.padding(24.dp)) {
                             when (selectedTab) {
-                                0 -> Text("Portfolio content goes here...", color = MaterialTheme.colorScheme.onSurfaceVariant)
-                                1 -> Text("Reviews content goes here...", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                0 -> Text(stringResource(R.string.no_portfolio_yet), color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                1 -> {
+                                    when (val rState = reviewState) {
+                                        is ReviewViewModel.ReviewUiState.Loading -> {
+                                            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                                                CircularProgressIndicator(color = LogoBlue)
+                                            }
+                                        }
+                                        is ReviewViewModel.ReviewUiState.ReviewsLoaded -> {
+                                            if (rState.reviews.isEmpty()) {
+                                                Text(stringResource(R.string.no_reviews_yet), color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                            } else {
+                                                Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                                                    rState.reviews.forEach { review ->
+                                                        ReviewItem(review)
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        is ReviewViewModel.ReviewUiState.Error -> {
+                                            ErrorMessage(message = rState.message)
+                                        }
+                                        else -> {}
+                                    }
+                                }
                                 2 -> Text(data.artisan.description.ifEmpty { stringResource(R.string.no_bio) }, color = MaterialTheme.colorScheme.onSurfaceVariant)
                             }
                         }
@@ -386,6 +411,45 @@ fun BottomActionBar(onBookClick: () -> Unit, onMessageClick: () -> Unit) {
             ) {
                 Text(stringResource(R.string.book_now), fontWeight = FontWeight.Bold, fontSize = 16.sp)
             }
+        }
+    }
+}
+
+@Composable
+fun ReviewItem(review: Review) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    repeat(5) { index ->
+                        Icon(
+                            imageVector = Icons.Default.Star,
+                            contentDescription = null,
+                            tint = if (index < review.rating.toInt()) LogoYellow else MaterialTheme.colorScheme.outline,
+                            modifier = Modifier.size(16.dp)
+                        )
+                    }
+                }
+                Text(
+                    text = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(review.getFormattedDate()),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = review.comment,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurface
+            )
         }
     }
 }

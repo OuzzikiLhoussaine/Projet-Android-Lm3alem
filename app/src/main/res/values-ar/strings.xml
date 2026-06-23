@@ -33,6 +33,7 @@
     <string name="add_review">إضافة تقييم</string>
     <string name="reviews">التقييمات</string>
     <string name="no_reviews_yet">لا توجد تقييمات بعد.</string>
+    <string name="no_portfolio_yet">لا توجد أعمال في المعرض بعد.</string>
     <string name="edit_professional_profile">تعديل الملف المهني</string>
     <string name="job_profession">المهنة / التخصص</string>
     <string name="description_bio">الوصف / السيرة الذاتية</string>
@@ -139,4 +140,6 @@
     <string name="notification_request_update_title">تحديث الطلب</string>
     <string name="notification_request_accepted">لقد تم قبول طلبك لـ %1$s!</string>
     <string name="notification_request_refused">لقد تم رفض طلبك لـ %1$s.</string>
+    <string name="notification_request_sent">لقد قمت بإرسال طلب جديد لـ %1$s إلى %2$s</string>
+    <string name="request_sent">تم إرسال الطلب</string>
 </resources>

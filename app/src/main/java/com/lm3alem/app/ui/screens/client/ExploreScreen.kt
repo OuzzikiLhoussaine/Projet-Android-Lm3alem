@@ -9,7 +9,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -29,6 +28,7 @@ import androidx.compose.ui.res.stringResource
 import com.lm3alem.app.R
 import com.lm3alem.app.data.model.ArtisanProfile
 import com.lm3alem.app.data.model.ArtisanWithUser
+import com.lm3alem.app.data.model.RequestStatus
 import com.lm3alem.app.data.model.User
 import com.lm3alem.app.ui.components.AppTopBar
 import com.lm3alem.app.ui.components.ClientBottomBar
@@ -38,6 +38,8 @@ import com.lm3alem.app.ui.theme.Lm3alemTheme
 import com.lm3alem.app.ui.theme.LogoBlue
 import com.lm3alem.app.ui.theme.LogoYellow
 import com.lm3alem.app.viewmodel.ClientViewModel
+import com.lm3alem.app.viewmodel.RequestViewModel
+import com.lm3alem.app.viewmodel.RequestViewModel.RequestUiState
 import java.util.Locale
 
 @Composable
@@ -51,11 +53,11 @@ fun ExploreScreen(
     var selectedCategory by remember { mutableStateOf(initialCategory ?: "All") }
     val categories = listOf("All", "Plumber", "Electrician", "Carpenter", "Painter", "Builder")
     
-    val requestViewModel: com.lm3alem.app.viewmodel.RequestViewModel = hiltViewModel()
+    val requestViewModel: RequestViewModel = hiltViewModel()
     val requestState by requestViewModel.uiState
 
-    val unreadCount = if (requestState is com.lm3alem.app.viewmodel.RequestViewModel.RequestUiState.ClientRequestsLoaded) {
-        (requestState as com.lm3alem.app.viewmodel.RequestViewModel.RequestUiState.ClientRequestsLoaded).requests.count { !it.request.readByClient && it.request.status != com.lm3alem.app.data.model.RequestStatus.PENDING }
+    val unreadCount = if (requestState is RequestUiState.ClientRequestsLoaded) {
+        (requestState as RequestUiState.ClientRequestsLoaded).requests.count { !it.request.readByClient && it.request.status != RequestStatus.PENDING }
     } else 0
 
     LaunchedEffect(initialCategory) {

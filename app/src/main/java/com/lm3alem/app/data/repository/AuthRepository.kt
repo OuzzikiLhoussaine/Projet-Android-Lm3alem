@@ -49,7 +49,7 @@ class AuthRepository @Inject constructor(
         return try {
             firebaseAuth.currentUser?.reload()?.await()
             firebaseAuth.currentUser?.isEmailVerified ?: false
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             false
         }
     }

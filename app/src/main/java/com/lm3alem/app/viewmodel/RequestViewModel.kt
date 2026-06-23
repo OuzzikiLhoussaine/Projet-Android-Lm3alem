@@ -10,6 +10,8 @@ import com.lm3alem.app.data.model.User
 import com.lm3alem.app.data.repository.AuthRepository
 import com.lm3alem.app.data.repository.RequestRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
@@ -18,7 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class RequestViewModel @Inject constructor(
     private val requestRepository: RequestRepository,
-    private val authRepository: AuthRepository,
+    private val authRepository: AuthRepository
 ) : ViewModel() {
 
     private val _uiState = mutableStateOf<RequestUiState>(RequestUiState.Idle)
@@ -34,7 +36,8 @@ class RequestViewModel @Inject constructor(
         address: String,
         budget: String,
         startTime: String,
-        endTime: String
+        endTime: String,
+        date: String
     ) {
         val clientId = authRepository.currentUser?.uid ?: return
         viewModelScope.launch {
@@ -49,16 +52,15 @@ class RequestViewModel @Inject constructor(
                 startTime = startTime,
                 endTime = endTime,
                 status = RequestStatus.PENDING,
-                date = java.util.Date()
+                date = date
             )
-            requestRepository.sendRequest(request)
-                .onSuccess {
-                    _uiState.value = RequestUiState.Success
-                    _eventFlow.emit(RequestEvent.RequestSent)
-                }
-                .onFailure {
-                    _uiState.value = RequestUiState.Error(it.message ?: "Failed to send request")
-                }
+            val result = requestRepository.sendRequest(request)
+            result.onSuccess {
+                _uiState.value = RequestUiState.Success
+                _eventFlow.emit(RequestEvent.RequestSent)
+            }.onFailure {
+                _uiState.value = RequestUiState.Error(it.message ?: "Failed to send request")
+            }
         }
     }
 
@@ -83,9 +85,11 @@ class RequestViewModel @Inject constructor(
             requestRepository.getRequestsForClient(clientId)
                 .onSuccess { requests ->
                     val requestsWithArtisan = requests.map { request ->
-                        val artisan = authRepository.getUserDetails(request.artisanId)
-                        RequestWithArtisan(request, artisan)
-                    }
+                        async {
+                            val artisan = authRepository.getUserDetails(request.artisanId)
+                            RequestWithArtisan(request, artisan)
+                        }
+                    }.awaitAll()
                     _uiState.value = RequestUiState.ClientRequestsLoaded(requestsWithArtisan)
                 }
                 .onFailure {
@@ -96,13 +100,9 @@ class RequestViewModel @Inject constructor(
 
     fun updateStatus(requestId: String, status: RequestStatus) {
         viewModelScope.launch {
-            _uiState.value = RequestUiState.Loading
             requestRepository.updateRequestStatus(requestId, status)
                 .onSuccess {
-                    fetchRequests() // Refresh list
-                }
-                .onFailure {
-                    _uiState.value = RequestUiState.Error(it.message ?: "Failed to update status")
+                    fetchRequests()
                 }
         }
     }
