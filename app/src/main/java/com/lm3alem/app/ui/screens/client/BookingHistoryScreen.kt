@@ -57,7 +57,7 @@ fun BookingHistoryScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .background(Color(0xFFF8F9FA))
+                .background(MaterialTheme.colorScheme.background)
         ) {
             when (val state = uiState) {
                 is RequestViewModel.RequestUiState.Loading -> {
@@ -70,7 +70,10 @@ fun BookingHistoryScreen(
                     
                     if (completedRequests.isEmpty()) {
                         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                            Text(text = stringResource(R.string.no_completed_bookings), color = Color.Gray)
+                            Text(
+                                text = stringResource(R.string.no_completed_bookings),
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
                         }
                     } else {
                         LazyColumn(
@@ -85,7 +88,7 @@ fun BookingHistoryScreen(
                 }
                 is RequestViewModel.RequestUiState.Error -> {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text(text = (state as RequestViewModel.RequestUiState.Error).message, color = Color.Red)
+                        Text(text = state.message, color = MaterialTheme.colorScheme.error)
                     }
                 }
                 else -> {}
@@ -104,7 +107,7 @@ fun BookingHistoryItem(item: RequestWithArtisan) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Row(
@@ -115,7 +118,7 @@ fun BookingHistoryItem(item: RequestWithArtisan) {
             Surface(
                 modifier = Modifier.size(60.dp),
                 shape = CircleShape,
-                color = Color.LightGray.copy(alpha = 0.2f),
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f),
             ) {
                 if (artisan?.imageUrl?.isNotEmpty() == true) {
                     AsyncImage(
@@ -146,24 +149,24 @@ fun BookingHistoryItem(item: RequestWithArtisan) {
                 Text(
                     text = artisan?.fullName ?: stringResource(R.string.artisan),
                     style = MaterialTheme.typography.bodyMedium,
-                    color = Color.Black
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
                     text = formattedDate,
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color.Gray
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
             
             Surface(
-                color = Color(0xFFE8F5E9),
+                color = Color(0xFF4CAF50).copy(alpha = 0.1f),
                 shape = RoundedCornerShape(8.dp)
             ) {
                 Text(
                     text = stringResource(R.string.status_done),
                     modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
                     style = MaterialTheme.typography.labelSmall,
-                    color = Color(0xFF2E7D32),
+                    color = Color(0xFF4CAF50),
                     fontWeight = FontWeight.Bold
                 )
             }

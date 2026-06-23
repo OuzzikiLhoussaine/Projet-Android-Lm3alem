@@ -25,6 +25,8 @@ import com.lm3alem.app.ui.screens.client.AddReviewScreen
 import com.lm3alem.app.ui.screens.artisan.ArtisanRequestsScreen
 import com.lm3alem.app.ui.screens.profile.ProfileScreen
 import com.lm3alem.app.ui.screens.profile.EditProfileScreen
+import com.lm3alem.app.ui.screens.profile.SettingsScreen
+import com.lm3alem.app.ui.screens.profile.TermsOfServiceScreen
 import com.lm3alem.app.ui.screens.client.ExploreScreen
 import com.lm3alem.app.ui.screens.client.BookingHistoryScreen
 import com.lm3alem.app.ui.screens.messages.MessagesScreen
@@ -112,6 +114,12 @@ fun NavGraph(
         }
         composable(Screen.EditProfile.route) {
             EditProfileScreen(navController)
+        }
+        composable(Screen.Settings.route) {
+            SettingsScreen(navController)
+        }
+        composable(Screen.TermsOfService.route) {
+            TermsOfServiceScreen(navController)
         }
         composable(Screen.Messages.route) {
             MessagesScreen(navController)

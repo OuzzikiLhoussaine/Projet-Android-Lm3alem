@@ -77,6 +77,7 @@ fun ArtisanProfileScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)
                     .verticalScroll(rememberScrollState())
             ) {
                 if (artisanWithUser != null) {
@@ -95,7 +96,7 @@ fun ArtisanProfileScreen(
                             Surface(
                                 modifier = Modifier.size(100.dp),
                                 shape = CircleShape,
-                                color = Color.White
+                                color = MaterialTheme.colorScheme.surface
                             ) {
                                 if (user?.imageUrl?.isNotEmpty() == true) {
                                     AsyncImage(
@@ -140,7 +141,7 @@ fun ArtisanProfileScreen(
                             text = stringResource(R.string.account_settings),
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
-                            color = Color.Gray
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         
@@ -171,7 +172,7 @@ fun ArtisanProfileScreen(
                             text = stringResource(R.string.app_settings),
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
-                            color = Color.Gray
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         

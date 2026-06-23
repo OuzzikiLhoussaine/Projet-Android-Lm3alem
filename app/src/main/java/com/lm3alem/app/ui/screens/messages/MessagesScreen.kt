@@ -63,7 +63,7 @@ fun MessagesScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .background(Color(0xFFF8F9FA))
+                .background(MaterialTheme.colorScheme.background)
         ) {
             // Search Bar
             OutlinedTextField(
@@ -72,21 +72,21 @@ fun MessagesScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp),
-                placeholder = { Text(stringResource(R.string.search_messages), color = Color.LightGray) },
-                leadingIcon = { Icon(Icons.Default.Search, contentDescription = null, tint = Color.LightGray) },
+                placeholder = { Text(stringResource(R.string.search_messages), color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)) },
+                leadingIcon = { Icon(Icons.Default.Search, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)) },
                 shape = RoundedCornerShape(28.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Color.LightGray,
-                    unfocusedBorderColor = Color.LightGray.copy(alpha = 0.5f),
-                    focusedContainerColor = Color.White,
-                    unfocusedContainerColor = Color.White
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f),
+                    focusedContainerColor = MaterialTheme.colorScheme.surface,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surface
                 ),
                 singleLine = true
             )
 
             if (chatRooms.isEmpty()) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text("No messages yet", color = Color.Gray)
+                    Text("No messages yet", color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             } else {
                 LazyColumn(
@@ -125,7 +125,7 @@ fun ConversationItem(chatRoom: ChatRoom, otherUser: User?, onClick: () -> Unit) 
             .fillMaxWidth()
             .clickable { onClick() },
         shape = RoundedCornerShape(32.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
     ) {
         Row(
@@ -139,7 +139,7 @@ fun ConversationItem(chatRoom: ChatRoom, otherUser: User?, onClick: () -> Unit) 
                 Surface(
                     modifier = Modifier.size(60.dp),
                     shape = CircleShape,
-                    color = Color.LightGray.copy(alpha = 0.2f)
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)
                 ) {
                     if (otherUser?.imageUrl?.isNotEmpty() == true) {
                         AsyncImage(
@@ -176,14 +176,14 @@ fun ConversationItem(chatRoom: ChatRoom, otherUser: User?, onClick: () -> Unit) 
                     Text(
                         text = "Today", 
                         style = MaterialTheme.typography.bodySmall,
-                        color = Color.Gray
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
                 
                 Text(
                     text = otherUser?.role ?: "",
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color.Gray
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 
                 Spacer(modifier = Modifier.height(4.dp))
@@ -196,7 +196,7 @@ fun ConversationItem(chatRoom: ChatRoom, otherUser: User?, onClick: () -> Unit) 
                     Text(
                         text = chatRoom.lastMessage,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = Color.Gray,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.weight(1f)

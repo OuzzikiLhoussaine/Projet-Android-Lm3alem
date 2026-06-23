@@ -58,7 +58,7 @@ fun ArtisanBottomBar(
     currentRoute: String?
 ) {
     NavigationBar(
-        containerColor = Color.White,
+        containerColor = MaterialTheme.colorScheme.surface,
         contentColor = MaterialTheme.colorScheme.primary
     ) {
         NavigationBarItem(
@@ -117,7 +117,7 @@ fun ClientBottomBar(
     currentRoute: String?
 ) {
     NavigationBar(
-        containerColor = Color.White,
+        containerColor = MaterialTheme.colorScheme.surface,
         contentColor = MaterialTheme.colorScheme.primary
     ) {
         NavigationBarItem(
@@ -217,14 +217,14 @@ fun ProfileMenuItem(
                 Text(
                     text = subtitle,
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color.Gray
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
         Icon(
             imageVector = Icons.AutoMirrored.Filled.ArrowForward,
             contentDescription = null,
-            tint = Color.Gray,
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.size(20.dp)
         )
     }
@@ -263,8 +263,8 @@ fun ProfileMenuToggleItem(
             colors = SwitchDefaults.colors(
                 checkedThumbColor = MaterialTheme.colorScheme.primary,
                 checkedTrackColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
-                uncheckedThumbColor = Color.White,
-                uncheckedTrackColor = Color.LightGray.copy(alpha = 0.5f)
+                uncheckedThumbColor = MaterialTheme.colorScheme.surface,
+                uncheckedTrackColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
             )
         )
     }
@@ -329,7 +329,7 @@ fun AppTextField(
             value = value,
             onValueChange = onValueChange,
             label = { Text(label) },
-            placeholder = placeholder?.let { { Text(it, color = Color.Gray) } },
+            placeholder = placeholder?.let { { Text(it, color = MaterialTheme.colorScheme.onSurfaceVariant) } },
             modifier = Modifier.fillMaxWidth(),
             leadingIcon = leadingIcon?.let { { Icon(it, contentDescription = null) } },
             trailingIcon = trailingIcon,
@@ -391,7 +391,7 @@ fun AppDropdownField(
             ExposedDropdownMenu(
                 expanded = expanded,
                 onDismissRequest = { expanded = false },
-                modifier = Modifier.background(Color.White)
+                modifier = Modifier.background(MaterialTheme.colorScheme.surface)
             ) {
                 options.forEach { option ->
                     DropdownMenuItem(
@@ -419,7 +419,7 @@ fun ArtisanCard(artisanWithUser: ArtisanWithUser, onClick: () -> Unit) {
             .clickable { onClick() },
         shape = RoundedCornerShape(8.dp), // More Houzz-like
         colors = CardDefaults.cardColors(
-            containerColor = Color.White,
+            containerColor = MaterialTheme.colorScheme.surface,
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
     ) {
@@ -433,7 +433,7 @@ fun ArtisanCard(artisanWithUser: ArtisanWithUser, onClick: () -> Unit) {
             Surface(
                 modifier = Modifier.size(70.dp),
                 shape = CircleShape,
-                color = Color(0xFFF0F2F5)
+                color = MaterialTheme.colorScheme.surfaceVariant
             ) {
                 if (user.imageUrl.isNotEmpty()) {
                     AsyncImage(
@@ -464,7 +464,7 @@ fun ArtisanCard(artisanWithUser: ArtisanWithUser, onClick: () -> Unit) {
                 Text(
                     text = artisan.job,
                     style = MaterialTheme.typography.bodyLarge,
-                    color = Color.Gray
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 4.dp)) {
                     Icon(
@@ -477,7 +477,7 @@ fun ArtisanCard(artisanWithUser: ArtisanWithUser, onClick: () -> Unit) {
                     Text(
                         text = "${String.format(Locale.US, "%.1f", artisan.rating)} (${artisan.reviewCount})",
                         style = MaterialTheme.typography.bodyMedium,
-                        color = Color.Gray,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontWeight = FontWeight.Medium
                     )
                 }
@@ -586,7 +586,7 @@ fun RequestCard(
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
     ) {
         Column(modifier = Modifier.padding(20.dp)) {
@@ -626,7 +626,7 @@ fun RequestCard(
                     Surface(
                         modifier = Modifier.size(44.dp),
                         shape = CircleShape,
-                        color = Color.LightGray.copy(alpha = 0.2f)
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)
                     ) {
                         if (client.imageUrl.isNotEmpty()) {
                             AsyncImage(
@@ -650,12 +650,12 @@ fun RequestCard(
                         Text(
                             text = client.phone.ifEmpty { "No phone provided" },
                             style = MaterialTheme.typography.labelSmall,
-                            color = Color.Gray
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                 }
                 Spacer(modifier = Modifier.height(16.dp))
-                HorizontalDivider(color = Color.LightGray.copy(alpha = 0.2f))
+                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
                 Spacer(modifier = Modifier.height(16.dp))
             }
 
@@ -686,13 +686,13 @@ fun RequestCard(
                         Icons.Default.LocationOn,
                         contentDescription = null,
                         modifier = Modifier.size(16.dp),
-                        tint = Color.Gray
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
                         text = request.address,
                         style = MaterialTheme.typography.bodySmall,
-                        color = Color.Gray
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
@@ -704,13 +704,13 @@ fun RequestCard(
                         Icons.Default.AccessTime,
                         contentDescription = null,
                         modifier = Modifier.size(16.dp),
-                        tint = Color.Gray
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
                         text = "${request.startTime} - ${request.endTime}",
                         style = MaterialTheme.typography.bodySmall,
-                        color = Color.Gray
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }

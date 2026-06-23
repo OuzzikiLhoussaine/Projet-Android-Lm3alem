@@ -64,7 +64,7 @@ fun RegisterScreen(
     }
 
     val primaryGreen = MaterialTheme.colorScheme.primary
-    val houzzBlack = MaterialTheme.colorScheme.secondary
+    val onBackground = MaterialTheme.colorScheme.onBackground
 
     Column(
         modifier = Modifier
@@ -81,7 +81,7 @@ fun RegisterScreen(
             modifier = Modifier.size(100.dp),
             shape = CircleShape,
             border = BorderStroke(3.dp, primaryGreen),
-            color = Color.White
+            color = MaterialTheme.colorScheme.surface
         ) {
             Box(contentAlignment = Alignment.Center) {
                 Image(
@@ -101,7 +101,7 @@ fun RegisterScreen(
                 withStyle(style = SpanStyle(color = primaryGreen)) {
                     append("Lm")
                 }
-                withStyle(style = SpanStyle(color = houzzBlack)) {
+                withStyle(style = SpanStyle(color = onBackground)) {
                     append("3")
                 }
                 withStyle(style = SpanStyle(color = primaryGreen)) {
@@ -118,7 +118,7 @@ fun RegisterScreen(
             text = stringResource(R.string.register),
             fontSize = 32.sp,
             fontWeight = FontWeight.Bold,
-            color = houzzBlack
+            color = onBackground
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -127,7 +127,7 @@ fun RegisterScreen(
             text = stringResource(R.string.i_am_a),
             fontSize = 14.sp,
             fontWeight = FontWeight.SemiBold,
-            color = houzzBlack
+            color = onBackground
         )
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -205,7 +205,7 @@ fun RegisterScreen(
             Text(
                 text = stringResource(R.string.already_have_account),
                 fontSize = 14.sp,
-                color = houzzBlack
+                color = onBackground
             )
             Text(
                 text = stringResource(R.string.login),
@@ -240,7 +240,7 @@ fun RoleToggleButton(
             .clickable { onClick() },
         shape = RoundedCornerShape(24.dp),
         color = if (isSelected) selectedColor else Color.Transparent,
-        border = if (isSelected) null else BorderStroke(1.dp, Color.LightGray)
+        border = if (isSelected) null else BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
     ) {
         Row(
             modifier = Modifier.padding(horizontal = 16.dp),
@@ -250,13 +250,13 @@ fun RoleToggleButton(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = if (isSelected) Color.White else Color.Gray,
+                tint = if (isSelected) Color.White else MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.size(20.dp)
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
                 text = text,
-                color = if (isSelected) Color.White else Color.Gray,
+                color = if (isSelected) Color.White else MaterialTheme.colorScheme.onSurfaceVariant,
                 fontWeight = FontWeight.Bold,
                 fontSize = 14.sp
             )

@@ -70,7 +70,7 @@ fun ExploreScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .background(Color(0xFFF8F9FA))
+                .background(MaterialTheme.colorScheme.background)
         ) {
             // Search and Filter Header
             Row(
@@ -87,14 +87,14 @@ fun ExploreScreen(
                         viewModel.filterArtisans(searchQuery, if (selectedCategory == "All") "" else selectedCategory)
                     },
                     modifier = Modifier.weight(1f),
-                    placeholder = { Text("Search artisans, services...", color = Color.LightGray) },
-                    leadingIcon = { Icon(Icons.Default.Search, contentDescription = null, tint = Color.LightGray) },
+                    placeholder = { Text("Search artisans, services...", color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)) },
+                    leadingIcon = { Icon(Icons.Default.Search, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)) },
                     shape = RoundedCornerShape(24.dp),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = LogoBlue,
-                        unfocusedBorderColor = Color.LightGray.copy(alpha = 0.3f),
-                        focusedContainerColor = Color.White,
-                        unfocusedContainerColor = Color.White
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f),
+                        focusedContainerColor = MaterialTheme.colorScheme.surface,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surface
                     ),
                     singleLine = true
                 )
@@ -134,7 +134,7 @@ fun ExploreScreen(
                 }
             }
             
-            HorizontalDivider(modifier = Modifier.padding(top = 8.dp), color = Color.LightGray.copy(alpha = 0.2f))
+            HorizontalDivider(modifier = Modifier.padding(top = 8.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
 
             // Results Summary
             when (val state = uiState) {
@@ -143,7 +143,7 @@ fun ExploreScreen(
                         text = "${state.artisans.size} artisans found",
                         modifier = Modifier.padding(horizontal = 24.dp, vertical = 16.dp),
                         style = MaterialTheme.typography.bodyMedium,
-                        color = Color.Gray
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
 
                     LazyColumn(
@@ -185,7 +185,7 @@ fun CategoryTab(
             text = title,
             style = MaterialTheme.typography.titleMedium,
             fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-            color = if (isSelected) LogoBlue else Color.LightGray
+            color = if (isSelected) LogoBlue else MaterialTheme.colorScheme.outline
         )
         Spacer(modifier = Modifier.height(4.dp))
         if (isSelected) {
@@ -207,7 +207,7 @@ fun ExploreArtisanCard(
             .fillMaxWidth()
             .clickable { onClick() },
         shape = RoundedCornerShape(32.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Row(
@@ -218,7 +218,7 @@ fun ExploreArtisanCard(
             Surface(
                 modifier = Modifier.size(90.dp),
                 shape = CircleShape,
-                color = Color.LightGray.copy(alpha = 0.2f)
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)
             ) {
                 if (user.imageUrl.isNotEmpty()) {
                     AsyncImage(
@@ -245,16 +245,16 @@ fun ExploreArtisanCard(
                 Text(
                     text = artisan.job,
                     style = MaterialTheme.typography.bodyLarge,
-                    color = Color.Gray
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Default.LocationOn, contentDescription = null, tint = Color.Gray, modifier = Modifier.size(16.dp))
+                    Icon(Icons.Default.LocationOn, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(16.dp))
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
                         text = artisan.city.ifEmpty { "Cairo, Egypt" },
                         style = MaterialTheme.typography.bodySmall,
-                        color = Color.Gray
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
 
@@ -263,7 +263,7 @@ fun ExploreArtisanCard(
                         Icon(
                             imageVector = Icons.Default.Star,
                             contentDescription = null,
-                            tint = if (index < artisan.rating.toInt()) LogoYellow else Color.LightGray,
+                            tint = if (index < artisan.rating.toInt()) LogoYellow else MaterialTheme.colorScheme.outline,
                             modifier = Modifier.size(16.dp)
                         )
                     }
@@ -271,7 +271,7 @@ fun ExploreArtisanCard(
                     Text(
                         text = "${String.format(Locale.US, "%.1f", artisan.rating)} (${artisan.reviewCount})",
                         style = MaterialTheme.typography.bodySmall,
-                        color = Color.Gray
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
 

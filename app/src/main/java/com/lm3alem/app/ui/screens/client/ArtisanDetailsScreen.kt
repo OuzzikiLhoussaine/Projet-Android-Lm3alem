@@ -88,7 +88,7 @@ fun ArtisanDetailsScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .background(Color(0xFFF8F9FA))
+                .background(MaterialTheme.colorScheme.background)
                 .verticalScroll(rememberScrollState())
         ) {
             when (val state = uiState) {
@@ -118,9 +118,9 @@ fun ArtisanDetailsScreen(
                         // Tab Content
                         Box(modifier = Modifier.padding(24.dp)) {
                             when (selectedTab) {
-                                0 -> Text("Portfolio content goes here...", color = Color.Gray)
-                                1 -> Text("Reviews content goes here...", color = Color.Gray)
-                                2 -> Text(data.artisan.description.ifEmpty { stringResource(R.string.no_bio) }, color = Color.Gray)
+                                0 -> Text("Portfolio content goes here...", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                1 -> Text("Reviews content goes here...", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                2 -> Text(data.artisan.description.ifEmpty { stringResource(R.string.no_bio) }, color = MaterialTheme.colorScheme.onSurfaceVariant)
                             }
                         }
                     }
@@ -140,7 +140,7 @@ fun ArtisanHeaderSection(data: ArtisanWithUser) {
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 24.dp),
         shape = RoundedCornerShape(32.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(modifier = Modifier.padding(24.dp)) {
@@ -148,7 +148,7 @@ fun ArtisanHeaderSection(data: ArtisanWithUser) {
                 Surface(
                     modifier = Modifier.size(100.dp),
                     shape = CircleShape,
-                    color = Color.LightGray.copy(alpha = 0.2f)
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)
                 ) {
                     if (user.imageUrl.isNotEmpty()) {
                         AsyncImage(
@@ -183,14 +183,14 @@ fun ArtisanHeaderSection(data: ArtisanWithUser) {
                     Text(
                         text = stringResource(R.string.professional_job, profile.job),
                         style = MaterialTheme.typography.bodyLarge,
-                        color = Color.Gray
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         repeat(5) { index ->
                             Icon(
                                 imageVector = Icons.Default.Star,
                                 contentDescription = null,
-                                tint = if (index < profile.rating.toInt()) LogoYellow else Color.LightGray,
+                                tint = if (index < profile.rating.toInt()) LogoYellow else MaterialTheme.colorScheme.outline,
                                 modifier = Modifier.size(18.dp)
                             )
                         }
@@ -198,7 +198,7 @@ fun ArtisanHeaderSection(data: ArtisanWithUser) {
                         Text(
                             text = "${String.format(Locale.US, "%.1f", profile.rating)} (${profile.reviewCount} ${stringResource(R.string.reviews)})",
                             style = MaterialTheme.typography.bodySmall,
-                            color = Color.Gray
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                 }
@@ -235,14 +235,14 @@ fun StatItem(label: String, value: String) {
             .width(90.dp)
             .height(80.dp),
         shape = RoundedCornerShape(16.dp),
-        color = Color(0xFFF3F7FF)
+        color = MaterialTheme.colorScheme.secondaryContainer
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
             Text(text = value, fontWeight = FontWeight.Bold, fontSize = 18.sp, color = LogoBlue)
-            Text(text = label, fontSize = 10.sp, color = Color.Gray)
+            Text(text = label, fontSize = 10.sp, color = MaterialTheme.colorScheme.onSecondaryContainer)
         }
     }
 }
@@ -250,12 +250,12 @@ fun StatItem(label: String, value: String) {
 @Composable
 fun InfoItem(icon: ImageVector, text: String, isPrice: Boolean = false) {
     Row(verticalAlignment = Alignment.CenterVertically) {
-        Icon(imageVector = icon, contentDescription = null, tint = Color.Gray, modifier = Modifier.size(20.dp))
+        Icon(imageVector = icon, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(20.dp))
         Spacer(modifier = Modifier.width(12.dp))
         Text(
             text = text,
             style = if (isPrice) MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold) else MaterialTheme.typography.bodyMedium,
-            color = if (isPrice) LogoBlue else Color.Gray
+            color = if (isPrice) LogoBlue else MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -269,7 +269,7 @@ fun SpecializationsSection(specs: List<String>) {
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
         shape = RoundedCornerShape(32.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(modifier = Modifier.padding(24.dp)) {
@@ -299,13 +299,13 @@ fun SpecializationsSection(specs: List<String>) {
 fun TagItem(text: String) {
     Surface(
         shape = RoundedCornerShape(12.dp),
-        color = Color(0xFFF3F7FF)
+        color = MaterialTheme.colorScheme.secondaryContainer
     ) {
         Text(
             text = text,
             modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
             fontSize = 12.sp,
-            color = LogoBlue
+            color = MaterialTheme.colorScheme.onSecondaryContainer
         )
     }
 }
@@ -331,7 +331,7 @@ fun ArtisanTabs(selectedTab: Int, onTabSelected: (Int) -> Unit) {
                         text = title,
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = if (selectedTab == index) FontWeight.Bold else FontWeight.Normal,
-                        color = if (selectedTab == index) LogoBlue else Color.LightGray
+                        color = if (selectedTab == index) LogoBlue else MaterialTheme.colorScheme.outline
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     if (selectedTab == index) {
@@ -340,7 +340,7 @@ fun ArtisanTabs(selectedTab: Int, onTabSelected: (Int) -> Unit) {
                 }
             }
         }
-        HorizontalDivider(modifier = Modifier.padding(top = 8.dp), color = Color.LightGray.copy(alpha = 0.2f))
+        HorizontalDivider(modifier = Modifier.padding(top = 8.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
     }
 }
 
@@ -348,7 +348,7 @@ fun ArtisanTabs(selectedTab: Int, onTabSelected: (Int) -> Unit) {
 fun BottomActionBar(onBookClick: () -> Unit, onMessageClick: () -> Unit) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        color = Color.White,
+        color = MaterialTheme.colorScheme.surface,
         shadowElevation = 8.dp
     ) {
         Row(

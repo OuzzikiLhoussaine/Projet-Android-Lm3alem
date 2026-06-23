@@ -68,7 +68,7 @@ fun ClientHomeScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .background(Color(0xFFF8F9FA))
+                .background(MaterialTheme.colorScheme.background)
                 .verticalScroll(rememberScrollState())
         ) {
             // Header Section
@@ -82,7 +82,7 @@ fun ClientHomeScreen(
                 Text(
                     text = stringResource(R.string.client_home_subtitle),
                     style = MaterialTheme.typography.bodyLarge,
-                    color = Color.Gray
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
@@ -95,24 +95,24 @@ fun ClientHomeScreen(
                         viewModel.filterArtisans(searchQuery, "")
                     },
                     modifier = Modifier.fillMaxWidth(),
-                    placeholder = { Text(stringResource(R.string.search_services), color = Color.LightGray) },
-                    leadingIcon = { Icon(Icons.Default.Search, contentDescription = null, tint = Color.LightGray) },
+                    placeholder = { Text(stringResource(R.string.search_services), color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)) },
+                    leadingIcon = { Icon(Icons.Default.Search, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)) },
                     trailingIcon = {
                         if (searchQuery.isNotEmpty()) {
                             IconButton(onClick = { 
                                 searchQuery = ""
                                 viewModel.filterArtisans("", "")
                             }) {
-                                Icon(Icons.Default.Clear, contentDescription = "Clear", tint = Color.Gray)
+                                Icon(Icons.Default.Clear, contentDescription = "Clear", tint = MaterialTheme.colorScheme.onSurfaceVariant)
                             }
                         }
                     },
                     shape = RoundedCornerShape(28.dp),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = LogoBlue,
-                        unfocusedBorderColor = Color.LightGray.copy(alpha = 0.3f),
-                        focusedContainerColor = Color.White,
-                        unfocusedContainerColor = Color.White
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f),
+                        focusedContainerColor = MaterialTheme.colorScheme.surface,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surface
                     ),
                     singleLine = true
                 )
@@ -182,7 +182,7 @@ fun ClientHomeScreen(
                             Text(
                                 text = stringResource(R.string.no_artisans_found),
                                 modifier = Modifier.padding(vertical = 32.dp).align(Alignment.CenterHorizontally),
-                                color = Color.Gray
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
                     }
@@ -219,7 +219,7 @@ fun SectionHeader(
             color = LogoBlue
         )
         TextButton(onClick = onSeeAllClick) {
-            Text(text = stringResource(R.string.see_all), color = Color.Gray)
+            Text(text = stringResource(R.string.see_all), color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
 }

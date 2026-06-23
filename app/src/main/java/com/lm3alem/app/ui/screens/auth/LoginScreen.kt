@@ -17,7 +17,6 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -84,13 +83,13 @@ fun LoginScreen(
         }
     }
 
-    val navyBlue = Color(0xFF001D3D)
-    val goldYellow = Color(0xFFFFC107)
+    val primaryColor = MaterialTheme.colorScheme.primary
+    val onBackground = MaterialTheme.colorScheme.onBackground
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF8F9FA))
+            .background(MaterialTheme.colorScheme.background)
             .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -99,8 +98,8 @@ fun LoginScreen(
         Surface(
             modifier = Modifier.size(100.dp),
             shape = CircleShape,
-            border = BorderStroke(3.dp, goldYellow),
-            color = Color.White
+            border = BorderStroke(3.dp, MaterialTheme.colorScheme.secondary),
+            color = MaterialTheme.colorScheme.surface
         ) {
             Box(contentAlignment = Alignment.Center) {
                 Image(
@@ -117,13 +116,13 @@ fun LoginScreen(
         // Lm3alem Text
         Text(
             text = buildAnnotatedString {
-                withStyle(style = SpanStyle(color = navyBlue)) {
+                withStyle(style = SpanStyle(color = primaryColor)) {
                     append("Lm")
                 }
-                withStyle(style = SpanStyle(color = goldYellow)) {
+                withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.secondary)) {
                     append("3")
                 }
-                withStyle(style = SpanStyle(color = navyBlue)) {
+                withStyle(style = SpanStyle(color = primaryColor)) {
                     append("alem")
                 }
             },
@@ -137,7 +136,7 @@ fun LoginScreen(
             text = stringResource(R.string.welcome_back),
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
-            color = navyBlue
+            color = onBackground
         )
 
         Spacer(modifier = Modifier.height(32.dp))
@@ -169,7 +168,7 @@ fun LoginScreen(
             text = stringResource(R.string.login),
             onClick = { viewModel.login(email, password) },
             isLoading = authState is AuthViewModel.AuthState.Loading,
-            containerColor = navyBlue
+            containerColor = primaryColor
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -233,13 +232,13 @@ fun LoginScreen(
             Text(
                 text = stringResource(R.string.no_account),
                 fontSize = 14.sp,
-                color = navyBlue
+                color = onBackground
             )
             Text(
                 text = stringResource(R.string.register),
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
-                color = navyBlue,
+                color = primaryColor,
                 modifier = Modifier.clickable { navController.navigate(Screen.Register.route) }
             )
         }

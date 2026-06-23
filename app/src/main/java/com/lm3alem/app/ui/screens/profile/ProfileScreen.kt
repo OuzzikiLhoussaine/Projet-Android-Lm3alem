@@ -39,15 +39,17 @@ import com.lm3alem.app.ui.theme.LogoBlue
 import com.lm3alem.app.ui.theme.LogoYellow
 import com.lm3alem.app.viewmodel.AuthViewModel
 import com.lm3alem.app.viewmodel.ProfileViewModel
+import com.lm3alem.app.viewmodel.SettingsViewModel
 
 @Composable
 fun ProfileScreen(
     navController: NavHostController,
     viewModel: ProfileViewModel = hiltViewModel(),
-    authViewModel: AuthViewModel = hiltViewModel()
+    authViewModel: AuthViewModel = hiltViewModel(),
+    settingsViewModel: SettingsViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState
-    var notificationsEnabled by remember { mutableStateOf(true) }
+    val isDarkMode by settingsViewModel.isDarkMode.collectAsState()
     var showLanguageBottomSheet by remember { mutableStateOf(false) }
 
     val currentLanguage = remember(showLanguageBottomSheet) {
@@ -103,7 +105,7 @@ fun ProfileScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .background(Color(0xFFF8F9FA))
+                .background(MaterialTheme.colorScheme.background)
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 24.dp)
         ) {
@@ -122,7 +124,7 @@ fun ProfileScreen(
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(32.dp),
-                        colors = CardDefaults.cardColors(containerColor = Color.White),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
                     ) {
                         Row(
@@ -133,7 +135,7 @@ fun ProfileScreen(
                                 Surface(
                                     modifier = Modifier.size(80.dp),
                                     shape = CircleShape,
-                                    color = Color.LightGray.copy(alpha = 0.2f),
+                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f),
                                 ) {
                                     if (user.imageUrl.isNotEmpty()) {
                                         AsyncImage(
@@ -157,7 +159,7 @@ fun ProfileScreen(
                                         .clickable { navController.navigate(Screen.EditProfile.route) },
                                     shape = CircleShape,
                                     color = LogoYellow,
-                                    border = androidx.compose.foundation.BorderStroke(2.dp, Color.White),
+                                    border = androidx.compose.foundation.BorderStroke(2.dp, MaterialTheme.colorScheme.surface),
                                 ) {
                                     Icon(
                                         imageVector = Icons.Default.Edit,
@@ -180,13 +182,13 @@ fun ProfileScreen(
                                 Text(
                                     text = user.email,
                                     style = MaterialTheme.typography.bodyMedium,
-                                    color = Color.Gray
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                                 if (user.phone.isNotEmpty()) {
                                     Text(
                                         text = user.phone,
                                         style = MaterialTheme.typography.bodySmall,
-                                        color = Color.Gray
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
                                 }
                             }
@@ -199,7 +201,7 @@ fun ProfileScreen(
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(24.dp),
-                        colors = CardDefaults.cardColors(containerColor = Color.White),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
                     ) {
                         ProfileMenuItem(
@@ -215,28 +217,28 @@ fun ProfileScreen(
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(24.dp),
-                        colors = CardDefaults.cardColors(containerColor = Color.White),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
                     ) {
                         Column {
                             ProfileMenuToggleItem(
-                                icon = Icons.Default.NotificationsNone,
-                                title = stringResource(R.string.notifications),
-                                isChecked = notificationsEnabled,
-                                onCheckedChange = { notificationsEnabled = it }
+                                icon = Icons.Default.DarkMode,
+                                title = stringResource(R.string.dark_mode),
+                                isChecked = isDarkMode,
+                                onCheckedChange = { settingsViewModel.toggleDarkMode(it) }
                             )
-                            HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = Color.LightGray.copy(alpha = 0.3f))
+                            HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
                             ProfileMenuItem(
                                 icon = Icons.Default.Language,
                                 title = stringResource(R.string.language),
                                 subtitle = currentLanguage,
                                 onClick = { showLanguageBottomSheet = true }
                             )
-                            HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = Color.LightGray.copy(alpha = 0.3f))
+                            HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
                             ProfileMenuItem(
                                 icon = Icons.Default.Settings,
                                 title = stringResource(R.string.settings),
-                                onClick = { }
+                                onClick = { navController.navigate(Screen.Settings.route) }
                             )
                         }
                     }
@@ -247,7 +249,7 @@ fun ProfileScreen(
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(24.dp),
-                        colors = CardDefaults.cardColors(containerColor = Color.White),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
                     ) {
                         ProfileMenuItem(
@@ -262,7 +264,7 @@ fun ProfileScreen(
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(24.dp),
-                        colors = CardDefaults.cardColors(containerColor = Color.White),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
                     ) {
                         Row(
@@ -294,7 +296,7 @@ fun ProfileScreen(
                         text = stringResource(R.string.version, "1.0.0"),
                         modifier = Modifier.align(Alignment.CenterHorizontally),
                         style = MaterialTheme.typography.bodySmall,
-                        color = Color.Gray
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
 
                     Spacer(modifier = Modifier.height(32.dp))
@@ -319,7 +321,7 @@ fun LanguageBottomSheet(
 ) {
     ModalBottomSheet(
         onDismissRequest = onDismiss,
-        containerColor = Color.White,
+        containerColor = MaterialTheme.colorScheme.surface,
         sheetState = rememberModalBottomSheetState()
     ) {
         Column(
@@ -331,6 +333,7 @@ fun LanguageBottomSheet(
                 text = stringResource(R.string.select_language),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.padding(vertical = 16.dp)
             )
             
@@ -358,7 +361,8 @@ fun LanguageOption(
     Surface(
         onClick = onClick,
         modifier = Modifier.fillMaxWidth(),
-        color = Color.Transparent
+        color = Color.Transparent,
+        contentColor = MaterialTheme.colorScheme.onSurface
     ) {
         Row(
             modifier = Modifier

@@ -81,6 +81,7 @@
     <string name="notifications">Notifications</string>
     <string name="dark_mode">Mode sombre</string>
     <string name="settings">Paramètres</string>
+    <string name="terms_of_service">Conditions d\'utilisation</string>
     <string name="help_support">Aide &amp; Support</string>
     <string name="version">Version %1$s</string>
     <string name="explore">Explorer</string>

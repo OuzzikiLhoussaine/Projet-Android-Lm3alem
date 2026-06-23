@@ -105,7 +105,7 @@ fun ChatDetailScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .background(Color(0xFFF5F5F5))
+                .background(MaterialTheme.colorScheme.background)
         ) {
             LazyColumn(
                 modifier = Modifier
@@ -126,7 +126,7 @@ fun ChatDetailScreen(
             // Message Input
             Surface(
                 modifier = Modifier.fillMaxWidth(),
-                color = Color.White,
+                color = MaterialTheme.colorScheme.surface,
                 shadowElevation = 8.dp
             ) {
                 Row(
@@ -139,13 +139,15 @@ fun ChatDetailScreen(
                         value = messageText,
                         onValueChange = { messageText = it },
                         modifier = Modifier.weight(1f),
-                        placeholder = { Text("Type a message...") },
+                        placeholder = { Text("Type a message...", color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)) },
                         colors = TextFieldDefaults.colors(
                             focusedContainerColor = Color.Transparent,
                             unfocusedContainerColor = Color.Transparent,
                             disabledContainerColor = Color.Transparent,
                             focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent,
+                            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                            unfocusedTextColor = MaterialTheme.colorScheme.onSurface
                         ),
                         maxLines = 4
                     )
@@ -162,7 +164,7 @@ fun ChatDetailScreen(
                         Icon(
                             Icons.AutoMirrored.Filled.Send,
                             contentDescription = "Send",
-                            tint = if (messageText.isNotBlank()) LogoBlue else Color.Gray
+                            tint = if (messageText.isNotBlank()) LogoBlue else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
                         )
                     }
                 }
@@ -178,7 +180,7 @@ fun MessageBubble(message: Message, isCurrentUser: Boolean) {
         contentAlignment = if (isCurrentUser) Alignment.CenterEnd else Alignment.CenterStart
     ) {
         Surface(
-            color = if (isCurrentUser) LogoBlue else Color.White,
+            color = if (isCurrentUser) LogoBlue else MaterialTheme.colorScheme.surfaceVariant,
             shape = RoundedCornerShape(
                 topStart = 16.dp,
                 topEnd = 16.dp,
@@ -191,7 +193,7 @@ fun MessageBubble(message: Message, isCurrentUser: Boolean) {
             Text(
                 text = message.text,
                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
-                color = if (isCurrentUser) Color.White else Color.Black,
+                color = if (isCurrentUser) Color.White else MaterialTheme.colorScheme.onSurfaceVariant,
                 fontSize = 15.sp
             )
         }
