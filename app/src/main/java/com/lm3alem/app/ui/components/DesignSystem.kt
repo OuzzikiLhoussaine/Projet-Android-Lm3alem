@@ -59,7 +59,7 @@ fun ArtisanBottomBar(
 ) {
     NavigationBar(
         containerColor = Color.White,
-        contentColor = LogoBlue
+        contentColor = MaterialTheme.colorScheme.primary
     ) {
         NavigationBarItem(
             selected = currentRoute == Screen.ArtisanHome.route,
@@ -73,9 +73,9 @@ fun ArtisanBottomBar(
             icon = { Icon(Icons.Default.Dashboard, contentDescription = stringResource(R.string.home)) },
             label = { Text(stringResource(R.string.home)) },
             colors = NavigationBarItemDefaults.colors(
-                selectedIconColor = LogoBlue,
-                selectedTextColor = LogoBlue,
-                indicatorColor = LogoBlue.copy(alpha = 0.1f),
+                selectedIconColor = MaterialTheme.colorScheme.primary,
+                selectedTextColor = MaterialTheme.colorScheme.primary,
+                indicatorColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
             ),
         )
         NavigationBarItem(
@@ -88,9 +88,9 @@ fun ArtisanBottomBar(
             icon = { Icon(Icons.Default.ListAlt, contentDescription = stringResource(R.string.requests)) },
             label = { Text(stringResource(R.string.requests)) },
             colors = NavigationBarItemDefaults.colors(
-                selectedIconColor = LogoBlue,
-                selectedTextColor = LogoBlue,
-                indicatorColor = LogoBlue.copy(alpha = 0.1f),
+                selectedIconColor = MaterialTheme.colorScheme.primary,
+                selectedTextColor = MaterialTheme.colorScheme.primary,
+                indicatorColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
             ),
         )
         NavigationBarItem(
@@ -103,9 +103,9 @@ fun ArtisanBottomBar(
             icon = { Icon(Icons.AutoMirrored.Filled.Message, contentDescription = stringResource(R.string.messages)) },
             label = { Text(stringResource(R.string.messages)) },
             colors = NavigationBarItemDefaults.colors(
-                selectedIconColor = LogoBlue,
-                selectedTextColor = LogoBlue,
-                indicatorColor = LogoBlue.copy(alpha = 0.1f),
+                selectedIconColor = MaterialTheme.colorScheme.primary,
+                selectedTextColor = MaterialTheme.colorScheme.primary,
+                indicatorColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
             ),
         )
     }
@@ -118,7 +118,7 @@ fun ClientBottomBar(
 ) {
     NavigationBar(
         containerColor = Color.White,
-        contentColor = LogoBlue
+        contentColor = MaterialTheme.colorScheme.primary
     ) {
         NavigationBarItem(
             selected = currentRoute == Screen.ClientHome.route,
@@ -132,9 +132,9 @@ fun ClientBottomBar(
             icon = { Icon(Icons.Default.Home, contentDescription = stringResource(R.string.home)) },
             label = { Text(stringResource(R.string.home)) },
             colors = NavigationBarItemDefaults.colors(
-                selectedIconColor = LogoBlue,
-                selectedTextColor = LogoBlue,
-                indicatorColor = LogoBlue.copy(alpha = 0.1f),
+                selectedIconColor = MaterialTheme.colorScheme.primary,
+                selectedTextColor = MaterialTheme.colorScheme.primary,
+                indicatorColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
             ),
         )
         NavigationBarItem(
@@ -147,9 +147,9 @@ fun ClientBottomBar(
             icon = { Icon(Icons.Default.Explore, contentDescription = stringResource(R.string.explore)) },
             label = { Text(stringResource(R.string.explore)) },
             colors = NavigationBarItemDefaults.colors(
-                selectedIconColor = LogoBlue,
-                selectedTextColor = LogoBlue,
-                indicatorColor = LogoBlue.copy(alpha = 0.1f),
+                selectedIconColor = MaterialTheme.colorScheme.primary,
+                selectedTextColor = MaterialTheme.colorScheme.primary,
+                indicatorColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
             ),
         )
         NavigationBarItem(
@@ -162,9 +162,9 @@ fun ClientBottomBar(
             icon = { Icon(Icons.AutoMirrored.Filled.Message, contentDescription = stringResource(R.string.messages)) },
             label = { Text(stringResource(R.string.messages)) },
             colors = NavigationBarItemDefaults.colors(
-                selectedIconColor = LogoBlue,
-                selectedTextColor = LogoBlue,
-                indicatorColor = LogoBlue.copy(alpha = 0.1f),
+                selectedIconColor = MaterialTheme.colorScheme.primary,
+                selectedTextColor = MaterialTheme.colorScheme.primary,
+                indicatorColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
             ),
         )
         NavigationBarItem(
@@ -177,9 +177,9 @@ fun ClientBottomBar(
             icon = { Icon(Icons.Default.Person, contentDescription = stringResource(R.string.profile)) },
             label = { Text(stringResource(R.string.profile)) },
             colors = NavigationBarItemDefaults.colors(
-                selectedIconColor = LogoBlue,
-                selectedTextColor = LogoBlue,
-                indicatorColor = LogoBlue.copy(alpha = 0.1f),
+                selectedIconColor = MaterialTheme.colorScheme.primary,
+                selectedTextColor = MaterialTheme.colorScheme.primary,
+                indicatorColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
             ),
         )
     }
@@ -202,7 +202,7 @@ fun ProfileMenuItem(
         Icon(
             imageVector = icon,
             contentDescription = null,
-            tint = LogoBlue,
+            tint = MaterialTheme.colorScheme.primary,
             modifier = Modifier.size(24.dp)
         )
         Spacer(modifier = Modifier.width(16.dp))
@@ -211,7 +211,7 @@ fun ProfileMenuItem(
                 text = title,
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold,
-                color = LogoBlue
+                color = MaterialTheme.colorScheme.onSurface
             )
             if (subtitle != null) {
                 Text(
@@ -246,7 +246,7 @@ fun ProfileMenuToggleItem(
         Icon(
             imageVector = icon,
             contentDescription = null,
-            tint = LogoBlue,
+            tint = MaterialTheme.colorScheme.primary,
             modifier = Modifier.size(24.dp)
         )
         Spacer(modifier = Modifier.width(16.dp))
@@ -255,14 +255,14 @@ fun ProfileMenuToggleItem(
             modifier = Modifier.weight(1f),
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.SemiBold,
-            color = LogoBlue
+            color = MaterialTheme.colorScheme.onSurface
         )
         Switch(
             checked = isChecked,
             onCheckedChange = onCheckedChange,
             colors = SwitchDefaults.colors(
-                checkedThumbColor = LogoYellow,
-                checkedTrackColor = LogoYellow.copy(alpha = 0.5f),
+                checkedThumbColor = MaterialTheme.colorScheme.primary,
+                checkedTrackColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
                 uncheckedThumbColor = Color.White,
                 uncheckedTrackColor = Color.LightGray.copy(alpha = 0.5f)
             )
@@ -284,9 +284,9 @@ fun MainButton(
         onClick = onClick,
         modifier = modifier
             .fillMaxWidth()
-            .height(56.dp),
+            .height(50.dp), // Houzz buttons are slightly more compact
         enabled = enabled && !isLoading,
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(4.dp), // Houzz uses less rounded corners
         colors = ButtonDefaults.buttonColors(
             containerColor = containerColor,
             contentColor = contentColor,
@@ -417,11 +417,11 @@ fun ArtisanCard(artisanWithUser: ArtisanWithUser, onClick: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onClick() },
-        shape = RoundedCornerShape(32.dp), // Coins plus arrondis pour plus de confort
+        shape = RoundedCornerShape(8.dp), // More Houzz-like
         colors = CardDefaults.cardColors(
-            containerColor = Color.White, // Fond blanc forcé pour la lisibilité
+            containerColor = Color.White,
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp), // Ombre plus douce
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
     ) {
         Row(
             modifier = Modifier
@@ -459,7 +459,7 @@ fun ArtisanCard(artisanWithUser: ArtisanWithUser, onClick: () -> Unit) {
                     text = user.fullName.ifEmpty { stringResource(R.string.full_name) }, 
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
-                    color = LogoBlue
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
                     text = artisan.job,
@@ -470,7 +470,7 @@ fun ArtisanCard(artisanWithUser: ArtisanWithUser, onClick: () -> Unit) {
                     Icon(
                         imageVector = Icons.Default.Star,
                         contentDescription = null,
-                        tint = LogoYellow,
+                        tint = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.size(18.dp)
                     )
                     Spacer(modifier = Modifier.width(4.dp))
@@ -488,13 +488,13 @@ fun ArtisanCard(artisanWithUser: ArtisanWithUser, onClick: () -> Unit) {
                     text = stringResource(R.string.price_per_hr, artisan.getPriceDouble().toString()),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.ExtraBold,
-                    color = LogoBlue
+                    color = MaterialTheme.colorScheme.primary
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 Surface(
                     modifier = Modifier.size(36.dp),
                     shape = CircleShape,
-                    color = LogoBlue
+                    color = MaterialTheme.colorScheme.primary
                 ) {
                     Box(contentAlignment = Alignment.Center) {
                         Icon(
@@ -523,7 +523,7 @@ fun CategoryCard(
             .fillMaxWidth()
             .height(140.dp)
             .clickable { onClick() },
-        shape = RoundedCornerShape(32.dp),
+        shape = RoundedCornerShape(8.dp),
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             // Placeholder for image with overlay
@@ -536,8 +536,8 @@ fun CategoryCard(
                         )
                     )
             ) {
-                // Background image (simulated with a dark navy if no URL)
-                Box(modifier = Modifier.fillMaxSize().background(LogoBlue.copy(alpha = 0.8f)))
+                // Background image
+                Box(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.secondary))
             }
 
             Column(
@@ -548,7 +548,7 @@ fun CategoryCard(
                 Icon(
                     imageVector = icon,
                     contentDescription = null,
-                    tint = LogoYellow,
+                    tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(32.dp)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
@@ -613,7 +613,7 @@ fun RequestCard(
                         text = "${request.budget} DH",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
-                        color = LogoBlue
+                        color = MaterialTheme.colorScheme.primary
                     )
                 }
             }
@@ -636,7 +636,7 @@ fun RequestCard(
                                 modifier = Modifier.clip(CircleShape)
                             )
                         } else {
-                            Icon(Icons.Default.Person, contentDescription = null, modifier = Modifier.padding(8.dp), tint = LogoBlue)
+                            Icon(Icons.Default.Person, contentDescription = null, modifier = Modifier.padding(8.dp), tint = MaterialTheme.colorScheme.primary)
                         }
                     }
                     Spacer(modifier = Modifier.width(12.dp))
@@ -645,7 +645,7 @@ fun RequestCard(
                             text = client.fullName,
                             style = MaterialTheme.typography.titleSmall,
                             fontWeight = FontWeight.Bold,
-                            color = LogoBlue
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                         Text(
                             text = client.phone.ifEmpty { "No phone provided" },
@@ -665,7 +665,7 @@ fun RequestCard(
                     text = request.serviceName,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = LogoBlue
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 Spacer(modifier = Modifier.height(4.dp))
             }
@@ -733,15 +733,15 @@ fun RequestCard(
                         Spacer(modifier = Modifier.width(8.dp))
                         Button(
                             onClick = { onStatusUpdate(RequestStatus.ACCEPTED) },
-                            shape = RoundedCornerShape(12.dp),
-                            colors = ButtonDefaults.buttonColors(containerColor = LogoBlue)
+                            shape = RoundedCornerShape(4.dp), // Houzz style
+                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                         ) {
                             Text(stringResource(R.string.accept))
                         }
                     } else {
                         Button(
                             onClick = { onStatusUpdate(RequestStatus.DONE) },
-                            shape = RoundedCornerShape(12.dp),
+                            shape = RoundedCornerShape(4.dp), // Houzz style
                             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)),
                         ) {
                             Text(stringResource(R.string.mark_as_done))
@@ -768,19 +768,19 @@ fun AppTopBar(
                 Text(
                     text = title,
                     style = MaterialTheme.typography.titleLarge,
-                    color = if (useBrandedColors) LogoYellow else MaterialTheme.colorScheme.onBackground,
+                    color = if (useBrandedColors) Color.White else MaterialTheme.colorScheme.onBackground,
                     fontWeight = if (useBrandedColors) FontWeight.Bold else FontWeight.Normal
                 )
             } else {
                 Text(
                     text = buildAnnotatedString {
-                        withStyle(style = SpanStyle(color = LogoYellow)) {
+                        withStyle(style = SpanStyle(color = Color.White)) {
                             append("Lm")
                         }
-                        withStyle(style = SpanStyle(color = Color.White)) {
+                        withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.primary)) {
                             append("3")
                         }
-                        withStyle(style = SpanStyle(color = LogoYellow)) {
+                        withStyle(style = SpanStyle(color = Color.White)) {
                             append("alem")
                         }
                     },
@@ -813,7 +813,7 @@ fun AppTopBar(
             actions()
         },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = if (useBrandedColors) LogoBlue else MaterialTheme.colorScheme.background,
+            containerColor = if (useBrandedColors) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.background,
             titleContentColor = if (useBrandedColors) Color.White else MaterialTheme.colorScheme.onBackground,
             actionIconContentColor = if (useBrandedColors) Color.White else MaterialTheme.colorScheme.onBackground
         ),
@@ -841,25 +841,6 @@ fun LoadingDialog() {
                 )
             }
         }
-    }
-}
-
-@Composable
-fun ErrorMessage(
-    message: String,
-    modifier: Modifier = Modifier,
-) {
-    Surface(
-        modifier = modifier.fillMaxWidth(),
-        color = MaterialTheme.colorScheme.errorContainer,
-        shape = RoundedCornerShape(8.dp),
-    ) {
-        Text(
-            text = message,
-            color = MaterialTheme.colorScheme.onErrorContainer,
-            style = MaterialTheme.typography.bodySmall,
-            modifier = Modifier.padding(12.dp),
-        )
     }
 }
 

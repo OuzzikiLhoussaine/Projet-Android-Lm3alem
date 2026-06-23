@@ -63,13 +63,13 @@ fun RegisterScreen(
         }
     }
 
-    val navyBlue = Color(0xFF001D3D)
-    val goldYellow = Color(0xFFFFC107)
+    val primaryGreen = MaterialTheme.colorScheme.primary
+    val houzzBlack = MaterialTheme.colorScheme.secondary
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF8F9FA))
+            .background(MaterialTheme.colorScheme.background)
             .padding(24.dp)
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -80,7 +80,7 @@ fun RegisterScreen(
         Surface(
             modifier = Modifier.size(100.dp),
             shape = CircleShape,
-            border = BorderStroke(3.dp, goldYellow),
+            border = BorderStroke(3.dp, primaryGreen),
             color = Color.White
         ) {
             Box(contentAlignment = Alignment.Center) {
@@ -98,13 +98,13 @@ fun RegisterScreen(
         // Lm3alem Text
         Text(
             text = buildAnnotatedString {
-                withStyle(style = SpanStyle(color = navyBlue)) {
+                withStyle(style = SpanStyle(color = primaryGreen)) {
                     append("Lm")
                 }
-                withStyle(style = SpanStyle(color = goldYellow)) {
+                withStyle(style = SpanStyle(color = houzzBlack)) {
                     append("3")
                 }
-                withStyle(style = SpanStyle(color = navyBlue)) {
+                withStyle(style = SpanStyle(color = primaryGreen)) {
                     append("alem")
                 }
             },
@@ -118,7 +118,7 @@ fun RegisterScreen(
             text = stringResource(R.string.register),
             fontSize = 32.sp,
             fontWeight = FontWeight.Bold,
-            color = navyBlue
+            color = houzzBlack
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -127,7 +127,7 @@ fun RegisterScreen(
             text = stringResource(R.string.i_am_a),
             fontSize = 14.sp,
             fontWeight = FontWeight.SemiBold,
-            color = navyBlue
+            color = houzzBlack
         )
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -145,7 +145,7 @@ fun RegisterScreen(
                 isSelected = selectedRole == UserRole.CLIENT,
                 onClick = { selectedRole = UserRole.CLIENT },
                 modifier = Modifier.weight(1f),
-                selectedColor = navyBlue
+                selectedColor = primaryGreen
             )
             RoleToggleButton(
                 text = stringResource(R.string.artisan),
@@ -153,7 +153,7 @@ fun RegisterScreen(
                 isSelected = selectedRole == UserRole.ARTISAN,
                 onClick = { selectedRole = UserRole.ARTISAN },
                 modifier = Modifier.weight(1f),
-                selectedColor = navyBlue
+                selectedColor = primaryGreen
             )
         }
 
@@ -194,7 +194,7 @@ fun RegisterScreen(
             },
             enabled = isFormValid,
             isLoading = authState is AuthViewModel.AuthState.Loading,
-            containerColor = navyBlue
+            containerColor = primaryGreen
         )
         
         Spacer(modifier = Modifier.height(24.dp))
@@ -205,13 +205,13 @@ fun RegisterScreen(
             Text(
                 text = stringResource(R.string.already_have_account),
                 fontSize = 14.sp,
-                color = navyBlue
+                color = houzzBlack
             )
             Text(
                 text = stringResource(R.string.login),
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
-                color = navyBlue,
+                color = primaryGreen,
                 modifier = Modifier.clickable { navController.popBackStack() }
             )
         }

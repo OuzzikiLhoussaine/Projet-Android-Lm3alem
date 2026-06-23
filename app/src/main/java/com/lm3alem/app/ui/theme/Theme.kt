@@ -13,31 +13,32 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
-    primary = LogoBlue,
+    primary = PrimaryGreen,
     onPrimary = Color.White,
-    secondary = LogoYellow,
-    onSecondary = Color.Black,
-    tertiary = LogoYellow,
+    secondary = HouzzBlack,
+    onSecondary = Color.White,
+    tertiary = HouzzDarkGrey,
     background = Color(0xFF121212),
     surface = Color(0xFF1E1E1E),
+    onBackground = Color.White,
+    onSurface = Color.White,
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = LogoBlue,
+    primary = PrimaryGreen,
     onPrimary = Color.White,
-    secondary = LogoYellow,
-    onSecondary = Color.Black,
-    tertiary = LogoYellow,
+    secondary = HouzzBlack,
+    onSecondary = Color.White,
+    tertiary = HouzzDarkGrey,
     background = Background,
     surface = Surface,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
+    onBackground = HouzzBlack,
+    onSurface = HouzzBlack,
 )
 
 @Composable
 fun Lm3alemTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is disabled to maintain brand consistency
     dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
