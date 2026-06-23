@@ -26,6 +26,7 @@ import com.lm3alem.app.ui.screens.artisan.ArtisanRequestsScreen
 import com.lm3alem.app.ui.screens.profile.ProfileScreen
 import com.lm3alem.app.ui.screens.profile.EditProfileScreen
 import com.lm3alem.app.ui.screens.client.ExploreScreen
+import com.lm3alem.app.ui.screens.client.BookingHistoryScreen
 import com.lm3alem.app.ui.screens.messages.MessagesScreen
 
 @Composable
@@ -94,6 +95,9 @@ fun NavGraph(
         }
         composable(Screen.Profile.route) {
             ProfileScreen(navController)
+        }
+        composable(Screen.BookingHistory.route) {
+            BookingHistoryScreen(navController)
         }
         composable(
             route = Screen.Explore.route,

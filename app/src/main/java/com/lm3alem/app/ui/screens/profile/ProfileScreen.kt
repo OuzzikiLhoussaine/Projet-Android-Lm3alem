@@ -205,7 +205,7 @@ fun ProfileScreen(
                         ProfileMenuItem(
                             icon = Icons.Default.History,
                             title = stringResource(R.string.booking_history),
-                            onClick = { }
+                            onClick = { navController.navigate(Screen.BookingHistory.route) }
                         )
                     }
 

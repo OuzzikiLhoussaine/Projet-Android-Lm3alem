@@ -78,6 +78,7 @@
     <string name="arabic">العربية</string>
     <string name="select_language">اختر اللغة</string>
     <string name="booking_history">سجل الحجوزات</string>
+    <string name="no_completed_bookings">لا توجد حجوزات مكتملة بعد</string>
     <string name="notifications">الإشعارات</string>
     <string name="dark_mode">الوضع الليلي</string>
     <string name="settings">الإعدادات</string>

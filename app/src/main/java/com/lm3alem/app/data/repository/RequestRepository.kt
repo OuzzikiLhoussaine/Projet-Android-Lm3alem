@@ -35,6 +35,19 @@ class RequestRepository @Inject constructor(
         }
     }
 
+    suspend fun getRequestsForClient(clientId: String): Result<List<ServiceRequest>> {
+        return try {
+            val snapshot = firestore.collection("requests")
+                .whereEqualTo("clientId", clientId)
+                .get()
+                .await()
+            val requests = snapshot.toObjects(ServiceRequest::class.java)
+            Result.success(requests)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
     suspend fun updateRequestStatus(requestId: String, status: RequestStatus): Result<Unit> {
         return try {
             firestore.collection("requests").document(requestId)

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lm3alem.app.data.model.RequestStatus
 import com.lm3alem.app.data.model.ServiceRequest
+import com.lm3alem.app.data.model.User
 import com.lm3alem.app.data.repository.AuthRepository
 import com.lm3alem.app.data.repository.RequestRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -75,6 +76,24 @@ class RequestViewModel @Inject constructor(
         }
     }
 
+    fun fetchClientRequests() {
+        val clientId = authRepository.currentUser?.uid ?: return
+        viewModelScope.launch {
+            _uiState.value = RequestUiState.Loading
+            requestRepository.getRequestsForClient(clientId)
+                .onSuccess { requests ->
+                    val requestsWithArtisan = requests.map { request ->
+                        val artisan = authRepository.getUserDetails(request.artisanId)
+                        RequestWithArtisan(request, artisan)
+                    }
+                    _uiState.value = RequestUiState.ClientRequestsLoaded(requestsWithArtisan)
+                }
+                .onFailure {
+                    _uiState.value = RequestUiState.Error(it.message ?: "Failed to fetch requests")
+                }
+        }
+    }
+
     fun updateStatus(requestId: String, status: RequestStatus) {
         viewModelScope.launch {
             _uiState.value = RequestUiState.Loading
@@ -93,6 +112,7 @@ class RequestViewModel @Inject constructor(
         object Loading : RequestUiState()
         object Success : RequestUiState()
         data class RequestsLoaded(val requests: List<ServiceRequest>) : RequestUiState()
+        data class ClientRequestsLoaded(val requests: List<RequestWithArtisan>) : RequestUiState()
         data class Error(val message: String) : RequestUiState()
     }
 
@@ -100,3 +120,8 @@ class RequestViewModel @Inject constructor(
         object RequestSent : RequestEvent()
     }
 }
+
+data class RequestWithArtisan(
+    val request: ServiceRequest,
+    val artisan: User?
+)

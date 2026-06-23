@@ -19,6 +19,7 @@ sealed class Screen(val route: String) {
         fun createRoute(artisanId: String) = "add_review/$artisanId"
     }
     object Profile : Screen("profile")
+    object BookingHistory : Screen("booking_history")
     object Explore : Screen("explore?category={category}") {
         fun createRoute(category: String? = null) = if (category != null) "explore?category=$category" else "explore"
     }

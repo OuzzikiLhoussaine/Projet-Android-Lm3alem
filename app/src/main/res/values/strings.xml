@@ -78,6 +78,7 @@
     <string name="arabic">Arabic</string>
     <string name="select_language">Select Language</string>
     <string name="booking_history">Booking History</string>
+    <string name="no_completed_bookings">No completed bookings yet</string>
     <string name="notifications">Notifications</string>
     <string name="dark_mode">Dark Mode</string>
     <string name="settings">Settings</string>
