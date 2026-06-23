@@ -12,7 +12,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.lm3alem.app.R
 import com.lm3alem.app.ui.components.AppTopBar
@@ -23,7 +22,7 @@ import com.lm3alem.app.viewmodel.SettingsViewModel
 
 @Composable
 fun SettingsScreen(
-    navController: NavHostController
+    navController: NavHostController,
 ) {
     var notificationsEnabled by remember { mutableStateOf(value = true) }
 
@@ -59,9 +58,8 @@ fun SettingsScreen(
             ) {
                 ProfileMenuItem(
                     icon = Icons.Default.Person,
-                    title = stringResource(R.string.edit_profile),
-                    onClick = { navController.navigate(Screen.EditProfile.route) }
-                )
+                    title = stringResource(R.string.edit_profile)
+                ) { navController.navigate(Screen.EditProfile.route) }
             }
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -91,6 +89,12 @@ fun SettingsScreen(
                         icon = Icons.Default.Description,
                         title = stringResource(R.string.terms_of_service),
                         onClick = { navController.navigate(Screen.TermsOfService.route) }
+                    )
+                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+                    ProfileMenuItem(
+                        icon = Icons.Default.HelpOutline,
+                        title = stringResource(R.string.help_support),
+                        onClick = { navController.navigate(Screen.Support.route) }
                     )
                 }
             }

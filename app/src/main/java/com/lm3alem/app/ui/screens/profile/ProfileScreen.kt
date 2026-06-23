@@ -255,7 +255,7 @@ fun ProfileScreen(
                         ProfileMenuItem(
                             icon = Icons.Default.HelpOutline,
                             title = stringResource(R.string.help_support),
-                            onClick = { }
+                            onClick = { navController.navigate(Screen.Support.route) }
                         )
                     }
 

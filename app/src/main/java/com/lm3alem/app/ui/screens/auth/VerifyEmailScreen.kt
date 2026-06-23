@@ -36,8 +36,8 @@ fun VerifyEmailScreen(
     viewModel: AuthViewModel = hiltViewModel(),
 ) {
     val authState by viewModel.authState
-    val navyBlue = Color(0xFF001D3D)
-    val goldYellow = Color(0xFFFFC107)
+    val primaryGreen = MaterialTheme.colorScheme.primary
+    val onBackground = MaterialTheme.colorScheme.onBackground
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collect { event ->
@@ -60,7 +60,7 @@ fun VerifyEmailScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF8F9FA))
+            .background(MaterialTheme.colorScheme.background)
             .padding(24.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -69,8 +69,8 @@ fun VerifyEmailScreen(
         Surface(
             modifier = Modifier.size(100.dp),
             shape = CircleShape,
-            border = BorderStroke(3.dp, goldYellow),
-            color = Color.White
+            border = BorderStroke(3.dp, primaryGreen),
+            color = MaterialTheme.colorScheme.surface
         ) {
             Box(contentAlignment = Alignment.Center) {
                 Image(
@@ -87,13 +87,13 @@ fun VerifyEmailScreen(
         // Lm3alem Text
         Text(
             text = buildAnnotatedString {
-                withStyle(style = SpanStyle(color = navyBlue)) {
+                withStyle(style = SpanStyle(color = primaryGreen)) {
                     append("Lm")
                 }
-                withStyle(style = SpanStyle(color = goldYellow)) {
+                withStyle(style = SpanStyle(color = onBackground)) {
                     append("3")
                 }
-                withStyle(style = SpanStyle(color = navyBlue)) {
+                withStyle(style = SpanStyle(color = primaryGreen)) {
                     append("alem")
                 }
             },
@@ -107,7 +107,7 @@ fun VerifyEmailScreen(
             text = "Verify your email",
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
-            color = navyBlue
+            color = onBackground
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -116,7 +116,7 @@ fun VerifyEmailScreen(
             text = "We've sent a verification link to your email address. Please click the link in the email to continue.",
             style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center,
-            color = Color.Gray
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
         Spacer(modifier = Modifier.height(48.dp))
@@ -125,7 +125,7 @@ fun VerifyEmailScreen(
             text = "I have verified",
             onClick = { viewModel.checkEmailVerificationStatus() },
             isLoading = authState is AuthViewModel.AuthState.Loading,
-            containerColor = navyBlue
+            containerColor = primaryGreen
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -134,13 +134,13 @@ fun VerifyEmailScreen(
             onClick = { viewModel.resendVerificationEmail() },
             enabled = authState !is AuthViewModel.AuthState.Loading
         ) {
-            Text(text = "Resend verification email", color = navyBlue)
+            Text(text = "Resend verification email", color = primaryGreen)
         }
 
         Spacer(modifier = Modifier.height(8.dp))
 
         TextButton(onClick = { viewModel.logout() }) {
-            Text(text = "Use a different account", color = Color.Gray)
+            Text(text = "Use a different account", color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
 
         if (authState is AuthViewModel.AuthState.Error) {

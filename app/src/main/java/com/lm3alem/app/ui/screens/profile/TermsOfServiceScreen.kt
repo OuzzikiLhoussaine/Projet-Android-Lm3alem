@@ -7,7 +7,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -17,7 +16,7 @@ import com.lm3alem.app.ui.components.AppTopBar
 
 @Composable
 fun TermsOfServiceScreen(
-    navController: NavHostController
+    navController: NavHostController,
 ) {
     Scaffold(
         topBar = {
@@ -32,7 +31,7 @@ fun TermsOfServiceScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .background(Color(0xFFF8F9FA))
+                .background(MaterialTheme.colorScheme.background)
                 .verticalScroll(rememberScrollState())
                 .padding(24.dp)
         ) {
@@ -40,6 +39,7 @@ fun TermsOfServiceScreen(
                 text = "Terms of Service",
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.padding(bottom = 16.dp)
             )
             
@@ -62,7 +62,8 @@ fun TermsOfServiceScreen(
                     5. Changes to Terms
                     We reserve the right to modify these terms at any time. Continued use of the application constitutes acceptance of the new terms.
                 """.trimIndent(),
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }

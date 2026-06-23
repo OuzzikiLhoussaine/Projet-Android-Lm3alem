@@ -39,8 +39,8 @@ fun RoleSelectionScreen(
     navController: NavHostController,
     viewModel: AuthViewModel = hiltViewModel(),
 ) {
-    val navyBlue = Color(0xFF001D3D)
-    val goldYellow = Color(0xFFFFC107)
+    val primaryGreen = MaterialTheme.colorScheme.primary
+    val onBackground = MaterialTheme.colorScheme.onBackground
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collect { event ->
@@ -55,7 +55,7 @@ fun RoleSelectionScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF8F9FA))
+            .background(MaterialTheme.colorScheme.background)
             .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -64,8 +64,8 @@ fun RoleSelectionScreen(
         Surface(
             modifier = Modifier.size(100.dp),
             shape = CircleShape,
-            border = BorderStroke(3.dp, goldYellow),
-            color = Color.White
+            border = BorderStroke(3.dp, primaryGreen),
+            color = MaterialTheme.colorScheme.surface
         ) {
             Box(contentAlignment = Alignment.Center) {
                 Image(
@@ -82,13 +82,13 @@ fun RoleSelectionScreen(
         // Lm3alem Text
         Text(
             text = buildAnnotatedString {
-                withStyle(style = SpanStyle(color = navyBlue)) {
+                withStyle(style = SpanStyle(color = primaryGreen)) {
                     append("Lm")
                 }
-                withStyle(style = SpanStyle(color = goldYellow)) {
+                withStyle(style = SpanStyle(color = onBackground)) {
                     append("3")
                 }
-                withStyle(style = SpanStyle(color = navyBlue)) {
+                withStyle(style = SpanStyle(color = primaryGreen)) {
                     append("alem")
                 }
             },
@@ -102,7 +102,7 @@ fun RoleSelectionScreen(
             text = stringResource(R.string.choose_role),
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
-            color = navyBlue,
+            color = onBackground,
             textAlign = TextAlign.Center
         )
 
@@ -111,7 +111,7 @@ fun RoleSelectionScreen(
         Text(
             text = stringResource(R.string.role_description),
             style = MaterialTheme.typography.bodyLarge,
-            color = Color.Gray,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center
         )
 
@@ -127,7 +127,7 @@ fun RoleSelectionScreen(
                 icon = Icons.Default.Person,
                 onClick = { viewModel.selectRole(UserRole.CLIENT) },
                 modifier = Modifier.weight(1f),
-                color = navyBlue
+                color = primaryGreen
             )
             RoleCard(
                 title = stringResource(R.string.artisan),
@@ -135,7 +135,7 @@ fun RoleSelectionScreen(
                 icon = Icons.Default.Build,
                 onClick = { viewModel.selectRole(UserRole.ARTISAN) },
                 modifier = Modifier.weight(1f),
-                color = goldYellow
+                color = MaterialTheme.colorScheme.secondary
             )
         }
     }
@@ -155,7 +155,7 @@ fun RoleCard(
             .height(200.dp)
             .clickable { onClick() },
         shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Column(
@@ -184,13 +184,13 @@ fun RoleCard(
                 text = title,
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
-                color = Color.Black
+                color = MaterialTheme.colorScheme.onSurface
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = description,
                 fontSize = 12.sp,
-                color = Color.Gray,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
                 lineHeight = 16.sp
             )

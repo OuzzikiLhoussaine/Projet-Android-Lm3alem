@@ -27,6 +27,7 @@ import com.lm3alem.app.ui.screens.profile.ProfileScreen
 import com.lm3alem.app.ui.screens.profile.EditProfileScreen
 import com.lm3alem.app.ui.screens.profile.SettingsScreen
 import com.lm3alem.app.ui.screens.profile.TermsOfServiceScreen
+import com.lm3alem.app.ui.screens.profile.SupportScreen
 import com.lm3alem.app.ui.screens.client.ExploreScreen
 import com.lm3alem.app.ui.screens.client.BookingHistoryScreen
 import com.lm3alem.app.ui.screens.messages.MessagesScreen
@@ -39,7 +40,7 @@ fun NavGraph(
     NavHost(
         navController = navController,
         startDestination = Screen.Login.route,
-        modifier = modifier
+        modifier = modifier,
     ) {
         composable(Screen.Login.route) {
             LoginScreen(navController)
@@ -120,6 +121,9 @@ fun NavGraph(
         }
         composable(Screen.TermsOfService.route) {
             TermsOfServiceScreen(navController)
+        }
+        composable(Screen.Support.route) {
+            SupportScreen(navController)
         }
         composable(Screen.Messages.route) {
             MessagesScreen(navController)

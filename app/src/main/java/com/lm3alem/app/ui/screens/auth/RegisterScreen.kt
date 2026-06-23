@@ -36,7 +36,6 @@ import com.lm3alem.app.ui.components.ErrorMessage
 import com.lm3alem.app.ui.components.MainButton
 import com.lm3alem.app.ui.navigation.Screen
 import com.lm3alem.app.viewmodel.AuthViewModel
-import kotlinx.coroutines.flow.collect
 
 @Composable
 fun RegisterScreen(
