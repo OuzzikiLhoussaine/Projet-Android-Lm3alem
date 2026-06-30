@@ -26,30 +26,33 @@ L'application vise à simplifier la recherche de professionnels de confiance au 
 
 ## 📱 Interfaces Utilisateur
 
-### 1. Authentification et Profil
-L'application propose un flux d'inscription fluide permettant de choisir son rôle dès le départ.
+### 1. Authentification et Inscription
+Un flux fluide pour accéder à la plateforme et sécuriser son compte.
 
-| Connexion | Inscription | Choix du Rôle | Profil |
-| :---: | :---: | :---: | :---: |
-| ![Login](assets/screenshots/client/Screenshot_20260630_153048.png) | ![Register](assets/screenshots/client/Screenshot_20260630_153115.png) | ![Role](assets/screenshots/client/Screenshot_20260630_153204.png) | ![Profile](assets/screenshots/client/Screenshot_20260630_153918.png) |
+| Connexion | Inscription & Rôle | Mot de passe oublié |
+| :---: | :---: | :---: |
+| ![Connexion](assets/screenshots/client/Connexion.png) | ![Inscription](assets/screenshots/client/Inscription%20+%20Choix%20du%20Rôle.png) | ![Forgot Password](assets/screenshots/client/Forgot%20Password.png) |
 
-### 2. Expérience Client
-Une interface riche et intuitive pour trouver le bon professionnel.
+### 2. Expérience Utilisateur
+Une interface riche pour explorer les services et gérer ses interactions.
 
 | Accueil | Exploration | Détails Artisan | Réservation |
 | :---: | :---: | :---: | :---: |
-| ![Home](assets/screenshots/client/Screenshot_20260630_153940.png) | ![Explore](assets/screenshots/client/Screenshot_20260630_154004.png) | ![Details](assets/screenshots/client/Screenshot_20260630_154029.png) | ![Booking](assets/screenshots/client/Screenshot_20260630_154111.png) |
+| ![Accueil](assets/screenshots/client/Accueil.png) | ![Exploration](assets/screenshots/client/Exploration.png) | ![Détails](assets/screenshots/client/Détails%20Artisan.png) | ![Réservation](assets/screenshots/client/Réservation.png) |
 
-| Historique | Notifications |
-| :---: | :---: |
-| ![History](assets/screenshots/client/Screenshot_20260630_154129.png) | ![Notifications](assets/screenshots/client/Screenshot_20260630_154156.png) |
+### 3. Communication et Suivi
+Restez informé et échangez en temps réel.
 
-### 3. Expérience Artisan
-Des outils dédiés pour gérer son activité professionnelle.
-
-| Dashboard | Messagerie | Chat |
+| Notifications | Messagerie | Chat |
 | :---: | :---: | :---: |
-| ![Dashboard](assets/screenshots/client/Screenshot_20260630_154220.png) | ![Messages](assets/screenshots/client/Screenshot_20260630_154412.png) | ![Chat](assets/screenshots/client/Screenshot_20260630_154430.png) |
+| ![Notifications](assets/screenshots/client/Notifications%20client.png) | ![Messages](assets/screenshots/client/messages.png) | ![Chat](assets/screenshots/client/conversation.png) |
+
+### 4. Paramètres et Personnalisation
+Adaptez l'application à vos préférences.
+
+| Profil | Paramètres | Dark Mode | Langue |
+| :---: | :---: | :---: | :---: |
+| ![Profil](assets/screenshots/client/Profile%20client.png) | ![Settings](assets/screenshots/client/settings.png) | ![Dark Mode](assets/screenshots/client/Dark%20mode%20on.png) | ![Language](assets/screenshots/client/langage%20switch.png) |
 
 ---
 
