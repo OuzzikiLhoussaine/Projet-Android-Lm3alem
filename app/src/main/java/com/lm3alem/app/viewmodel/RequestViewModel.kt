@@ -129,7 +129,6 @@ class RequestViewModel @Inject constructor(
         object Idle : RequestUiState()
         object Loading : RequestUiState()
         object Success : RequestUiState()
-        data class RequestsLoaded(val requests: List<ServiceRequest>) : RequestUiState()
         data class ArtisanRequestsLoaded(val requests: List<RequestWithUser>) : RequestUiState()
         data class ClientRequestsLoaded(val requests: List<RequestWithUser>) : RequestUiState()
         data class Error(val message: String) : RequestUiState()

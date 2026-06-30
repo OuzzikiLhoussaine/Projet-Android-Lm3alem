@@ -25,7 +25,6 @@ import com.lm3alem.app.ui.components.RequestCard
 import com.lm3alem.app.ui.navigation.Screen
 import com.lm3alem.app.viewmodel.AuthViewModel
 import com.lm3alem.app.viewmodel.RequestViewModel
-import com.lm3alem.app.viewmodel.ProfileViewModel
 import com.lm3alem.app.viewmodel.ChatViewModel
 import com.lm3alem.app.data.model.User
 import com.lm3alem.app.data.model.RequestStatus
@@ -36,7 +35,6 @@ fun ArtisanHomeScreen(
     navController: NavHostController,
     authViewModel: AuthViewModel = hiltViewModel(),
     requestViewModel: RequestViewModel = hiltViewModel(),
-    profileViewModel: ProfileViewModel = hiltViewModel(),
     chatViewModel: ChatViewModel = hiltViewModel(),
 ) {
     val requestState by requestViewModel.uiState

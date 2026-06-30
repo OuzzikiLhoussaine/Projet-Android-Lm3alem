@@ -18,7 +18,6 @@ import com.lm3alem.app.ui.components.ErrorMessage
 import com.lm3alem.app.ui.components.RequestCard
 import com.lm3alem.app.ui.navigation.Screen
 import com.lm3alem.app.viewmodel.RequestViewModel
-import com.lm3alem.app.viewmodel.ProfileViewModel
 import com.lm3alem.app.viewmodel.ChatViewModel
 import com.lm3alem.app.data.model.User
 import com.lm3alem.app.data.model.RequestStatus
@@ -29,7 +28,6 @@ import kotlinx.coroutines.launch
 fun ArtisanRequestsScreen(
     navController: NavHostController,
     viewModel: RequestViewModel = hiltViewModel(),
-    profileViewModel: ProfileViewModel = hiltViewModel(),
     chatViewModel: ChatViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState
