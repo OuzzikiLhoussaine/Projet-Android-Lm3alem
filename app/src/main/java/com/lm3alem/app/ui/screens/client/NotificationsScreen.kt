@@ -33,19 +33,29 @@ import com.lm3alem.app.ui.components.AppTopBar
 import com.lm3alem.app.ui.components.ErrorMessage
 import com.lm3alem.app.ui.theme.LogoBlue
 import com.lm3alem.app.viewmodel.RequestViewModel
-import com.lm3alem.app.viewmodel.RequestWithArtisan
+import com.lm3alem.app.viewmodel.RequestWithUser
+import com.lm3alem.app.viewmodel.AuthViewModel
+import com.lm3alem.app.data.model.UserRole
 import java.text.SimpleDateFormat
 import java.util.*
 
 @Composable
 fun NotificationsScreen(
     navController: NavHostController,
-    viewModel: RequestViewModel = hiltViewModel()
+    viewModel: RequestViewModel = hiltViewModel(),
+    authViewModel: AuthViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState
+    val authState by authViewModel.authState
 
-    LaunchedEffect(Unit) {
-        viewModel.fetchClientRequests()
+    val userRole = (authState as? AuthViewModel.AuthState.Success)?.user?.userRole
+
+    LaunchedEffect(userRole) {
+        if (userRole == UserRole.ARTISAN) {
+            viewModel.fetchRequests()
+        } else if (userRole == UserRole.CLIENT) {
+            viewModel.fetchClientRequests()
+        }
     }
 
     Scaffold(
@@ -70,14 +80,9 @@ fun NotificationsScreen(
                     }
                 }
                 is RequestViewModel.RequestUiState.ClientRequestsLoaded -> {
-                    // Filter for notifications: 
-                    // 1. Status updates (Accepted/Refused/Done)
-                    // 2. New requests sent by the client (Pending)
                     val updates = state.requests
                         .sortedByDescending { it.request.getFormattedDate() }
                     
-                    // Mark all status updates as read when screen is opened
-                    // (Pending requests sent by client are "read" by default as they are created by the user)
                     LaunchedEffect(updates) {
                         updates.forEach { 
                             if (!it.request.readByClient && it.request.status != RequestStatus.PENDING) {
@@ -96,9 +101,39 @@ fun NotificationsScreen(
                             items(updates) { item ->
                                 NotificationItem(
                                     item = item,
+                                    userRole = UserRole.CLIENT,
                                     onReviewClick = {
                                         navController.navigate(Screen.AddReview.createRoute(item.request.artisanId, item.request.id))
                                     }
+                                )
+                            }
+                        }
+                    }
+                }
+                is RequestViewModel.RequestUiState.ArtisanRequestsLoaded -> {
+                    val updates = state.requests
+                        .sortedByDescending { it.request.getFormattedDate() }
+                    
+                    LaunchedEffect(updates) {
+                        updates.forEach { 
+                            if (!it.request.readByArtisan) {
+                                viewModel.markAsReadByArtisan(it.request.id)
+                            }
+                        }
+                    }
+
+                    if (updates.isEmpty()) {
+                        EmptyNotifications()
+                    } else {
+                        LazyColumn(
+                            contentPadding = PaddingValues(16.dp),
+                            verticalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            items(updates) { item ->
+                                NotificationItem(
+                                    item = item,
+                                    userRole = UserRole.ARTISAN,
+                                    onReviewClick = {} // Artisan doesn't review clients here usually
                                 )
                             }
                         }
@@ -118,11 +153,12 @@ fun NotificationsScreen(
 
 @Composable
 fun NotificationItem(
-    item: RequestWithArtisan,
+    item: RequestWithUser,
+    userRole: UserRole,
     onReviewClick: () -> Unit
 ) {
     val request = item.request
-    val artisan = item.artisan
+    val user = item.user
     val sdf = SimpleDateFormat("dd MMM, HH:mm", Locale.getDefault())
     val formattedDate = sdf.format(request.getFormattedDate())
 
@@ -130,18 +166,27 @@ fun NotificationItem(
         RequestStatus.ACCEPTED -> Triple(Icons.Default.CheckCircle, Color(0xFF4CAF50), R.string.notification_request_update_title)
         RequestStatus.REFUSED -> Triple(Icons.Default.Cancel, Color(0xFFF44336), R.string.notification_request_update_title)
         RequestStatus.DONE -> Triple(Icons.Default.Info, LogoBlue, R.string.booking_history)
-        RequestStatus.PENDING -> Triple(Icons.AutoMirrored.Filled.Send, LogoBlue, R.string.request_sent)
+        RequestStatus.PENDING -> Triple(Icons.AutoMirrored.Filled.Send, LogoBlue, if (userRole == UserRole.ARTISAN) R.string.new_request else R.string.request_sent)
     }
 
-    val message = when (request.status) {
-        RequestStatus.ACCEPTED -> stringResource(R.string.notification_request_accepted, request.serviceName)
-        RequestStatus.REFUSED -> stringResource(R.string.notification_request_refused, request.serviceName)
-        RequestStatus.DONE -> stringResource(R.string.status_done) + ": " + request.serviceName
-        RequestStatus.PENDING -> stringResource(
-            R.string.notification_request_sent, 
-            request.serviceName, 
-            artisan?.fullName ?: stringResource(R.string.artisan)
-        )
+    val message = if (userRole == UserRole.ARTISAN) {
+        when (request.status) {
+            RequestStatus.PENDING -> stringResource(R.string.notification_new_request, user?.fullName ?: stringResource(R.string.client), request.serviceName)
+            RequestStatus.ACCEPTED -> stringResource(R.string.notification_artisan_accepted, request.serviceName)
+            RequestStatus.REFUSED -> stringResource(R.string.notification_artisan_refused, request.serviceName)
+            RequestStatus.DONE -> stringResource(R.string.status_done) + ": " + request.serviceName
+        }
+    } else {
+        when (request.status) {
+            RequestStatus.ACCEPTED -> stringResource(R.string.notification_request_accepted, request.serviceName)
+            RequestStatus.REFUSED -> stringResource(R.string.notification_request_refused, request.serviceName)
+            RequestStatus.DONE -> stringResource(R.string.status_done) + ": " + request.serviceName
+            RequestStatus.PENDING -> stringResource(
+                R.string.notification_request_sent, 
+                request.serviceName, 
+                user?.fullName ?: stringResource(R.string.artisan)
+            )
+        }
     }
 
     Card(
@@ -189,7 +234,7 @@ fun NotificationItem(
                 }
             }
 
-            if (request.status == RequestStatus.ACCEPTED || request.status == RequestStatus.DONE) {
+            if (userRole == UserRole.CLIENT && (request.status == RequestStatus.ACCEPTED || request.status == RequestStatus.DONE)) {
                 Spacer(modifier = Modifier.height(12.dp))
                 Button(
                     onClick = onReviewClick,

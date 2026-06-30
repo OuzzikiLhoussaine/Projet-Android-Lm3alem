@@ -57,7 +57,7 @@ fun ExploreScreen(
     val requestState by requestViewModel.uiState
 
     val unreadCount = if (requestState is RequestUiState.ClientRequestsLoaded) {
-        (requestState as RequestUiState.ClientRequestsLoaded).requests.count { !it.request.readByClient && it.request.status != RequestStatus.PENDING }
+        (requestState as RequestUiState.ClientRequestsLoaded).requests.count { it.request.readByClient.not() && it.request.status != RequestStatus.PENDING }
     } else 0
 
     LaunchedEffect(initialCategory) {

@@ -70,7 +70,13 @@ class RequestViewModel @Inject constructor(
             _uiState.value = RequestUiState.Loading
             requestRepository.getRequestsForArtisan(artisanId)
                 .onSuccess { requests ->
-                    _uiState.value = RequestUiState.RequestsLoaded(requests)
+                    val requestsWithClient = requests.map { request ->
+                        async {
+                            val client = authRepository.getUserDetails(request.clientId)
+                            RequestWithUser(request, client)
+                        }
+                    }.awaitAll()
+                    _uiState.value = RequestUiState.ArtisanRequestsLoaded(requestsWithClient)
                 }
                 .onFailure {
                     _uiState.value = RequestUiState.Error(it.message ?: "Failed to fetch requests")
@@ -87,7 +93,7 @@ class RequestViewModel @Inject constructor(
                     val requestsWithArtisan = requests.map { request ->
                         async {
                             val artisan = authRepository.getUserDetails(request.artisanId)
-                            RequestWithArtisan(request, artisan)
+                            RequestWithUser(request, artisan)
                         }
                     }.awaitAll()
                     _uiState.value = RequestUiState.ClientRequestsLoaded(requestsWithArtisan)
@@ -124,7 +130,8 @@ class RequestViewModel @Inject constructor(
         object Loading : RequestUiState()
         object Success : RequestUiState()
         data class RequestsLoaded(val requests: List<ServiceRequest>) : RequestUiState()
-        data class ClientRequestsLoaded(val requests: List<RequestWithArtisan>) : RequestUiState()
+        data class ArtisanRequestsLoaded(val requests: List<RequestWithUser>) : RequestUiState()
+        data class ClientRequestsLoaded(val requests: List<RequestWithUser>) : RequestUiState()
         data class Error(val message: String) : RequestUiState()
     }
 
@@ -133,7 +140,7 @@ class RequestViewModel @Inject constructor(
     }
 }
 
-data class RequestWithArtisan(
+data class RequestWithUser(
     val request: ServiceRequest,
-    val artisan: User?
+    val user: User?
 )

@@ -144,4 +144,8 @@
     <string name="notification_new_review_title">تقييم جديد</string>
     <string name="notification_new_review_body">لقد ترك لك أحد الزبائن تقييماً بـ %1$.1f نجوم!</string>
     <string name="request_sent">تم إرسال الطلب</string>
+    <string name="new_request">طلب جديد</string>
+    <string name="notification_new_request">طلب جديد من %1$s بخصوص %2$s</string>
+    <string name="notification_artisan_accepted">لقد قبلت الطلب الخاص بـ %1$s</string>
+    <string name="notification_artisan_refused">لقد رفضت الطلب الخاص بـ %1$s</string>
 </resources>

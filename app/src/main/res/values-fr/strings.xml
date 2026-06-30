@@ -144,4 +144,8 @@
     <string name="notification_new_review_title">Nouvel Avis</string>
     <string name="notification_new_review_body">Un client vous a laissé un avis de %1$.1f étoiles !</string>
     <string name="request_sent">Demande envoyée</string>
+    <string name="new_request">Nouvelle demande</string>
+    <string name="notification_new_request">Nouvelle demande de %1$s pour %2$s</string>
+    <string name="notification_artisan_accepted">Vous avez accepté la demande pour %1$s</string>
+    <string name="notification_artisan_refused">Vous avez refusé la demande pour %1$s</string>
 </resources>

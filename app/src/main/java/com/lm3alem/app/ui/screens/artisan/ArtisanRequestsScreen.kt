@@ -55,12 +55,12 @@ fun ArtisanRequestsScreen(
                 is RequestViewModel.RequestUiState.Loading -> {
                     CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                 }
-                is RequestViewModel.RequestUiState.RequestsLoaded -> {
+                is RequestViewModel.RequestUiState.ArtisanRequestsLoaded -> {
                     // Mark as read for artisan
                     LaunchedEffect(state.requests) {
                         state.requests.forEach { 
-                            if (!it.readByArtisan) {
-                                viewModel.markAsReadByArtisan(it.id)
+                            if (!it.request.readByArtisan) {
+                                viewModel.markAsReadByArtisan(it.request.id)
                             }
                         }
                     }
@@ -77,12 +77,9 @@ fun ArtisanRequestsScreen(
                             verticalArrangement = Arrangement.spacedBy(16.dp),
                             contentPadding = PaddingValues(bottom = 16.dp),
                         ) {
-                            items(state.requests) { request ->
-                                var clientInfo by remember { mutableStateOf<User?>(null) }
-                                
-                                LaunchedEffect(request.clientId) {
-                                    clientInfo = profileViewModel.getUserById(request.clientId)
-                                }
+                            items(state.requests) { requestWithUser ->
+                                val request = requestWithUser.request
+                                val clientInfo = requestWithUser.user
 
                                 RequestCard(
                                     request = request,

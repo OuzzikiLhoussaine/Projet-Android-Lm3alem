@@ -144,5 +144,9 @@
     <string name="notification_new_review_title">New Review</string>
     <string name="notification_new_review_body">A client left you a %1$.1f star review!</string>
     <string name="request_sent">Request Sent</string>
+    <string name="new_request">New Request</string>
+    <string name="notification_new_request">New request from %1$s for %2$s</string>
+    <string name="notification_artisan_accepted">You have accepted the request for %1$s</string>
+    <string name="notification_artisan_refused">You have refused the request for %1$s</string>
     <string name="default_web_client_id">183217366087-aisajifol185dt7h8frmmhr51qto4kui.apps.googleusercontent.com</string>
 </resources>

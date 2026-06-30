@@ -29,7 +29,7 @@ import com.lm3alem.app.data.model.RequestStatus
 import com.lm3alem.app.ui.components.AppTopBar
 import com.lm3alem.app.ui.theme.LogoBlue
 import com.lm3alem.app.viewmodel.RequestViewModel
-import com.lm3alem.app.viewmodel.RequestWithArtisan
+import com.lm3alem.app.viewmodel.RequestWithUser
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -98,9 +98,9 @@ fun BookingHistoryScreen(
 }
 
 @Composable
-fun BookingHistoryItem(item: RequestWithArtisan) {
+fun BookingHistoryItem(item: RequestWithUser) {
     val request = item.request
-    val artisan = item.artisan
+    val artisan = item.user
     val sdf = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault())
     val formattedDate = sdf.format(request.getFormattedDate())
 

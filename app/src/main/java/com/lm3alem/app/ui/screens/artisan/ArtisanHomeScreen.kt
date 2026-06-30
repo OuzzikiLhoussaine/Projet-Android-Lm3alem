@@ -42,8 +42,8 @@ fun ArtisanHomeScreen(
     val requestState by requestViewModel.uiState
     val scope = rememberCoroutineScope()
 
-    val unreadCount = if (requestState is RequestViewModel.RequestUiState.RequestsLoaded) {
-        (requestState as RequestViewModel.RequestUiState.RequestsLoaded).requests.count { !it.readByArtisan && it.status == RequestStatus.PENDING }
+    val unreadCount = if (requestState is RequestViewModel.RequestUiState.ArtisanRequestsLoaded) {
+        (requestState as RequestViewModel.RequestUiState.ArtisanRequestsLoaded).requests.count { it.request.readByArtisan.not() && it.request.status == RequestStatus.PENDING }
     } else 0
 
     LaunchedEffect(key1 = true) {
@@ -61,7 +61,7 @@ fun ArtisanHomeScreen(
         topBar = {
             AppTopBar(
                 title = stringResource(R.string.artisan_dashboard),
-                onNotificationClick = { navController.navigate(Screen.ArtisanRequests.route) },
+                onNotificationClick = { navController.navigate(Screen.Notifications.route) },
                 notificationCount = unreadCount,
                 actions = {
                     IconButton(onClick = { navController.navigate(Screen.ArtisanMessages.route) }) {
@@ -109,7 +109,7 @@ fun ArtisanHomeScreen(
                     is RequestViewModel.RequestUiState.Loading -> {
                         CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                     }
-                    is RequestViewModel.RequestUiState.RequestsLoaded -> {
+                    is RequestViewModel.RequestUiState.ArtisanRequestsLoaded -> {
                         if (state.requests.isEmpty()) {
                             Text(
                                 text = stringResource(R.string.no_requests_yet),
@@ -121,12 +121,9 @@ fun ArtisanHomeScreen(
                                 verticalArrangement = Arrangement.spacedBy(16.dp),
                                 contentPadding = PaddingValues(bottom = 24.dp),
                             ) {
-                                items(state.requests) { request ->
-                                    var clientInfo by remember { mutableStateOf<User?>(null) }
-                                    
-                                    LaunchedEffect(request.clientId) {
-                                        clientInfo = profileViewModel.getUserById(request.clientId)
-                                    }
+                                items(state.requests) { requestWithUser ->
+                                    val request = requestWithUser.request
+                                    val clientInfo = requestWithUser.user
 
                                     RequestCard(
                                         request = request,

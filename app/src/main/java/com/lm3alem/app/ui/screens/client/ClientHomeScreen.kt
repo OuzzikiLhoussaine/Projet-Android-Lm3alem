@@ -22,6 +22,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.compose.ui.res.stringResource
 import com.lm3alem.app.R
 import com.lm3alem.app.ui.components.*
+import com.lm3alem.app.viewmodel.RequestWithUser
 import com.lm3alem.app.ui.navigation.Screen
 import com.lm3alem.app.ui.theme.Lm3alemTheme
 import com.lm3alem.app.ui.theme.LogoBlue
@@ -41,7 +42,7 @@ fun ClientHomeScreen(
     val requestState by requestViewModel.uiState
 
     val unreadCount = if (requestState is com.lm3alem.app.viewmodel.RequestViewModel.RequestUiState.ClientRequestsLoaded) {
-        (requestState as com.lm3alem.app.viewmodel.RequestViewModel.RequestUiState.ClientRequestsLoaded).requests.count { !it.request.readByClient && it.request.status != com.lm3alem.app.data.model.RequestStatus.PENDING }
+        (requestState as com.lm3alem.app.viewmodel.RequestViewModel.RequestUiState.ClientRequestsLoaded).requests.count { it.request.readByClient.not() && it.request.status != com.lm3alem.app.data.model.RequestStatus.PENDING }
     } else 0
 
     val userName = if (authState is AuthViewModel.AuthState.Success) {
