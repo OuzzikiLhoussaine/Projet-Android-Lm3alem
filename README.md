@@ -28,23 +28,28 @@ L'application vise à simplifier la recherche de professionnels de confiance au 
 
 ### 1. Authentification et Profil
 L'application propose un flux d'inscription fluide permettant de choisir son rôle dès le départ.
-*   **Connexion/Inscription :** Supporte l'email et Google.
-*   **Sélection de Rôle :** Interface claire pour choisir entre "Client" et "Artisan".
-*   **Complétion de Profil :** Formulaire pour ajouter les informations personnelles et professionnelles.
+
+| Connexion | Inscription | Choix du Rôle | Profil |
+| :---: | :---: | :---: | :---: |
+| ![Login](assets/screenshots/client/Screenshot_20260630_153048.png) | ![Register](assets/screenshots/client/Screenshot_20260630_153115.png) | ![Role](assets/screenshots/client/Screenshot_20260630_153204.png) | ![Profile](assets/screenshots/client/Screenshot_20260630_153918.png) |
 
 ### 2. Expérience Client
 Une interface riche et intuitive pour trouver le bon professionnel.
-*   **Accueil Personnalisé :** Recherche rapide, catégories de services et artisans les mieux notés.
-*   **Exploration Avancée :** Recherche filtrée par catégorie (Plomberie, Électricité, Menuiserie, Peinture, Maçonnerie, Bricolage).
-*   **Détails Artisan :** Vue complète incluant le portfolio, les avis, les statistiques de projets, l'expérience et les tarifs.
-*   **Réservation & Messagerie :** Envoi de demandes de service et chat intégré pour discuter des détails.
-*   **Historique & Suivi :** Gestion des réservations passées et notifications en temps réel.
+
+| Accueil | Exploration | Détails Artisan | Réservation |
+| :---: | :---: | :---: | :---: |
+| ![Home](assets/screenshots/client/Screenshot_20260630_153940.png) | ![Explore](assets/screenshots/client/Screenshot_20260630_154004.png) | ![Details](assets/screenshots/client/Screenshot_20260630_154029.png) | ![Booking](assets/screenshots/client/Screenshot_20260630_154111.png) |
+
+| Historique | Notifications |
+| :---: | :---: |
+| ![History](assets/screenshots/client/Screenshot_20260630_154129.png) | ![Notifications](assets/screenshots/client/Screenshot_20260630_154156.png) |
 
 ### 3. Expérience Artisan
 Des outils dédiés pour gérer son activité professionnelle.
-*   **Tableau de Bord :** Gestion centralisée des demandes de service (En attente, Accepté, Refusé, Terminé).
-*   **Profil Professionnel :** Mise en valeur des compétences, des spécialisations et du portfolio.
-*   **Interaction Client :** Réponse rapide aux demandes et communication directe via messagerie.
+
+| Dashboard | Messagerie | Chat |
+| :---: | :---: | :---: |
+| ![Dashboard](assets/screenshots/client/Screenshot_20260630_154220.png) | ![Messages](assets/screenshots/client/Screenshot_20260630_154412.png) | ![Chat](assets/screenshots/client/Screenshot_20260630_154430.png) |
 
 ---
 
