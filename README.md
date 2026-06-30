@@ -24,6 +24,30 @@ L'application vise à simplifier la recherche de professionnels de confiance au 
 
 ---
 
+## 📱 Interfaces Utilisateur
+
+### 1. Authentification et Profil
+L'application propose un flux d'inscription fluide permettant de choisir son rôle dès le départ.
+*   **Connexion/Inscription :** Supporte l'email et Google.
+*   **Sélection de Rôle :** Interface claire pour choisir entre "Client" et "Artisan".
+*   **Complétion de Profil :** Formulaire pour ajouter les informations personnelles et professionnelles.
+
+### 2. Expérience Client
+Une interface riche et intuitive pour trouver le bon professionnel.
+*   **Accueil Personnalisé :** Recherche rapide, catégories de services et artisans les mieux notés.
+*   **Exploration Avancée :** Recherche filtrée par catégorie (Plomberie, Électricité, Menuiserie, Peinture, Maçonnerie, Bricolage).
+*   **Détails Artisan :** Vue complète incluant le portfolio, les avis, les statistiques de projets, l'expérience et les tarifs.
+*   **Réservation & Messagerie :** Envoi de demandes de service et chat intégré pour discuter des détails.
+*   **Historique & Suivi :** Gestion des réservations passées et notifications en temps réel.
+
+### 3. Expérience Artisan
+Des outils dédiés pour gérer son activité professionnelle.
+*   **Tableau de Bord :** Gestion centralisée des demandes de service (En attente, Accepté, Refusé, Terminé).
+*   **Profil Professionnel :** Mise en valeur des compétences, des spécialisations et du portfolio.
+*   **Interaction Client :** Réponse rapide aux demandes et communication directe via messagerie.
+
+---
+
 ## 🏗️ Architecture du Projet
 Le projet suit les principes de la **Clean Architecture** combinée au pattern **MVVM (Model-View-ViewModel)** pour garantir un code testable, maintenable et évolutif.
 
@@ -45,34 +69,8 @@ L'application utilise les dernières technologies recommandées par Google :
 *   **Navigation :** Compose Navigation
 *   **Base de données & Auth :** Firebase (Firestore, Auth)
 *   **Injection de Dépendances :** Hilt (Dagger)
-*   **Images :** Coil
+*   **Images :** Coil (Chargement asynchrone)
 *   **Données Locales :** Jetpack DataStore (Preferences)
-
-### Prérequis pour l'installation
-Pour compiler le projet, assurez-vous d'avoir :
-1.  **Android Studio Ladybug** (ou version plus récente).
-2.  **JDK 17** configuré.
-3.  Le fichier `google-services.json` (à placer dans le dossier `app/`) pour la connexion Firebase.
-
----
-
-## 📸 Captures d'écran
-Voici un aperçu de l'interface utilisateur de **Lm3alem** :
-
-### Authentification
-| Inscription | Connexion | Réinitialisation |
-| :---: | :---: | :---: |
-| ![Register](assets/screenshots/register.png) | ![Login](assets/screenshots/login.png) | ![Reset Password](assets/screenshots/res_passwd.png) |
-
-### Interface Client
-| Accueil Client | Exploration | Profil Client |
-| :---: | :---: | :---: |
-| ![Home](assets/screenshots/client_screen1.png) | ![Explore](assets/screenshots/explore.png) | ![Profile](assets/screenshots/client_profile.png) |
-
-### Communication
-| Messages |
-| :---: |
-| ![Messages](assets/screenshots/messages.png) |
 
 ---
 
