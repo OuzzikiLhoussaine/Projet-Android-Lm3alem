@@ -35,6 +35,7 @@ import com.lm3alem.app.ui.theme.LogoBlue
 import com.lm3alem.app.ui.theme.LogoYellow
 import com.lm3alem.app.viewmodel.ArtisanViewModel
 import com.lm3alem.app.viewmodel.ReviewViewModel
+import java.text.SimpleDateFormat
 import java.util.Locale
 
 @Composable

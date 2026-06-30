@@ -25,16 +25,18 @@ class ReviewViewModel @Inject constructor(
     private val _eventFlow = MutableSharedFlow<ReviewEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
-    fun addReview(artisanId: String, rating: Float, comment: String) {
+    fun addReview(artisanId: String, requestId: String, rating: Float, comment: String) {
         val clientId = authRepository.currentUser?.uid ?: return
         viewModelScope.launch {
             _uiState.value = ReviewUiState.Loading
             val review = Review(
                 clientId = clientId,
                 artisanId = artisanId,
+                requestId = requestId,
                 rating = rating,
                 comment = comment,
-                date = java.util.Date()
+                date = java.util.Date(),
+                readByArtisan = false
             )
             reviewRepository.addReview(review)
                 .onSuccess {

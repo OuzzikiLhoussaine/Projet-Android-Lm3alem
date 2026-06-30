@@ -174,7 +174,7 @@ fun ClientConversationItem(chatRoom: ChatRoom, otherUser: User?, onClick: () -> 
                         color = LogoBlue
                     )
                     Text(
-                        text = "Just now", 
+                        text = "Just now",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

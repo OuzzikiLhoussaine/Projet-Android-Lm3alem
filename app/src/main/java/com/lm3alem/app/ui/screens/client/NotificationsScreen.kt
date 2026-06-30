@@ -28,6 +28,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.lm3alem.app.R
 import com.lm3alem.app.data.model.RequestStatus
+import com.lm3alem.app.ui.navigation.Screen
 import com.lm3alem.app.ui.components.AppTopBar
 import com.lm3alem.app.ui.components.ErrorMessage
 import com.lm3alem.app.ui.theme.LogoBlue
@@ -93,7 +94,12 @@ fun NotificationsScreen(
                             verticalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
                             items(updates) { item ->
-                                NotificationItem(item)
+                                NotificationItem(
+                                    item = item,
+                                    onReviewClick = {
+                                        navController.navigate(Screen.AddReview.createRoute(item.request.artisanId, item.request.id))
+                                    }
+                                )
                             }
                         }
                     }
@@ -111,7 +117,10 @@ fun NotificationsScreen(
 }
 
 @Composable
-fun NotificationItem(item: RequestWithArtisan) {
+fun NotificationItem(
+    item: RequestWithArtisan,
+    onReviewClick: () -> Unit
+) {
     val request = item.request
     val artisan = item.artisan
     val sdf = SimpleDateFormat("dd MMM, HH:mm", Locale.getDefault())
@@ -141,42 +150,55 @@ fun NotificationItem(item: RequestWithArtisan) {
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
     ) {
-        Row(
-            modifier = Modifier.padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Surface(
-                modifier = Modifier.size(40.dp),
-                shape = CircleShape,
-                color = color.copy(alpha = 0.1f)
+        Column(modifier = Modifier.padding(16.dp)) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(
-                    imageVector = icon,
-                    contentDescription = null,
-                    modifier = Modifier.padding(8.dp),
-                    tint = color
-                )
+                Surface(
+                    modifier = Modifier.size(40.dp),
+                    shape = CircleShape,
+                    color = color.copy(alpha = 0.1f)
+                ) {
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = null,
+                        modifier = Modifier.padding(8.dp),
+                        tint = color
+                    )
+                }
+
+                Spacer(modifier = Modifier.width(16.dp))
+
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = stringResource(titleRes),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(
+                        text = message,
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Text(
+                        text = formattedDate,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             }
 
-            Spacer(modifier = Modifier.width(16.dp))
-
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = stringResource(titleRes),
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Text(
-                    text = message,
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                Text(
-                    text = formattedDate,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+            if (request.status == RequestStatus.ACCEPTED || request.status == RequestStatus.DONE) {
+                Spacer(modifier = Modifier.height(12.dp))
+                Button(
+                    onClick = onReviewClick,
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(containerColor = LogoBlue),
+                    shape = RoundedCornerShape(8.dp)
+                ) {
+                    Text(stringResource(R.string.add_review))
+                }
             }
         }
     }

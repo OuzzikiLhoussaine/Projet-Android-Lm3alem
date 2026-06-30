@@ -6,6 +6,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.lm3alem.app.R
 import com.lm3alem.app.data.model.RequestStatus
+import com.lm3alem.app.data.model.Review
 import com.lm3alem.app.data.model.ServiceRequest
 import com.lm3alem.app.data.model.UserRole
 import com.lm3alem.app.utils.NotificationHelper
@@ -21,15 +22,41 @@ class RequestNotificationManager @Inject constructor(
 ) {
     private var artisanListener: ListenerRegistration? = null
     private var clientListener: ListenerRegistration? = null
+    private var reviewListener: ListenerRegistration? = null
 
     fun startListening(userId: String, role: UserRole) {
         stopListening()
         
         if (role == UserRole.ARTISAN) {
             listenForArtisanRequests(userId)
+            listenForArtisanReviews(userId)
         } else if (role == UserRole.CLIENT) {
             listenForClientUpdates(userId)
         }
+    }
+
+    private fun listenForArtisanReviews(artisanId: String) {
+        var isInitial = true
+        reviewListener = firestore.collection("reviews")
+            .whereEqualTo("artisanId", artisanId)
+            .addSnapshotListener { snapshots, e ->
+                if (e != null || (snapshots == null)) return@addSnapshotListener
+
+                if (!isInitial) {
+                    for (dc in snapshots.documentChanges) {
+                        if (dc.type == DocumentChange.Type.ADDED) {
+                            val review = dc.document.toObject(Review::class.java)
+                            if (!review.readByArtisan) {
+                                notificationHelper.showNotification(
+                                    context.getString(R.string.notification_new_review_title),
+                                    context.getString(R.string.notification_new_review_body, review.rating)
+                                )
+                            }
+                        }
+                    }
+                }
+                isInitial = false
+            }
     }
 
     private fun listenForArtisanRequests(artisanId: String) {
@@ -97,7 +124,9 @@ class RequestNotificationManager @Inject constructor(
     fun stopListening() {
         artisanListener?.remove()
         clientListener?.remove()
+        reviewListener?.remove()
         artisanListener = null
         clientListener = null
+        reviewListener = null
     }
 }

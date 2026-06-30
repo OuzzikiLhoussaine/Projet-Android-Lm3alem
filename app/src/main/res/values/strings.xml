@@ -141,6 +141,8 @@
     <string name="notification_request_accepted">Your request for %1$s has been accepted!</string>
     <string name="notification_request_refused">Your request for %1$s has been refused.</string>
     <string name="notification_request_sent">You made a new request for %1$s to %2$s</string>
+    <string name="notification_new_review_title">New Review</string>
+    <string name="notification_new_review_body">A client left you a %1$.1f star review!</string>
     <string name="request_sent">Request Sent</string>
     <string name="default_web_client_id">183217366087-aisajifol185dt7h8frmmhr51qto4kui.apps.googleusercontent.com</string>
 </resources>

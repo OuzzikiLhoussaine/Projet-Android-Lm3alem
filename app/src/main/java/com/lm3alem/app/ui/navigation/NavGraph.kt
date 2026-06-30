@@ -93,10 +93,14 @@ fun NavGraph(
         }
         composable(
             route = Screen.AddReview.route,
-            arguments = listOf(navArgument("artisanId") { type = NavType.StringType })
+            arguments = listOf(
+                navArgument("artisanId") { type = NavType.StringType },
+                navArgument("requestId") { type = NavType.StringType }
+            )
         ) { backStackEntry ->
             val artisanId = backStackEntry.arguments?.getString("artisanId")
-            AddReviewScreen(navController, artisanId)
+            val requestId = backStackEntry.arguments?.getString("requestId")
+            AddReviewScreen(navController, artisanId, requestId)
         }
         composable(Screen.Profile.route) {
             ProfileScreen(navController)

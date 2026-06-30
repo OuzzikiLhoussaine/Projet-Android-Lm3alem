@@ -141,5 +141,7 @@
     <string name="notification_request_accepted">Votre demande pour %1$s a été acceptée !</string>
     <string name="notification_request_refused">Votre demande pour %1$s a été refusée.</string>
     <string name="notification_request_sent">Vous avez envoyé une nouvelle demande pour %1$s à %2$s</string>
+    <string name="notification_new_review_title">Nouvel Avis</string>
+    <string name="notification_new_review_body">Un client vous a laissé un avis de %1$.1f étoiles !</string>
     <string name="request_sent">Demande envoyée</string>
 </resources>

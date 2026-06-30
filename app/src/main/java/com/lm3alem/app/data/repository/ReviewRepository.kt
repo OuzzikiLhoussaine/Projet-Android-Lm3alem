@@ -36,6 +36,12 @@ class ReviewRepository @Inject constructor(
 
                 transaction.set(reviewRef, finalReview)
                 transaction.set(artisanRef, updatedArtisan)
+                
+                // Update the request to mark it as reviewed
+                if (review.requestId.isNotEmpty()) {
+                    val requestRef = firestore.collection("requests").document(review.requestId)
+                    transaction.update(requestRef, "isReviewed", true)
+                }
             }.await()
             Result.success(Unit)
         } catch (e: Exception) {

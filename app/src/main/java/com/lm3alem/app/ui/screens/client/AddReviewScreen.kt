@@ -26,6 +26,7 @@ import com.lm3alem.app.viewmodel.ReviewViewModel
 fun AddReviewScreen(
     navController: NavHostController,
     artisanId: String?,
+    requestId: String?,
     viewModel: ReviewViewModel = hiltViewModel()
 ) {
     var rating by remember { mutableStateOf(0f) }
@@ -86,7 +87,11 @@ fun AddReviewScreen(
             
             MainButton(
                 text = "Save",
-                onClick = { artisanId?.let { viewModel.addReview(it, rating, comment) } },
+                onClick = { 
+                    if (artisanId != null && requestId != null) {
+                        viewModel.addReview(artisanId, requestId, rating, comment)
+                    }
+                },
                 isLoading = uiState is ReviewViewModel.ReviewUiState.Loading,
                 enabled = rating > 0,
                 modifier = Modifier.align(Alignment.CenterHorizontally)

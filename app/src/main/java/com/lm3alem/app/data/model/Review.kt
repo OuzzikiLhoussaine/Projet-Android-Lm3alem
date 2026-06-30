@@ -7,9 +7,11 @@ data class Review(
     val id: String = "",
     val clientId: String = "",
     val artisanId: String = "",
+    val requestId: String = "",
     val rating: Float = 0f,
     val comment: String = "",
-    val date: Any? = null
+    val date: Any? = null,
+    val readByArtisan: Boolean = true
 ) {
     fun getFormattedDate(): Date {
         return when (date) {

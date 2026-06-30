@@ -141,5 +141,7 @@
     <string name="notification_request_accepted">لقد تم قبول طلبك لـ %1$s!</string>
     <string name="notification_request_refused">لقد تم رفض طلبك لـ %1$s.</string>
     <string name="notification_request_sent">لقد قمت بإرسال طلب جديد لـ %1$s إلى %2$s</string>
+    <string name="notification_new_review_title">تقييم جديد</string>
+    <string name="notification_new_review_body">لقد ترك لك أحد الزبائن تقييماً بـ %1$.1f نجوم!</string>
     <string name="request_sent">تم إرسال الطلب</string>
 </resources>
